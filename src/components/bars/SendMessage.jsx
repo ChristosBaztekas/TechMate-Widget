@@ -5,11 +5,11 @@ export const SendMessage = () => {
             <input
                 type="text"
                 placeholder="Πληκτρολογήστε την ερώτησή σας..."
-                className="w-full h-10 rounded-[20px] px-7"
+                className="w-full h-10 rounded-[20px] px-7 outline-none"
                 aria-label="Message input field"
             />
             {/* Submit button for sending the message */}
-            <button type="submit" className="ml-6 text-lightColor font-bold">
+            <button type="submit" className="ml-6 text-white font-bold">
                 Send
             </button>
         </main>
