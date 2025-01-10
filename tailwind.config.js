@@ -9,7 +9,7 @@ export default {
       colors: {
         darkColor: "#000000", // Default Dark Color
         lightColor: "#FFF", // Default Light Color
-        primaryColor: "#501AC8", // Change Chatbot Theme
+        primaryColor: "#C7313D", // Change Chatbot Theme
         hoverColor: "#B366CF", // Change Chatbot Hover Theme
       },
       screens: {
@@ -19,7 +19,7 @@ export default {
         "md": "868px",
         "sm": "640px",
         "vsm": "460px",
-        "tiny": "370px",
+        "tiny": "330px",
       },
     },
   },

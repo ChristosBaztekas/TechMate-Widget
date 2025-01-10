@@ -1,1 +1,1 @@
-// export * from "./bars/Header"
+export * from "./MainPage"
