@@ -1,11 +1,11 @@
 export const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ marginRight: '1em' }}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path d="M15.7397 0.26031C15.3927 -0.0867702 14.8299 -0.0867702 14.4828 0.26031L7.99999 6.74315L1.51718 0.26031C1.17011 -0.0867702 0.607383 -0.0867702 0.260311 0.26031C-0.0867703 0.607382 -0.0867703 1.17011 0.260311 1.51718L6.74313 8.00001L0.260329 14.4828C-0.0867525 14.8299 -0.0867525 15.3926 0.260329 15.7397C0.607401 16.0868 1.17013 16.0868 1.5172 15.7397L7.99999 9.25686L14.4828 15.7397C14.8299 16.0868 15.3927 16.0868 15.7397 15.7397C16.0868 15.3926 16.0868 14.8299 15.7397 14.4828L9.25685 8.00001L15.7397 1.51718C16.0868 1.17011 16.0868 0.607382 15.7397 0.26031Z" fill="currentColor" />
     </svg>
 );
 
 export const RefreshIcon = () => (
-    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '1em' }}>
+    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask id="mask0_1_313" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="25" height="25">
             <path d="M0.75 24.25V0.75H24.25V24.25H0.75Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" />
         </mask>
@@ -16,7 +16,7 @@ export const RefreshIcon = () => (
 );
 
 export const ArrowIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none" style={{ marginRight: '1em' }}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 18" fill="none">
         <path d="M9.6827 0.739081C9.25953 0.363991 8.57363 0.363991 8.15046 0.739081L0.951957 7.12102C-0.316976 8.24602 -0.317366 10.0698 0.951068 11.1952L8.06931 17.5108C8.49238 17.886 9.17838 17.886 9.60145 17.5108C10.0245 17.1357 10.0245 16.5275 9.60145 16.1525L2.48136 9.84015C2.05827 9.46498 2.05827 8.85689 2.48136 8.48182L9.6827 2.09742C10.1058 1.72232 10.1058 1.11418 9.6827 0.739081Z" fill="currentColor" />
     </svg>
 );

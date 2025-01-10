@@ -11,6 +11,7 @@ export default {
         lightColor: "#FFF", // Default Light Color
         primaryColor: "#C7313D", // Change Chatbot Theme
         hoverColor: "#B366CF", // Change Chatbot Hover Theme
+        footerColor: "#370E92", // Change Footer Theme
       },
       screens: {
         "2xl": "1536px",

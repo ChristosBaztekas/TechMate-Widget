@@ -8,14 +8,14 @@ export const Header = () => {
             <Icons.PatternIcon />
 
             {/* Logo and Greeting */}
-            <span className="flex justify-center tiny:items-center vsm:gap-2 z-20 text-lightColor">
+            <span className="flex justify-center items-center vsm:gap-2 z-20 text-lightColor">
                 <Icons.ArrowIcon />
-                <img src={Logo} alt="logo" className="w-14 vsm:w-auto" />
-                <h1>Γεια σας! 👋</h1>
+                <img src={Logo} alt="logo" className="w-14 vsm:w-auto xl:w-20" />
+                <h1 className="tiny:text-lg font-bold">Γεια σας! 👋</h1>
             </span>
 
             {/* Refresh and Close Icons */}
-            <span className="flex justify-center items-center vsm:gap-6 z-20 text-lightColor">
+            <span className="flex justify-center items-center gap-2 vsm:gap-6 z-20 text-lightColor">
                 <Icons.RefreshIcon />
                 <Icons.CloseIcon />
             </span>
