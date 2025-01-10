@@ -1,5 +1,5 @@
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
-import Logo from "@/assets/images/logo.png"; // Import the logo image
+import Logo from "@/assets/images/Logo.png"; // Import the logo image
 
 export const Header = () => {
     return (
