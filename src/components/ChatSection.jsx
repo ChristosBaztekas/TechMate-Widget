@@ -24,7 +24,7 @@ export const ChatSection = ({ radius = "10px" }) => {
                     // Option Container
                     <p
                         style={{ borderRadius: radius }}
-                        className="w-fit text-lightColor font-semibold border border-primaryColor hover:bg-hoverColor text-center px-4 py-3 cursor-pointer transition-all"
+                        className="w-fit text-lightColor font-semibold border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
                         key={index}
                     >
                         {item}
