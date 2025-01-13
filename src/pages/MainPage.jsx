@@ -2,6 +2,8 @@ import { Fragment, useState, useEffect } from "react";
 import { Header, Footer, SendMessage, ChatSection } from "@/components";
 import Logo from "@/assets/images/Logo.png";
 import { WelcomePage } from "./WelcomePage";
+import { CongratulationsPage } from "./CongratulationsPage";
+import { PhonePage } from "./PhonePage";
 
 export const MainPage = () => {
     const [isChatClosed, setIsChatClosed] = useState(true);
@@ -22,13 +24,7 @@ export const MainPage = () => {
         <Fragment>
             {!isChatClosed ? (
                 <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-                    <WelcomePage handleClose={() => setIsChatClosed(true)} />
-                    {/* 
-                    <Header handleClose={() => setIsChatClosed(true)} />
-                    <ChatSection />
-                    <SendMessage />
-                    <Footer />
-                */}
+                    <PhonePage handleClose={() => setIsChatClosed(true)} />
                 </section>
             ) : (
                 <div
@@ -43,6 +39,14 @@ export const MainPage = () => {
     );
 };
 
+// <CongratulationsPage handleClose={() => setIsChatClosed(true)} />
+// <WelcomePage handleClose={() => setIsChatClosed(true)} />
+// {/*
+//                     <Header handleClose={() => setIsChatClosed(true)} />
+//                     <ChatSection />
+//                     <SendMessage />
+//                     <Footer />
+//                 */}
 // <script>
 //     const chatbotContainer = document.createElement('div');
 //     chatbotContainer.id = 'chatbot-container';
