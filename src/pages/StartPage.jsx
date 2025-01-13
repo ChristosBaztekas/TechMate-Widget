@@ -86,7 +86,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                     }}
                 />
                 {/* Submit button for sending the message */}
-                <button type="submit" className="ml-6 mt-2 text-white font-bold">
+                <button type="submit" className="ml-6 mt-2 text-white font-bold hover:text-hoverColor">
                     Send
                 </button>
             </footer>
