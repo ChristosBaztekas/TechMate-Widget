@@ -25,7 +25,7 @@ export const MainPage = () => {
         <Fragment>
             {!isChatClosed ? (
                 <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-                    <StartPage handleClose={() => setIsChatClosed(true)} />
+                    <StartPage handleClose={() => setIsChatClosed(true)} /> {/* Use radius="20px" To Change inputs Border Rounded as want */}
                 </section>
             ) : (
                 <div
