@@ -4,6 +4,7 @@ import Logo from "@/assets/images/Logo.png";
 import { WelcomePage } from "./WelcomePage";
 import { CongratulationsPage } from "./CongratulationsPage";
 import { PhonePage } from "./PhonePage";
+import { StartPage } from "./StartPage";
 
 export const MainPage = () => {
     const [isChatClosed, setIsChatClosed] = useState(true);
@@ -16,7 +17,7 @@ export const MainPage = () => {
         if (isChatClosed) {
             sendDimensionsToParent("95px", "87px", true);
         } else {
-            sendDimensionsToParent("600px", "600px", false);
+            sendDimensionsToParent("574px", "600px", false);
         }
     }, [isChatClosed]);
 
@@ -24,7 +25,7 @@ export const MainPage = () => {
         <Fragment>
             {!isChatClosed ? (
                 <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-                    <PhonePage handleClose={() => setIsChatClosed(true)} />
+                    <StartPage handleClose={() => setIsChatClosed(true)} />
                 </section>
             ) : (
                 <div

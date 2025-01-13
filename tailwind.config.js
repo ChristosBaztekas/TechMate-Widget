@@ -15,13 +15,7 @@ export default {
         footerColor: "#370E92", // Change Footer Theme
       },
       screens: {
-        "2xl": "1536px",
-        "xl": "1280px",
-        "lg": "1024px",
-        "md": "868px",
-        "sm": "640px",
-        "vsm": "600px",
-        "tiny": "330px",
+        "vsm": "574px",
       },
     },
   },
