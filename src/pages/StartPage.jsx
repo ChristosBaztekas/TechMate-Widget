@@ -1,6 +1,6 @@
-import { Fragment } from 'react';
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import Logo from "@/assets/images/Logo.png"; // Import the logo image
+import { Link } from "react-router-dom";
 
 export const StartPage = ({ handleClose, state, radius = "10px" }) => {
     // Function to go back one page
@@ -14,7 +14,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
     };
 
     return (
-        <Fragment>
+        <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
             <header className="relative flex justify-between items-start text-primaryColor p-3 h-20 transition-all">
                 {/* Pattern Icon */}
                 <Icons.PatternIcon />
@@ -56,20 +56,31 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                 {/* Choose Section */}
                 <section className="flex flex-col justify-center items-end gap-4 text-xs vsm:text-sm">
                     {[
-                        "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-                        "Μόλις τράκαρα. Τι πρέπει να κάνω;",
-                        "Τι χρειάζεται για να κάνω μία ασφάλεια;"
+                        {
+                            text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
+                            path: "/first",
+                        },
+                        {
+                            text: "Μόλις τράκαρα. Τι πρέπει να κάνω;",
+                            path: "/second",
+                        },
+                        {
+                            text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
+                            path: "/third",
+                        },
                     ].map((item, index) => (
                         // Option Container
-                        <p
-                            style={{ borderRadius: radius }}
-                            className="w-fit text-lightColor font-semibold border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
-                            key={index}
-                        >
-                            {item}
-                        </p>
+                        <Link to={item.path} key={index}>
+                            <p
+                                style={{ borderRadius: radius }}
+                                className="w-fit text-lightColor font-semibold border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
+                            >
+                                {item.text}
+                            </p>
+                        </Link>
                     ))}
                 </section>
+
             </main>
 
             <footer className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">
@@ -81,7 +92,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                     rows={1} // Initial height of the textarea
                     onInput={(e) => {
                         // Adjust the height of the textarea based on its content
-                        e.target.style.height = 'auto';
+                        e.target.style.height = "auto";
                         e.target.style.height = `${e.target.scrollHeight}px`;
                     }}
                 />
@@ -94,6 +105,6 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
             <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor h-[30px]">
                 Supported by TechMate
             </footer>
-        </Fragment>
+        </section>
     );
 };

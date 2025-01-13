@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import Logo from "@/assets/images/Logo.png"; // Import the logo image
-import { StartPage } from "@/pages";
+import { StartPage } from "@/pages"; // Import the StartPage component
 
 export const MainPage = () => {
     const [isChatClosed, setIsChatClosed] = useState(true);
@@ -22,18 +22,14 @@ export const MainPage = () => {
     return (
         <Fragment>
             {!isChatClosed ? (
-                <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-                    {/* StartPage component with handleClose function */}
-                    <StartPage handleClose={() => setIsChatClosed(true)} radius="20px" />
-                </section>
+                <StartPage handleClose={() => setIsChatClosed(true)} radius="10px" />
             ) : (
                 <div
                     onClick={() => setIsChatClosed(false)}
-                    className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-200 rounded-full cursor-pointer"
+                    className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-400 rounded-full cursor-pointer"
                     role="button"
                     aria-label="Open chat"
                 >
-                    Logo
                     {/* Logo */}
                     <img src={Logo} alt="logo" className="absolute -top-1 -left-7 w-15" />
                 </div>

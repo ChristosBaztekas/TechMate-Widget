@@ -1,2 +1,5 @@
 export * from "./MainPage"
 export * from "./StartPage"
+export * from "./WelcomePage"
+export * from "./CongratulationsPage.jsx"
+export * from "./PhonePage.jsx"

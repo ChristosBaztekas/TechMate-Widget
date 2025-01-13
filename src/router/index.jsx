@@ -1,10 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { MainPage } from "@/pages";// Pages
+import { MainPage, WelcomePage, PhonePage, CongratulationsPage } from "@/pages";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainPage />,
+    },
+    {
+        path: "/first",
+        element: <WelcomePage />,
+    },
+    {
+        path: "/second",
+        element: <PhonePage />,
+    },
+    {
+        path: "/third",
+        element: <CongratulationsPage />,
     },
 ]);
 
