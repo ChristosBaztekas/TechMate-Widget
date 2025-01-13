@@ -1,14 +1,14 @@
 export const ChatSection = ({ radius = "10px" }) => {
     return (
-        <main className="ml-6 my-8 max-h-[500px] overflow-scroll overflow-x-hidden">
+        <main className="vsm:ml-6 mb-8 p-2 overflow-scroll overflow-x-hidden flex-grow vsm:flex-grow-0">
             {/* Chat Section */}
             <section className="flex justify-start items-center gap-4 my-6">
                 {/* Logo Container */}
-                <div className="flex justify-center items-center flex-shrink-0 w-14 h-14 bg-lightColor rounded-full font-light">
+                <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 vsm:w-14 vsm:h-14 bg-lightColor rounded-full font-light">
                     Logo
                 </div>
                 {/* Chat Message */}
-                <p className="w-full bg-lightColor text-darkColor font-light p-4 rounded-[20px] mr-6">
+                <p className="w-full bg-lightColor text-darkColor font-light p-4 rounded-[20px] vsm:mr-6">
                     <span className="block mb-4">Γεια σας!</span>
                     Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλες τις απορίες σας σχετικά με ασφάλειες και καλύψεις.
                 </p>

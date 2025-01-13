@@ -1,7 +1,7 @@
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import Logo from "@/assets/images/Logo.png"; // Import the logo image
 
-export const Header = () => {
+export const Header = ({ handleClose, state }) => {
     return (
         <header className="relative flex justify-between items-start py-2 tiny:py-3 sm:items-center text-primaryColor px-3 vsm:px-7 h-20 vsm:h-24 sm:min-h-24 sm:h-20 md:h-28 xl:h-48 transition-all">
             {/* Pattern Icon */}
@@ -21,10 +21,10 @@ export const Header = () => {
                 <span className="cursor-pointer hover:animate-spin">
                     <Icons.RefreshIcon />
                 </span>
-                <span className="hover:text-red-800 cursor-pointer hover:scale-125">
+                <span className="hover:text-red-800 cursor-pointer hover:scale-125" onClick={() => handleClose(!state)}>
                     <Icons.CloseIcon />
                 </span>
             </span>
         </header>
-    )
-}
+    );
+};
