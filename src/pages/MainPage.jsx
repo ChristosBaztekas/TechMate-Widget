@@ -1,19 +1,20 @@
 import { Fragment, useState, useEffect } from "react";
 import { Header, Footer, SendMessage, ChatSection } from "@/components";
 import Logo from "@/assets/images/Logo.png";
+import { WelcomePage } from "./WelcomePage";
 
 export const MainPage = () => {
     const [isChatClosed, setIsChatClosed] = useState(true);
 
-    const sendDimensionsToParent = (width, height) => {
-        window.parent.postMessage({ width, height }, "*");
+    const sendDimensionsToParent = (width, height, isClosed) => {
+        window.parent.postMessage({ width, height, isChatClosed: isClosed }, "*");
     };
 
     useEffect(() => {
         if (isChatClosed) {
-            sendDimensionsToParent("95px", "87px");
+            sendDimensionsToParent("95px", "87px", true);
         } else {
-            sendDimensionsToParent("520px", "600px");
+            sendDimensionsToParent("600px", "600px", false);
         }
     }, [isChatClosed]);
 
@@ -21,10 +22,13 @@ export const MainPage = () => {
         <Fragment>
             {!isChatClosed ? (
                 <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
+                    <WelcomePage handleClose={() => setIsChatClosed(true)} />
+                    {/* 
                     <Header handleClose={() => setIsChatClosed(true)} />
                     <ChatSection />
                     <SendMessage />
                     <Footer />
+                */}
                 </section>
             ) : (
                 <div
@@ -38,8 +42,6 @@ export const MainPage = () => {
         </Fragment>
     );
 };
-
-
 
 // <script>
 //     const chatbotContainer = document.createElement('div');
@@ -93,10 +95,10 @@ export const MainPage = () => {
 //             return;
 //         }
 
-//     const {width, height} = event.data;
+//     const {width, height, isChatClosed} = event.data;
 
-//     // Check if width less than 600px
-//     if (window.innerWidth < 600) {
+//     // Adjust dimensions for small screens when chat is closed
+//     if (window.innerWidth < 600 && !isChatClosed) {
 //         chatbotIframe.style.width = '100%';
 //     chatbotIframe.style.height = '100%';
 //     chatbotIframe.style.bottom = '0';

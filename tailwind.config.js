@@ -20,7 +20,7 @@ export default {
         "lg": "1024px",
         "md": "868px",
         "sm": "640px",
-        "vsm": "5500px",
+        "vsm": "600px",
         "tiny": "330px",
       },
     },
