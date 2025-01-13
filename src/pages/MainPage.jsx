@@ -11,7 +11,7 @@ export const MainPage = () => {
 
     useEffect(() => {
         if (isChatClosed) {
-            sendDimensionsToParent("60px", "50px");
+            sendDimensionsToParent("95px", "87px");
         } else {
             sendDimensionsToParent("520px", "600px");
         }
@@ -20,7 +20,7 @@ export const MainPage = () => {
     return (
         <Fragment>
             {!isChatClosed ? (
-                <section className="flex flex-col h-screen overflow-hidden w-[520px] bg-darkColor fixed bottom-0 right-0 z-50">
+                <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
                     <Header handleClose={() => setIsChatClosed(true)} />
                     <ChatSection />
                     <SendMessage />
@@ -29,9 +29,10 @@ export const MainPage = () => {
             ) : (
                 <div
                     onClick={() => setIsChatClosed(false)}
-                    className="fixed bottom-0 right-0 z-50 flex justify-center items-center w-12 h-12 vsm:w-14 vsm:h-14 bg-lightColor rounded-full cursor-pointer"
+                    className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-200 rounded-full cursor-pointer"
                 >
-                    <img src={Logo} alt="logo" className="absolute top-0 -left-4 w-10 h-8" />
+                    logo
+                    <img src={Logo} alt="logo" className="absolute -top-1 -left-7 w-15" />
                 </div>
             )}
         </Fragment>
@@ -75,7 +76,7 @@ export const MainPage = () => {
 //     transition: width 0.3s ease, height 0.3s ease; /* Smooth transition */
 //     }
 
-//     @media (max-width: 550px) {
+//     @media (max-width: 600px) {
 //         #chatbot - iframe {
 //         width: 100%;
 //     height: 100%;
@@ -93,10 +94,17 @@ export const MainPage = () => {
 //         }
 
 //     const {width, height} = event.data;
-//     if (width && height) {
+
+//     // Check if width less than 600px
+//     if (window.innerWidth < 600) {
+//         chatbotIframe.style.width = '100%';
+//     chatbotIframe.style.height = '100%';
+//     chatbotIframe.style.bottom = '0';
+//     chatbotIframe.style.right = '0';
+//     chatbotIframe.style.borderRadius = '0';
+//         } else if (width && height) {
 //         chatbotIframe.style.width = width;
 //     chatbotIframe.style.height = height;
 //         }
 //     });
-
 // </script>
