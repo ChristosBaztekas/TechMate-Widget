@@ -6,7 +6,7 @@ export const PhonePage = ({ handleClose, state }) => {
     return (
         <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
             <div className="flex flex-col justify-between h-full bg-[#501AC8]">
-                <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-3 vsm:px-7 bg-primaryColor transition-all">
+                <header className="relative flex justify-between items-center text-primaryColor py-4 px-5 vsm:px-7 bg-primaryColor transition-all">
                     {/* Logo and Greeting */}
                     <div className="flex justify-center items-center z-20 text-lightColor my-1 p-2 vsm:p-0">
                         <button className="cursor-pointer hover:text-hoverColor" aria-label="Go back">
@@ -37,7 +37,7 @@ export const PhonePage = ({ handleClose, state }) => {
                     <p className="text-left font-medium text-xs my-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
                 </main>
 
-                <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor h-[30px]">
+                <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
                     Supported by TechMate
                 </footer>
             </div>

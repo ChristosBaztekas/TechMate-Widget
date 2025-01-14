@@ -5,7 +5,7 @@ export const WelcomePage = ({ handleClose, state }) => {
     return (
         <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
             <div className="flex flex-col justify-between h-full">
-                <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-3 vsm:px-7 h-56 bg-primaryColor transition-all">
+                <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-5 vsm:px-7 h-56 bg-primaryColor transition-all">
                     {/* Pattern Icon */}
                     <span className="absolute bottom-1 w-full left-0">
                         <Icons.PatternIcon />
@@ -49,7 +49,7 @@ export const WelcomePage = ({ handleClose, state }) => {
                     </section>
                 </main>
 
-                <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor h-[30px]">
+                <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
                     www.techai.gr
                 </footer>
             </div>

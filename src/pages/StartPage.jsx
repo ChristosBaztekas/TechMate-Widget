@@ -15,7 +15,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
 
     return (
         <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-            <header className="relative flex justify-between items-start text-primaryColor p-3 h-20 transition-all">
+            <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-4 px-5 vsm:px-7 h-20 transition-all">
                 {/* Pattern Icon */}
                 <Icons.PatternIcon />
 
@@ -102,7 +102,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                 </button>
             </footer>
 
-            <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor h-[30px]">
+            <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
                 Supported by TechMate
             </footer>
         </section>
