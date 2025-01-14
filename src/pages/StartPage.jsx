@@ -54,7 +54,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                 </section>
 
                 {/* Choose Section */}
-                <section className="flex flex-col justify-center items-end gap-4 text-xs vsm:text-sm">
+                <section className="flex flex-col justify-center items-end gap-3 text-xs vsm:text-sm">
                     {[
                         {
                             text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",

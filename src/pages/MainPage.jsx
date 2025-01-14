@@ -15,7 +15,7 @@ export const MainPage = () => {
         if (isChatClosed) {
             sendDimensionsToParent("95px", "87px", true);
         } else {
-            sendDimensionsToParent("574px", "600px", false);
+            sendDimensionsToParent("574px", "570px", false);
         }
     }, [isChatClosed]);
 
