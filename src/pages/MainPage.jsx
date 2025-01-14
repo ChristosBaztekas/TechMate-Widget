@@ -7,7 +7,16 @@ export const MainPage = () => {
 
     // Function to send dimensions to the parent window
     const sendDimensionsToParent = (width, height, isClosed) => {
-        window.parent.postMessage({ width, height, isChatClosed: isClosed }, "*");
+        console.log("Sending dimensions:", { width, height, isChatClosed: isClosed });
+        window.parent.postMessage(
+            {
+                type: "chatbot-dimensions", // Message key
+                width,
+                height,
+                isChatClosed: isClosed
+            },
+            "*"
+        );
     };
 
     // Effect to update parent with chat dimensions based on its state
