@@ -39,7 +39,7 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                 </div>
             </header>
 
-            <main className="flex flex-col gap-5 p-4 vsm:p-8 overflow-scroll overflow-x-hidden flex-grow">
+            <main className="flex flex-col gap-5 px-4 py-4 vsm:px-8 overflow-scroll overflow-x-hidden flex-grow">
                 {/* Chat Section */}
                 <section className="flex justify-start items-start gap-4">
                     {/* Logo Container */}
