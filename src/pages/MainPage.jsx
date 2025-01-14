@@ -7,7 +7,8 @@ export const MainPage = () => {
 
     // Function to send dimensions to the parent window
     const sendDimensionsToParent = (width, height, isClosed) => {
-        window.parent.postMessage({ width, height, isChatClosed: isClosed }, "*");
+        const targetOrigin = "https://tech-mate-chatbot.vercel.app"; // Use the production origin
+        window.parent.postMessage({ width, height, isChatClosed: isClosed }, targetOrigin);
     };
 
     // Effect to update parent with chat dimensions based on its state
