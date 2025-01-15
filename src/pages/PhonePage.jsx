@@ -4,7 +4,7 @@ import Phone from "@/assets/images/phone.png"; // Import the phone image
 
 export const PhonePage = ({ handleClose, state }) => {
     return (
-        <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
+        <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50  overflow-scroll overflow-x-hidden">
             <div className="flex flex-col justify-between h-full bg-[#501AC8]">
                 <header className="relative flex justify-between items-center text-primaryColor py-4 px-5 vsm:px-7 bg-primaryColor transition-all">
                     {/* Logo and Greeting */}

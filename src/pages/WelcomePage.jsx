@@ -3,7 +3,7 @@ import Logo from "@/assets/images/Logo.png"; // Import the logo image
 
 export const WelcomePage = ({ handleClose, state }) => {
     return (
-        <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
+        <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden">
             <div className="flex flex-col justify-between h-full">
                 <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-5 vsm:px-7 h-56 bg-primaryColor transition-all">
                     {/* Pattern Icon */}
@@ -15,7 +15,7 @@ export const WelcomePage = ({ handleClose, state }) => {
                     <div className="flex flex-col justify-center items-start vsm:gap-2 z-20 text-lightColor">
                         <img src={Logo} alt="logo" className="w-14 vsm:w-auto xl:w-20 my-5" />
                         <h1 className="text-3xl font-bold ml-5">Γεια σας! 👋</h1>
-                        <h2 className="text-lg font-semibold my-4 vsm:my-1 ml-5">Καλωσήρθατε στην υποστήριξη της TechMate! Είμαστε στη διάθεσή σας!</h2>
+                        <h2 className="text-xl my-4 vsm:my-1 ml-5">Καλωσήρθατε στην υποστήριξη της TechMate! Είμαστε στη διάθεσή σας!</h2>
                     </div>
 
                     {/* Close Icon */}

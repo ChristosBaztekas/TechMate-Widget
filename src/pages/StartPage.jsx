@@ -73,14 +73,13 @@ export const StartPage = ({ handleClose, state, radius = "10px" }) => {
                         <Link to={item.path} key={index}>
                             <p
                                 style={{ borderRadius: radius }}
-                                className="w-fit text-lightColor font-semibold border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
+                                className="w-fit text-lightColor border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
                             >
                                 {item.text}
                             </p>
                         </Link>
                     ))}
                 </section>
-
             </main>
 
             <footer className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">

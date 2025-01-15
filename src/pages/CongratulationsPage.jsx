@@ -25,8 +25,8 @@ export const CongratulationsPage = ({ handleClose, state }) => {
                     <p className="text-center font-bold text-3xl vsm:text-4xl">Συγχαρητήρια!</p>
                     <p className="text-center font-bold text-8xl text-hoverColor">6</p>
                     <div>
-                        <p className="text-center font-bold text-2xl mb-9">Συμπλήρωσε το τηλέφωνό σου για να σε καλέσουμε και να σε ενημερώσουμε για τη προσφορά σου!</p>
-                        <button className="bg-lightColor hover:bg-lightColor/85 text-2xl font-bold text-footerColor rounded-xl h-20 w-full">Θέλω ΠΡΟΣΦΟΡΑ!</button>
+                        <p className="text-center text-2xl mb-9">Συμπλήρωσε το τηλέφωνό σου για να σε καλέσουμε και να σε ενημερώσουμε για τη προσφορά σου!</p>
+                        <button className="bg-lightColor hover:bg-lightColor/85 text-xl font-black text-footerColor rounded-xl h-20 w-full">Θέλω ΠΡΟΣΦΟΡΑ!</button>
                     </div>
                 </main>
 
