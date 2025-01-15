@@ -15,7 +15,7 @@ export default {
         footerColor: "#370E92", // Change Footer Theme
       },
       screens: {
-        "vsm": "574px",
+        "vsm": "573px",
       },
     },
   },
