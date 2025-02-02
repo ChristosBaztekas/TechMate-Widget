@@ -6,7 +6,7 @@ export const Notifications = ({ hideNotification, radius = "10px", onNotificatio
         <main className="flex justify-center items-start gap-2">
             {/* Button to hide the notification */}
             <button
-                className="hover:text-hoverColor text-primaryColor cursor-pointer"
+                className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1"
                 onClick={() => hideNotification(false)}
                 aria-label="Close"
             >
@@ -31,7 +31,7 @@ export const Notifications = ({ hideNotification, radius = "10px", onNotificatio
                     <Link to={item.path} key={index} onClick={onNotificationClick}>
                         <article
                             style={{ borderRadius: radius }}
-                            className="w-fit text-darkColor bg-lightColor border-2 border-primaryColor hover:bg-primaryColor text-center px-2 py-2 cursor-pointer transition-all"
+                            className="w-fit text-darkColor bg-lightColor border-2 border-primaryColor hover:bg-primaryColor hover:text-white text-center px-2 py-2 cursor-pointer transition-all"
                         >
                             {item.text}
                         </article>
