@@ -9,7 +9,8 @@
 }
 
 /* Hide scrollbar in all browsers */
-body {
+body,
+html {
   font-family: "Inter", serif;
   margin: 0;
   padding: 0;
@@ -25,15 +26,15 @@ body {
   overflow: hidden;
 }
 
+/* Hide scrollbar in all scrollable elements */
+* {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE & Edge */
+}
+
 /* Hide scrollbar in WebKit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
   display: none;
-}
-
-.hide-scrollbar {
-  overflow: auto;
-  -ms-overflow-style: none;
-  /* IE 11 */
-  scrollbar-width: none;
-  /* Firefox 64 */
 }
