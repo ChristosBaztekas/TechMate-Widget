@@ -14,13 +14,19 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Old Firefox */
+  overflow: -moz-scrollbars-none;
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  /* Firefox */
+  scrollbar-width: none;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-/* hide Scroll Bar */
+/* Hide Scroll Bar for Webkit Browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
   width: 0px !important;
 }
