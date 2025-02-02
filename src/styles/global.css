@@ -8,25 +8,24 @@
   /* outline: 1px solid green; */
 }
 
-/* Global Style */
+/* Hide scrollbar in all browsers */
 body {
   font-family: "Inter", serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* Old Firefox */
-  overflow: -moz-scrollbars-none;
-  /* IE and Edge */
-  -ms-overflow-style: none;
-  /* Firefox */
+
+  /* Hide scrollbar in Firefox */
   scrollbar-width: none;
+
+  /* Hide scrollbar in Internet Explorer and Edge */
+  -ms-overflow-style: none;
+
+  /* Completely disable scrolling */
+  overflow: hidden;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-/* Hide Scroll Bar for Webkit Browsers (Chrome, Safari) */
+/* Hide scrollbar in WebKit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 0px !important;
+  display: none;
 }
