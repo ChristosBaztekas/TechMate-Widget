@@ -3,19 +3,14 @@ import Logo from "@/assets/images/Logo.png"; // Import the logo image
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
+import propTypes from "prop-types";
 
 export const StartPage = ({ radius = "10px" }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // Function to go back one page
-  const goBack = () => {
-    window.history.back();
-  };
 
   // Function to refresh the page
-  const refreshPage = () => {
-    window.location.reload();
-  };
+  const refreshPage = () => navigate(0);
 
   return (
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
@@ -27,7 +22,10 @@ export const StartPage = ({ radius = "10px" }) => {
         <div className="flex justify-center items-center z-20 text-lightColor">
           <button
             className="cursor-pointer hover:text-hoverColor"
-            onClick={goBack}
+            onClick={() => {
+              dispatch(setChatState(true));
+              navigate("/");
+            }}
             aria-label="Go back"
           >
             <Icons.ArrowIcon />
@@ -126,7 +124,7 @@ export const StartPage = ({ radius = "10px" }) => {
         </section>
       </main>
 
-      <footer className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">
+      <div className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">
         {/* Textarea for typing the message */}
         <textarea
           placeholder="Πληκτρολογήστε την ερώτησή σας..."
@@ -146,11 +144,15 @@ export const StartPage = ({ radius = "10px" }) => {
         >
           Send
         </button>
-      </footer>
+      </div>
 
       <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
         Supported by TechMate
       </footer>
     </section>
   );
+};
+
+StartPage.propTypes = {
+  radius: propTypes.string,
 };

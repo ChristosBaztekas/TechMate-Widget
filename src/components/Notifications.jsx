@@ -2,27 +2,11 @@ import { Link } from "react-router-dom";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import { useDispatch } from "react-redux";
 import { setNotificationState } from "@/store/Slices/userSlice";
+import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
+import propTypes from "prop-types";
 
 export const Notifications = ({ radius = "10px" }) => {
   const dispatch = useDispatch();
-
-  // Function to send dimensions to the parent window
-  const sendDimensionsToParent = (width, height, isClosed) => {
-    console.log("Sending dimensions:", {
-      width,
-      height,
-      isChatClosed: isClosed,
-    });
-    window.parent.postMessage(
-      {
-        type: "chatbot-dimensions", // Message key
-        width,
-        height,
-        isChatClosed: isClosed,
-      },
-      "*"
-    );
-  };
 
   return (
     <main className="flex justify-center items-start gap-2">
@@ -74,4 +58,8 @@ export const Notifications = ({ radius = "10px" }) => {
       </nav>
     </main>
   );
+};
+
+Notifications.propTypes = {
+  radius: propTypes.string,
 };

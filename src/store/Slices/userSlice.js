@@ -5,7 +5,7 @@ const initialState = {
   userId: null,
   userName: "",
   lastInteraction: "",
-  currentPage: "WelcomePage",
+  currentPage: "StartPage",
   formSubmitted: false,
   notification: false,
 };

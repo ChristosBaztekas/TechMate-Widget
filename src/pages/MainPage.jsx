@@ -3,29 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Logo from "@/assets/images/Logo.png"; // Import the logo image
 import { StartPage } from "@/pages"; // Import the StartPage component
 import { Notifications } from "@/components/Notifications"; // Import the Notifications component
-import { setChatState, setNotificationState } from "@/store/Slices/userSlice";
+import {
+  setChatState,
+  setNotificationState,
+  setCurrentPage,
+} from "@/store/Slices/userSlice";
+import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
 
 export const MainPage = () => {
   const dispatch = useDispatch();
   const { isChatClosed, notification } = useSelector((state) => state.user);
-
-  // Function to send dimensions to the parent window
-  const sendDimensionsToParent = (width, height, isClosed) => {
-    console.log("Sending dimensions:", {
-      width,
-      height,
-      isChatClosed: isClosed,
-    });
-    window.parent.postMessage(
-      {
-        type: "chatbot-dimensions", // Message key
-        width,
-        height,
-        isChatClosed: isClosed,
-      },
-      "*"
-    );
-  };
+  const NOTIFICATION_DELAY = 2000; // Delay of 2 seconds
 
   // Effect to update parent with chat dimensions based on its state
   useEffect(() => {
@@ -36,11 +24,14 @@ export const MainPage = () => {
     } else {
       sendDimensionsToParent("574px", "570px", false);
     }
-  }, [isChatClosed, dispatch, notification]);
+  }, [isChatClosed, notification]);
 
   // Effect to show notification after a delay
   useEffect(() => {
-    const timer = setTimeout(() => dispatch(setNotificationState(true)), 2000); // Delay of 1 second
+    const timer = setTimeout(
+      () => dispatch(setNotificationState(true)),
+      NOTIFICATION_DELAY
+    ); // Delay of 1 second
     return () => clearTimeout(timer); // Cleanup the timer if the component is unmounted
   }, [dispatch]);
 
@@ -49,11 +40,12 @@ export const MainPage = () => {
       {!isChatClosed ? (
         <StartPage radius="10px" />
       ) : (
-        <Fragment>
+        <>
           {notification && <Notifications />}
-          <div
+          <button
             onClick={() => {
               dispatch(setChatState(false));
+              dispatch(setCurrentPage("StartPage"));
             }}
             className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-400 rounded-full cursor-pointer"
             role="button"
@@ -63,10 +55,10 @@ export const MainPage = () => {
             <img
               src={Logo}
               alt="logo"
-              className="absolute -top-1 -left-7 w-15"
+              className="absolute -top-1 -left-7 w-16"
             />
-          </div>
-        </Fragment>
+          </button>
+        </>
       )}
     </Fragment>
   );
