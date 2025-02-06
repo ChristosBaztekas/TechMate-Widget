@@ -10,21 +10,22 @@ export const NewsLetterPage = () => {
         <main className="flex flex-col justify-around items-center h-full text-lightColor mx-5">
           <div className="flex flex-col text-center gap-7 items-center">
             <h1 className="text-4xl font-bold">Newsletter!</h1>
-            <p className="text-2xl font-bold w-[90%]">
+            <p className="text-2xl font-black w-[90%]">
               Θα λαμβάνετε εντελώς δωρεάν, newsletter με επιμορφωτικό υλικό!
             </p>
           </div>
           <div className="w-full mt-8">
             <input
-              placeholder="E-mail"
+              placeholder="E-mail*"
               type="email"
               className="bg-lightColor text-xl p-5 text-black/70 rounded-xl h-20 vsm:h-[70px] w-full mb-4 outline-none"
               aria-label="Email"
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-hoverColor hover:bg-hoverColor/85 text-2xl font-bold text-white rounded-xl h-20 vsm:h-[70px] w-full"
+                className="bg-hoverColor hover:bg-hoverColor/85 text-2xl font-black text-white rounded-xl h-20 vsm:h-[70px] w-full"
                 aria-label="I want an OFFER!"
+                style={{ boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)' }}
               >
                 Δωρεάν Ανάλυση Αναγκών!
               </button>

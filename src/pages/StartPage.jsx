@@ -1,9 +1,9 @@
-import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
-import Logo from "@/assets/images/Logo.png"; // Import the logo image
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import propTypes from "prop-types";
+import * as Icons from "@/utils/icons.util"; // Import all icons
+import Logo from "@/assets/images/Logo.png"; // Import logo image
 
 export const StartPage = ({ radius = "10px" }) => {
   const dispatch = useDispatch();
@@ -97,18 +97,6 @@ export const StartPage = ({ radius = "10px" }) => {
             {
               text: "Τι χρειάζεται για να κάνω μία ;",
               path: "/submit",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
             },
           ].map((item, index) => (
             // Option Container

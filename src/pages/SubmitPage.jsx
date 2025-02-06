@@ -1,8 +1,9 @@
-import Header from "@/components/Header";
-import Icon from "@/assets/images/congrats.png";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setChatState } from "@/store/Slices/userSlice";
+import Header from "@/components/Header"; // Components
+import Icon from "@/assets/images/congrats.png"; // Icons
+
 
 export const SubmitPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export const SubmitPage = () => {
             Συγχαρητήρια!
           </p>
           <div className="flex flex-col items-center w-full">
-            <p className="text-center text-2xl mb-6 w-[85%] mt-4 font-bold">
+            <p className="text-center text-2xl mb-6 w-[85%] mt-4 font-black">
               Έλαβες τη προσφορά σου και θα επικοινωνήσουμε μαζί σου το
               συντομότερο δυνατό!
             </p>

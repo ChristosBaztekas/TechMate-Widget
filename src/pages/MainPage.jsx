@@ -1,14 +1,14 @@
 import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Logo from "@/assets/images/Logo.png"; // Import the logo image
-import { StartPage } from "@/pages"; // Import the StartPage component
-import { Notifications } from "@/components/Notifications"; // Import the Notifications component
 import {
   setChatState,
   setNotificationState,
   setCurrentPage,
 } from "@/store/Slices/userSlice";
-import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
+import Logo from "@/assets/images/Logo.png"; // Import logo image
+import { StartPage } from "@/pages"; // Import StartPage component
+import { Notifications } from "@/components/Notifications"; // Import Notifications component
+import { sendDimensionsToParent } from "@/utils/functions.util"; // Import sendDimensionsToParent function
 
 export const MainPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const MainPage = () => {
     } else if (isChatClosed) {
       sendDimensionsToParent("95px", "87px", true);
     } else {
-      sendDimensionsToParent("574px", "570px", false);
+      sendDimensionsToParent("33%", "70%", false);
     }
   }, [isChatClosed, notification]);
 

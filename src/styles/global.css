@@ -15,23 +15,15 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
-  /* Hide scrollbar in Firefox */
   scrollbar-width: none;
-
-  /* Hide scrollbar in Internet Explorer and Edge */
   -ms-overflow-style: none;
-
-  /* Completely disable scrolling */
   overflow: hidden;
 }
 
 /* Hide scrollbar in all scrollable elements */
 * {
   scrollbar-width: none;
-  /* Firefox */
   -ms-overflow-style: none;
-  /* IE & Edge */
 }
 
 /* Hide scrollbar in WebKit-based browsers (Chrome, Safari) */

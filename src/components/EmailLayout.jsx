@@ -4,7 +4,7 @@ import propTypes from "prop-types";
 
 export const EmailLayout = ({ icon }) => {
   return (
-    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50  overflow-scroll overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden rounded-rad">
       <div className="flex flex-col justify-between h-full bg-[#501AC8]">
         <Header />
 
@@ -19,7 +19,7 @@ export const EmailLayout = ({ icon }) => {
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-lightColor hover:bg-lightColor/85 text-2xl font-bold text-footerColor rounded-xl h-20 vsm:h-[70px] w-full"
+                className="bg-lightColor hover:bg-lightColor/85 text-2xl font-black text-footerColor rounded-xl h-20 vsm:h-[70px] w-full"
                 aria-label="I want an OFFER!"
               >
                 Θέλω ΠΡΟΣΦΟΡΑ!
