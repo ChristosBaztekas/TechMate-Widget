@@ -16,13 +16,13 @@ export const SubmitPage = () => {
           <img
             src={Icon}
             alt="Congratulations"
-            className="bg-contain w-36 h-36"
+            className="bg-contain vsm:w-36 vsm:h-36"
           />
-          <p className="text-center font-bold text-3xl vsm:text-4xl">
+          <p className="text-center font-bold text-4xl vsm:text-4xl">
             Συγχαρητήρια!
           </p>
-          <div className="flex flex-col items-center">
-            <p className="text-center text-2xl mb-9 w-[85%]">
+          <div className="flex flex-col items-center w-full">
+            <p className="text-center text-2xl mb-6 w-[85%] mt-4 font-bold">
               Έλαβες τη προσφορά σου και θα επικοινωνήσουμε μαζί σου το
               συντομότερο δυνατό!
             </p>
