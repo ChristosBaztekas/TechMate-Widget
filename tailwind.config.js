@@ -1,9 +1,6 @@
 /** @type {import("tailwindcss").Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -14,11 +11,13 @@ export default {
         gradientColor: "#1C064C", // Change Chatbot Send Gradient Theme
         footerColor: "#370E92", // Change Footer Theme
       },
+      borderRadius: {
+        rad: "18px",
+      },
       screens: {
-        "vsm": "573px",
+        vsm: "573px",
       },
     },
   },
   plugins: [],
-}
-
+};

@@ -13,7 +13,7 @@ export const StartPage = ({ radius = "10px" }) => {
   const refreshPage = () => navigate(0);
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
+    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-4 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
         <Icons.PatternIcon />
@@ -87,16 +87,16 @@ export const StartPage = ({ radius = "10px" }) => {
               path: "/third",
             },
             {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
+              text: "Τι χρειάζεται για να κάνω",
+              path: "/fourth",
             },
             {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
+              text: "Τι χρειάζεται",
+              path: "/newsletter",
             },
             {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
+              text: "Τι χρειάζεται για να κάνω μία ;",
+              path: "/submit",
             },
             {
               text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",

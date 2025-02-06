@@ -8,7 +8,7 @@ export const WelcomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden">
+    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden rounded-rad">
       <div className="flex flex-col justify-between h-full">
         <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-5 vsm:px-7 h-56 bg-primaryColor transition-all">
           {/* Pattern Icon */}
