@@ -17,18 +17,18 @@ export const SubmitPage = () => {
           <img
             src={Icon}
             alt="Congratulations"
-            className="bg-contain vsm:w-36 vsm:h-36"
+            className="bg-contain w-36"
           />
-          <p className="text-center font-bold text-4xl vsm:text-4xl">
+          <p className="text-center font-bold text-3xl sm:text-4xl">
             Συγχαρητήρια!
           </p>
           <div className="flex flex-col items-center w-full">
-            <p className="text-center text-2xl mb-6 w-[85%] mt-4 font-black">
+            <p className="text-center  text-xl sm:text-2xl mb-6 sm:w-[85%] mt-4 font-black">
               Έλαβες τη προσφορά σου και θα επικοινωνήσουμε μαζί σου το
               συντομότερο δυνατό!
             </p>
             <button
-              className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-white rounded-xl h-20 w-full"
+              className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-white rounded-xl h-16 sm:h-20 w-full"
               onClick={() => {
                 dispatch(setChatState(false));
                 navigate("/");

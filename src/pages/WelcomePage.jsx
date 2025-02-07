@@ -8,11 +8,11 @@ export const WelcomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
-    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll rounded-rad">
       <div className="flex flex-col justify-between h-full">
         <header className="relative flex justify-between items-start py-2 tiny:py-3 text-primaryColor px-5 vsm:px-7 h-56 bg-primaryColor transition-all">
           {/* Pattern Icon */}
-          <span className="absolute bottom-1 w-full left-0">
+          <span className="absolute bottom-1 sm:-bottom-16 w-full left-0">
             <Icons.PatternIcon />
           </span>
 
@@ -28,7 +28,7 @@ export const WelcomePage = () => {
               }}
             />
             <h1 className="text-3xl font-bold ml-5">Γεια σας! 👋</h1>
-            <h2 className="text-xl my-4 vsm:my-1 ml-5">
+            <h2 className="text-lg sm:text-xl my-4 vsm:my-1 ml-5">
               Καλωσήρθατε στην υποστήριξη της TechMate! Είμαστε στη διάθεσή σας!
             </h2>
           </div>
@@ -45,7 +45,7 @@ export const WelcomePage = () => {
           </button>
         </header>
 
-        <aside className="flex justify-between items-center p-3 vsm:h-[59px] bg-lightColor z-50 mx-8 vsm:mt-3 vsm:mx-20 rounded-[10px]">
+        <aside className="flex justify-between items-center p-3 sm:max-h-[62px] bg-lightColor z-50 mx-8 sm:mx-20 rounded-[10px]">
           <div>
             <p className="text-lg font-semibold">Επιστροφή στο Chat</p>
             <p className="text-xs text-darkColor/70 font-medium max-w-64 vsm:max-w-max">
@@ -57,7 +57,7 @@ export const WelcomePage = () => {
           </span>
         </aside>
 
-        <main className="flex flex-col vsm:flex-row vsm:flex-wrap text-lightColor justify-evenly mx-10">
+        <main className="sm:flex flex-col vsm:flex-row text-lightColor justify-evenly mx-10">
           <section className="flex flex-col gap-5 justify-center items-center p-5">
             <Icons.ClockIcon />
             <p className="max-w-24 text-center text-sm">

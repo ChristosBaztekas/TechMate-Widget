@@ -22,7 +22,7 @@ export const MainPage = () => {
     } else if (isChatClosed) {
       sendDimensionsToParent("95px", "87px", true);
     } else {
-      sendDimensionsToParent("33%", "70%", false);
+      sendDimensionsToParent("33%", "588px", false);
     }
   }, [isChatClosed, notification]);
 

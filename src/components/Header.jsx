@@ -8,7 +8,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
-    <header className="relative flex justify-between items-center text-primaryColor py-4 px-5 vsm:px-7 bg-primaryColor transition-all">
+    <header className="relative flex justify-between items-center text-primaryColor py-2 px-5 vsm:px-7 bg-primaryColor transition-all">
       {/* Logo and Greeting */}
       <div className="flex justify-center items-center z-20 text-lightColor my-1 p-2 vsm:p-0">
         <button
@@ -23,7 +23,7 @@ const Header = () => {
         <img src={Logo} alt="logo" className="w-[73px] vsm:w-20 hover:cursor-pointer hover:scale-95 transition-all duration-300" onClick={() => {
           dispatch(setChatState(false));
           navigate("/");
-        }}/>
+        }} />
         <h1 className="text-lg font-bold">Γεια σας! 👋</h1>
       </div>
 

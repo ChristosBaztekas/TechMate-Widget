@@ -13,7 +13,7 @@ export const StartPage = ({ radius = "10px" }) => {
   const refreshPage = () => navigate(0);
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
+    <section className="flex flex-col h-screen overflow-hidden w-full bg-primaryColor fixed bottom-0 right-0 z-50 rounded-rad">
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-4 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
         <Icons.PatternIcon />
@@ -56,15 +56,15 @@ export const StartPage = ({ radius = "10px" }) => {
         </div>
       </header>
 
-      <main className="flex flex-col gap-5 px-4 py-4 vsm:px-8 overflow-scroll overflow-x-hidden flex-grow">
+      <main className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll bg-darkColor overflow-x-hidden flex-grow">
         {/* Chat Section */}
-        <section className="flex justify-start items-start gap-4">
+        <section className="flex justify-start items-start gap-2 sm:gap-4">
           {/* Logo Container */}
           <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 mt-2 bg-lightColor rounded-full text-sm font-light">
             Logo
           </div>
           {/* Chat Message */}
-          <p className="w-full bg-lightColor vsm:text-lg text-darkColor font-light p-4 rounded-[20px]">
+          <p className="w-full bg-lightColor sm:text-lg text-darkColor font-light p-4 rounded-[20px]">
             <span className="block mb-4">Γεια σας!</span>
             Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλες
             τις απορίες σας σχετικά με ασφάλειες και καλύψεις.
@@ -72,7 +72,7 @@ export const StartPage = ({ radius = "10px" }) => {
         </section>
 
         {/* Choose Section */}
-        <section className="flex flex-col justify-center items-end gap-3 text-xs">
+        <section className="flex flex-col justify-center items-end gap-2 sm:gap-3 text-xs">
           {[
             {
               text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",

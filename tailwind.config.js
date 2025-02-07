@@ -15,7 +15,8 @@ export default {
         rad: "18px",
       },
       screens: {
-        vsm: "573px",
+        sm: "500px",
+        vsm: "430px",
       },
     },
   },
