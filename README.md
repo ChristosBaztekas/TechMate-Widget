@@ -7,7 +7,7 @@
 
     // Create an iframe for the chatbot
     const chatbotIframe = document.createElement('iframe');
-    chatbotIframe.src = 'http://localhost:5173';
+    chatbotIframe.src = 'https://tech-mate-chatbot.vercel.app';
     chatbotIframe.style.position = 'fixed';
     chatbotIframe.style.bottom = '10px';
     chatbotIframe.style.right = '10px';
@@ -24,7 +24,7 @@
     // Listen for messages from the iframe
     window.addEventListener('message', (event) => {
         // Check the origin and message type
-        if (event.origin !== 'http://localhost:5173' || event.data.type !== "chatbot-dimensions") return;
+        if (event.origin !== 'https://tech-mate-chatbot.vercel.app' || event.data.type !== "chatbot-dimensions") return;
 
         const { width, height, isChatClosed: newIsChatClosed } = event.data;
         // Handle different window sizes and chat states
