@@ -44,7 +44,7 @@ export const Notifications = ({ radius = "10px" }) => {
             key={index}
             onClick={() => {
               dispatch(setNotificationState(true));
-              sendDimensionsToParent("574px", "570px", false);
+              sendDimensionsToParent("33%", "70%", false);
             }}
           >
             <article

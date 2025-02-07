@@ -4,10 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  /* outline: 1px solid green; */
-}
-
 /* Hide scrollbar in all browsers */
 body,
 html {

@@ -13,8 +13,8 @@ export const StartPage = ({ radius = "10px" }) => {
   const refreshPage = () => navigate(0);
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-primaryColor fixed bottom-0 right-0 z-50 rounded-rad">
-      <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-4 px-5 vsm:px-7 h-20 transition-all">
+    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
+      <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-3 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
         <Icons.PatternIcon />
 
@@ -56,7 +56,7 @@ export const StartPage = ({ radius = "10px" }) => {
         </div>
       </header>
 
-      <main className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll bg-darkColor overflow-x-hidden flex-grow">
+      <main className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
         {/* Chat Section */}
         <section className="flex justify-start items-start gap-2 sm:gap-4">
           {/* Logo Container */}
