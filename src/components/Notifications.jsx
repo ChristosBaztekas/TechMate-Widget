@@ -12,7 +12,7 @@ export const Notifications = ({ radius = "10px" }) => {
     <main className="flex justify-center items-start gap-2">
       {/* Button to hide the notification */}
       <button
-        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1"
+        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1 ml-auto"
         onClick={() => {
           dispatch(setNotificationState(false));
         }}
