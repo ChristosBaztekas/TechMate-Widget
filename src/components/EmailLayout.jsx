@@ -4,11 +4,11 @@ import propTypes from "prop-types";
 
 export const EmailLayout = ({ icon }) => {
   return (
-    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-scroll overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
       <div className="flex flex-col justify-between h-full bg-[#501AC8]">
         <Header />
 
-        <main className="flex flex-col justify-around items-center h-full text-lightColor mx-5">
+        <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">
           <img src={icon} alt="email" className="vsm:w-40" />
           <div className="w-full mt-8">
             <input

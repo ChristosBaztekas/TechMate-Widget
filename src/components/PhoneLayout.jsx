@@ -4,11 +4,11 @@ import propTypes from "prop-types";
 
 export const PhoneLayout = ({ icon }) => {
   return (
-    <section className="flex flex-col h-screen w-full bg-[#501AC8] fixed bottom-0 right-0 z-50  overflow-scroll overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-[#501AC8] fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
       <div className="flex flex-col justify-between h-full">
         <Header />
 
-        <main className="flex flex-col justify-around items-center h-full text-lightColor mx-5">
+        <main className="flex flex-col justify-around  overflow-scroll items-center h-full text-lightColor mx-5">
           <img src={icon} alt="phone" className="vsm:w-40" />
           <div className="w-full">
             <input
