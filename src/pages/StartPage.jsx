@@ -16,7 +16,9 @@ export const StartPage = ({ radius = "10px" }) => {
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-3 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
-        <Icons.PatternIcon />
+        <span className="absolute right-0 left-0 top-0 w-full h-fit">
+          <Icons.PatternIcon />
+        </span>
 
         {/* Logo and Greeting */}
         <div className="flex justify-center items-center z-20 text-lightColor">
