@@ -10,9 +10,9 @@ export const WelcomePage = () => {
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
       <div className="flex flex-col justify-between h-full">
-        <header className="relative flex justify-between items-start py-3 text-primaryColor px-5 vsm:px-7 h-56 bg-primaryColor transition-all">
+        <header className="relative flex justify-between items-start py-3 text-primaryColor px-5 vsm:px-7 bg-primaryColor transition-all">
           {/* Pattern Icon */}
-          <span className="absolute right-0 left-0 -bottom-16 w-full h-fit">
+          <span className="absolute right-0 left-0 -bottom-12 vsm:-bottom-16 w-full h-fit">
             <Icons.PatternIcon />
           </span>
 
