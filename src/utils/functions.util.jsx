@@ -1,4 +1,4 @@
-// Function to send dimensions to the parent window
+// Function to send dimensions (Width, Height) to the parent window
 export const sendDimensionsToParent = (width, height, isClosed) => {
   console.log("Sending dimensions:", {
     width,
