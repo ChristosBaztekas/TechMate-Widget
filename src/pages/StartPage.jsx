@@ -89,11 +89,15 @@ export const StartPage = () => {
         {
           // Show normal messages when not loading or in an error state
           messages.map((message, index) => (
-            <div key={index} className="flex flex-col gap-5">
+            <div
+              key={index}
+              className="flex flex-col gap-5 animate-fadeIn"
+            >
               {message.query ? <Query query={message.query} /> : null}
               <Response text={message.text} />
               <Questions questionsArr={message.questions} />
             </div>
+
           ))
         }
       </div>
