@@ -85,7 +85,7 @@ export const StartPage = () => {
       </header>
 
       {/* Chat Section */}
-      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
+      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 sm:mt-4 overflow-scroll overflow-x-hidden flex-grow">
         {
           // Show normal messages when not loading or in an error state
           messages.map((message, index) => (
