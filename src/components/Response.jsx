@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import ReactMarkdown from "react-markdown";
 import ChatLogo from "../assets/images/ChatLogo.jpg"
 const Response = ({ text }) => {
   // Remove "Γεια σας!" from the text
@@ -14,7 +13,7 @@ const Response = ({ text }) => {
       {/* Chat Message */}
       <div className="w-fit bg-lightColor text-darkColor font-light p-4 rounded-[20px]">
         {text.includes("Γεια σας!") && <div>Γεια σας!</div>}
-        <ReactMarkdown>{modifiedText}</ReactMarkdown>
+        {modifiedText}
       </div>
     </div>
   );
