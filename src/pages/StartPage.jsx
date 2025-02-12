@@ -89,7 +89,6 @@ export const StartPage = () => {
           </button>
         </div>
       </header>
-
       {/* Chat Section */}
       <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
         {messages.map((message, index) => {

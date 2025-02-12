@@ -15,7 +15,7 @@ const Questions = ({ questionsArr }) => {
         <div key={index} onClick={() => handleQuestionClick(item.id)}>
           <p
             style={{ borderRadius: "10px" }}
-            className="w-fit text-lightColor border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
+            className="w-fit text-center text-lightColor border border-primaryColor hover:bg-primaryColor px-2 py-3 cursor-pointer transition-all"
           >
             {item.question}
           </p>
