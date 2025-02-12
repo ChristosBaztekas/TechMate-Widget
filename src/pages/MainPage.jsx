@@ -1,5 +1,6 @@
 import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
 import {
   setChatState,
   setNotificationState,
@@ -32,7 +33,11 @@ export const MainPage = () => {
       () => dispatch(setNotificationState(true)),
       NOTIFICATION_DELAY
     ); // Delay of 1 second
-    return () => clearTimeout(timer); // Cleanup the timer if the component is unmounted
+    return () => clearTimeout(timer); // Cleanup the timer if the component is unmount
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchAllQuestions());
   }, [dispatch]);
 
   return (

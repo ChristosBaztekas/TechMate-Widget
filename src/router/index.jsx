@@ -3,7 +3,11 @@ import {
   MainPage,
   WelcomePage,
   PhonePageForm1,
+  PhonePageForm2,
+  PhonePageForm3,
   EmailPageForm1,
+  EmailPageForm2,
+  EmailPageForm3,
   CongratulationsPage,
   NewsLetterPage,
   SubmitPage,
@@ -19,23 +23,39 @@ const router = createBrowserRouter([
     element: <WelcomePage />,
   },
   {
-    path: "/second",
+    path: "/phone-form1",
     element: <PhonePageForm1 />,
   },
   {
-    path: "/third",
-    element: <CongratulationsPage />,
+    path: "/phone-form2",
+    element: <PhonePageForm2 />,
   },
   {
-    path: "/fourth",
+    path: "/phone-form3",
+    element: <PhonePageForm3 />,
+  },
+  {
+    path: "/email-form1",
     element: <EmailPageForm1 />,
+  },
+  {
+    path: "/email-form2",
+    element: <EmailPageForm2 />,
+  },
+  {
+    path: "/email-form3",
+    element: <EmailPageForm3 />,
+  },
+  {
+    path: "/congratulations",
+    element: <CongratulationsPage />,
   },
   {
     path: "/newsletter",
     element: <NewsLetterPage />,
   },
   {
-    path: "/submit",
+    path: "/submitted",
     element: <SubmitPage />,
   },
 ]);
