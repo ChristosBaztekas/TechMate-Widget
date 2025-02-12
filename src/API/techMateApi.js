@@ -38,3 +38,30 @@ export const ansGivenQuestion = async (conversation_id, question_id) => {
     return null;
   }
 };
+
+// post user info name and phone
+export const postUserInfo = async (conversation_id, full_name, phone) => {
+  try {
+    const response = await axiosInstance.post(`/${conversation_id}/form?id=1`, {
+      full_name,
+      phone,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while posting user info", error);
+    return null;
+  }
+};
+
+// post user info email only
+export const postUserEmail = async (conversation_id, email) => {
+  try {
+    const response = await axiosInstance.post(`/${conversation_id}/form?id=2`, {
+      email,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while posting user email", error);
+    return null;
+  }
+};
