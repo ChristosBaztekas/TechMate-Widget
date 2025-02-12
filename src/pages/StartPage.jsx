@@ -1,13 +1,39 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import propTypes from "prop-types";
 import * as Icons from "@/utils/icons.util"; // Import all icons
 import Logo from "@/assets/images/Logo.png"; // Import logo image
+import { useEffect, useState } from "react";
+import Questions from "@/components/Questions";
+import Response from "@/components/Response";
+import Query from "@/components/Query";
+import { fetchUserQuestion } from "@/store/Slices/chatbotApiSlice";
 
-export const StartPage = ({ radius = "10px" }) => {
+export const StartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userInput, setUserInput] = useState("");
+
+  const { messages, conversationId } = useSelector((state) => state.chatbotApi);
+
+  const handleSendClick = async () => {
+    if (!userInput || !conversationId) return;
+    dispatch(fetchUserQuestion(userInput));
+    setUserInput("");
+  };
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat section
+    const chatSection = document.querySelector(".overflow-scroll");
+    chatSection.scrollTop = chatSection.scrollHeight;
+  });
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSendClick();
+    }
+  };
 
   // Function to refresh the page
   const refreshPage = () => navigate(0);
@@ -58,61 +84,19 @@ export const StartPage = ({ radius = "10px" }) => {
         </div>
       </header>
 
-      <main className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
-        {/* Chat Section */}
-        <section className="flex justify-start items-start gap-2 sm:gap-4">
-          {/* Logo Container */}
-          <div className="flex justify-center items-center flex-shrink-0 w-12 h-12 mt-2 bg-lightColor rounded-full text-sm font-light">
-            Logo
-          </div>
-          {/* Chat Message */}
-          <p className="w-full bg-lightColor sm:text-lg text-darkColor font-light p-4 rounded-[20px]">
-            <span className="block mb-4">Γεια σας!</span>
-            Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλες
-            τις απορίες σας σχετικά με ασφάλειες και καλύψεις.
-          </p>
-        </section>
-
-        {/* Choose Section */}
-        <section className="flex flex-col justify-center items-end gap-2 sm:gap-3 text-xs">
-          {[
-            {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/first",
-            },
-            {
-              text: "Μόλις τράκαρα. Τι πρέπει να κάνω;",
-              path: "/second",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω μία ασφάλεια;",
-              path: "/third",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω",
-              path: "/fourth",
-            },
-            {
-              text: "Τι χρειάζεται",
-              path: "/newsletter",
-            },
-            {
-              text: "Τι χρειάζεται για να κάνω μία ;",
-              path: "/submit",
-            },
-          ].map((item, index) => (
-            // Option Container
-            <Link to={item.path} key={index}>
-              <p
-                style={{ borderRadius: radius }}
-                className="w-fit text-lightColor border border-primaryColor hover:bg-primaryColor text-center px-4 py-3 cursor-pointer transition-all"
-              >
-                {item.text}
-              </p>
-            </Link>
-          ))}
-        </section>
-      </main>
+      {/* Chat Section */}
+      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
+        {
+          // Show normal messages when not loading or in an error state
+          messages.map((message, index) => (
+            <div key={index} className="flex flex-col gap-5">
+              {message.query ? <Query query={message.query} /> : null}
+              <Response text={message.text} />
+              <Questions questionsArr={message.questions} />
+            </div>
+          ))
+        }
+      </div>
 
       <div className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">
         {/* Textarea for typing the message */}
@@ -126,11 +110,15 @@ export const StartPage = ({ radius = "10px" }) => {
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;
           }}
+          onChange={(e) => setUserInput(e.target.value)}
+          value={userInput}
         />
         {/* Submit button for sending the message */}
         <button
           type="submit"
           className="ml-6 mt-2 text-white font-bold hover:text-hoverColor"
+          onClick={handleSendClick}
+          onKeyDown={handleKeyDown}
         >
           Send
         </button>
