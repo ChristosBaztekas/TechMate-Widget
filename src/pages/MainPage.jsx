@@ -1,11 +1,7 @@
 import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
-import {
-  setChatState,
-  setNotificationState,
-  setCurrentPage,
-} from "@/store/Slices/userSlice";
+import { setChatState, setNotificationState } from "@/store/Slices/userSlice";
 import Logo from "@/assets/images/Logo.png"; // Import logo image
 import { StartPage } from "@/pages"; // Import StartPage component
 import { Notifications } from "@/components/Notifications"; // Import Notifications component
@@ -50,7 +46,6 @@ export const MainPage = () => {
           <button
             onClick={() => {
               dispatch(setChatState(false));
-              dispatch(setCurrentPage("StartPage"));
             }}
             className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-400 rounded-full cursor-pointer"
             role="button"

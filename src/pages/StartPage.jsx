@@ -35,6 +35,12 @@ export const StartPage = () => {
     }
   };
 
+  const formsMap = {
+    a: "phone-form1",
+    b: "newsletter",
+    c: "congratulations",
+  };
+
   // Function to refresh the page
   const refreshPage = () => navigate(0);
 
@@ -83,23 +89,24 @@ export const StartPage = () => {
           </button>
         </div>
       </header>
-
       {/* Chat Section */}
-      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 sm:mt-4 overflow-scroll overflow-x-hidden flex-grow">
-        {
-          // Show normal messages when not loading or in an error state
-          messages.map((message, index) => (
-            <div
-              key={index}
-              className="flex flex-col gap-5 animate-fadeIn"
-            >
+      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
+        {messages.map((message, index) => {
+          if (message.text.startsWith("form")) {
+            const lastChar = message.text.slice(-1); // Get last character
+            const form = formsMap[lastChar];
+            navigate(`/${form}`);
+            return null; // Prevent rendering components
+          }
+
+          return (
+            <div key={index} className="flex flex-col gap-5">
               {message.query ? <Query query={message.query} /> : null}
               <Response text={message.text} />
               <Questions questionsArr={message.questions} />
             </div>
-
-          ))
-        }
+          );
+        })}
       </div>
 
       <div className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">

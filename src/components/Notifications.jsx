@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import { useDispatch, useSelector } from "react-redux";
-import { setNotificationState } from "@/store/Slices/userSlice";
+import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
 import propTypes from "prop-types";
+import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
 
 export const Notifications = ({ radius = "10px" }) => {
   const dispatch = useDispatch();
@@ -39,6 +40,8 @@ export const Notifications = ({ radius = "10px" }) => {
             key={index}
             onClick={() => {
               dispatch(setNotificationState(true));
+              dispatch(setChatState(false));
+              dispatch(fetchGivenQuestion(item.id));
               sendDimensionsToParent("33%", "70%", false);
             }}
           >

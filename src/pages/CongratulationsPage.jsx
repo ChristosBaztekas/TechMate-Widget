@@ -9,7 +9,7 @@ export const CongratulationsPage = () => {
   // Effect to update the counter every second and navigate to the main page when the counter reaches 0
   useEffect(() => {
     if (counter <= 0) {
-      navigate("/");
+      navigate("/email-form2");
       return;
     }
 
