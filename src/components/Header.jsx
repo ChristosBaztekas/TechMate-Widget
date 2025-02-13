@@ -26,7 +26,7 @@ const Header = () => {
           className="w-[73px] vsm:w-20 hover:cursor-pointer hover:scale-95 transition-all duration-300"
           onClick={() => {
             dispatch(setChatState(false));
-            navigate("/");
+            navigate("/first");
           }}
         />
         <h1 className="text-lg font-bold">Γεια σας! 👋</h1>

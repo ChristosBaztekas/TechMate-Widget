@@ -24,7 +24,7 @@ export const WelcomePage = () => {
               className="w-14 vsm:w-auto xl:w-20 my-5"
               onClick={() => {
                 dispatch(setChatState(false));
-                navigate("/");
+                navigate("/first");
               }}
             />
             <h1 className="text-3xl font-bold ml-5">Γεια σας! 👋</h1>

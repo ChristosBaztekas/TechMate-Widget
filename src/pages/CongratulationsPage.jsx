@@ -36,13 +36,21 @@ export const CongratulationsPage = () => {
               Συμπλήρωσε το τηλέφωνό σου για να σε καλέσουμε και να σε
               ενημερώσουμε για τη προσφορά σου!
             </p>
-            <button className="bg-lightColor hover:bg-lightColor/85 text-xl font-black text-footerColor rounded-xl h-20 w-full">
+            <button
+              className="bg-lightColor hover:bg-lightColor/85 text-xl font-black text-footerColor rounded-xl h-20 w-full"
+              onClick={() => {
+                navigate("/email-form2");
+              }}
+            >
               Θέλω ΠΡΟΣΦΟΡΑ!
             </button>
           </div>
         </main>
 
-        <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
+        <footer
+          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
+          onClick={() => navigate("/first")}
+        >
           Supported by TechMate
         </footer>
       </div>

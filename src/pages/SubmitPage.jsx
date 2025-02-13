@@ -1,37 +1,39 @@
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { setChatState } from "@/store/Slices/userSlice";
 import Header from "@/components/Header"; // Components
 import Icon from "@/assets/images/congrats.png"; // Icons
-
+import { useNavigate } from "react-router-dom";
 
 export const SubmitPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.history.pushState({}, "", "/congratulations");
+  }, []);
+
   return (
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
       <div className="flex flex-col justify-between h-full bg-[#501AC8]">
         <Header />
 
         <main className="flex flex-col justify-around items-center h-full text-lightColor mx-6 vsm:mx-5">
-          <img
-            src={Icon}
-            alt="Congratulations"
-            className="bg-contain w-36"
-          />
+          <img src={Icon} alt="Congratulations" className="bg-contain w-36" />
           <p className="text-center font-bold text-3xl sm:text-4xl">
             Συγχαρητήρια!
           </p>
           <div className="flex flex-col items-center w-full">
-            <p className="text-center  text-xl sm:text-2xl mb-6 sm:w-[85%] mt-4 font-black">
+            <p className="text-center text-xl sm:text-2xl mb-6 sm:w-[85%] mt-4 font-black">
               Έλαβες τη προσφορά σου και θα επικοινωνήσουμε μαζί σου το
               συντομότερο δυνατό!
             </p>
             <button
               className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-white rounded-xl h-16 sm:h-20 w-full"
               onClick={() => {
-                dispatch(setChatState(false));
-                navigate("/");
+                dispatch(setChatState(true));
+                window.history.pushState({}, "", "/");
+                window.location.reload();
               }}
             >
               Επιστροφή στο Chat
@@ -44,7 +46,12 @@ export const SubmitPage = () => {
           </p>
         </main>
 
-        <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
+        <footer
+          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
+          onClick={() => {
+            navigate("/first");
+          }}
+        >
           Supported by TechMate
         </footer>
       </div>
