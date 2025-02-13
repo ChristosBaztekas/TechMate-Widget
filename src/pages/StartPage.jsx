@@ -41,10 +41,27 @@ export const StartPage = () => {
     c: "congratulations",
   };
 
-  // Navigate without reloading
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+
+      if (lastMessage.text.startsWith("form")) {
+        const lastChar = lastMessage.text.slice(-1);
+        const form = formsMap[lastChar];
+
+        // Delete Last Message Before Navigate (Forms Messages)
+        dispatch({
+          type: "chatbotApi/removeLastMessage",
+        });
+
+        navigateWithoutReload(`/${form}`);
+      }
+    }
+  }, [messages]);
+
   const navigateWithoutReload = (path) => {
-    window.history.pushState({}, "", path);
-    window.dispatchEvent(new Event("popstate")); // Let React Router detect the change
+    dispatch(setChatState(true));
+    navigate(path);
   };
 
   return (

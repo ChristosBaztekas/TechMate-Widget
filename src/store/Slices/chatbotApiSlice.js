@@ -95,6 +95,11 @@ const chatbotApiSlice = createSlice({
     setQuestionId: (state, action) => {
       state.questionId = action.payload;
     },
+    removeLastMessage: (state) => {
+      if (state.messages.length > 0) {
+        state.messages.pop();
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
