@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import Logo from "@/assets/images/Logo.png"; // Import the logo image
 
@@ -52,9 +52,9 @@ export const WelcomePage = () => {
               Μην ανησυχείτε, δεν έχετε χάσει την συνομιλία σας!
             </p>
           </div>
-          <span className="text-primaryColor hover:text-hoverColor cursor-pointer">
+          <Link to="/" className="text-primaryColor hover:text-hoverColor cursor-pointer">
             <Icons.SendIcon />
-          </span>
+          </Link>
         </aside>
 
         <main className="sm:flex flex-col vsm:flex-row text-lightColor overflow-scroll justify-evenly mx-10">

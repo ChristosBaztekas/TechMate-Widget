@@ -10,7 +10,7 @@ const Footer = () => {
         navigate("/first");
       }}
     >
-      Supported by TechMate 
+      Supported by TechMate
     </footer>
   );
 };
