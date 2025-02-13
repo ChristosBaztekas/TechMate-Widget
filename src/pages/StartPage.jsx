@@ -27,7 +27,7 @@ export const StartPage = () => {
     // Scroll to the bottom of the chat section
     const chatSection = document.querySelector(".overflow-scroll");
     chatSection.scrollTop = chatSection.scrollHeight;
-  });
+  }, [messages]); // Ensure it runs when messages change
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -41,8 +41,11 @@ export const StartPage = () => {
     c: "congratulations",
   };
 
-  // Function to refresh the page
-  const refreshPage = () => navigate(0);
+  // Navigate without reloading
+  const navigateWithoutReload = (path) => {
+    window.history.pushState({}, "", path);
+    window.dispatchEvent(new Event("popstate")); // Let React Router detect the change
+  };
 
   return (
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
@@ -58,13 +61,20 @@ export const StartPage = () => {
             className="cursor-pointer hover:text-hoverColor"
             onClick={() => {
               dispatch(setChatState(true));
-              navigate("/");
+              navigate(-1); // Go back to the previous page properly
             }}
             aria-label="Go back"
           >
             <Icons.ArrowIcon />
           </button>
-          <img src={Logo} alt="logo" className="w-16 vsm:w-auto" />
+          <img
+            src={Logo}
+            alt="logo"
+            className="w-16 vsm:w-auto"
+            onClick={() => {
+              navigate("/first");
+            }}
+          />
           <h1 className="font-bold">Γεια σας! 👋</h1>
         </div>
 
@@ -72,7 +82,7 @@ export const StartPage = () => {
         <div className="flex justify-center items-center gap-2 z-20 text-lightColor">
           <button
             className="cursor-pointer hover:text-hoverColor hover:animate-spin"
-            onClick={refreshPage}
+            onClick={() => navigate(0)} // Full refresh if needed
             aria-label="Refresh page"
           >
             <Icons.RefreshIcon />
@@ -81,7 +91,7 @@ export const StartPage = () => {
             className="hover:text-hoverColor cursor-pointer"
             onClick={() => {
               dispatch(setChatState(true));
-              navigate("/");
+              navigate("/"); // Redirect to home
             }}
             aria-label="Close"
           >
@@ -89,13 +99,17 @@ export const StartPage = () => {
           </button>
         </div>
       </header>
+
       {/* Chat Section */}
       <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
         {messages.map((message, index) => {
           if (message.text.startsWith("form")) {
-            const lastChar = message.text.slice(-1); // Get last character
+            const lastChar = message.text.slice(-1);
             const form = formsMap[lastChar];
-            navigate(`/${form}`);
+
+            // Ensure navigation updates properly
+            navigateWithoutReload(`/${form}`);
+
             return null; // Prevent rendering components
           }
 
@@ -115,9 +129,8 @@ export const StartPage = () => {
           placeholder="Πληκτρολογήστε την ερώτησή σας..."
           className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-[20px] pl-5 p-2 outline-none resize-none overflow-hidden"
           aria-label="Message input field"
-          rows={1} // Initial height of the textarea
+          rows={1}
           onInput={(e) => {
-            // Adjust the height of the textarea based on its content
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;
           }}
@@ -135,7 +148,12 @@ export const StartPage = () => {
         </button>
       </div>
 
-      <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
+      <footer
+        className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
+        onClick={() => {
+          navigate("/first");
+        }}
+      >
         Supported by TechMate
       </footer>
     </section>
