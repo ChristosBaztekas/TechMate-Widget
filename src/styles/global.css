@@ -18,7 +18,6 @@ html {
 
 /* Hide scrollbar in all scrollable elements */
 * {
-  outline: 1px solid red;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
