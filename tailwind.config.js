@@ -12,7 +12,7 @@ export default {
         footerColor: "#9D2816", // Change Footer Theme
       },
       borderRadius: {
-        rad: "18px",
+        rad: "10px",
       },
       screens: {
         sm: "500px",

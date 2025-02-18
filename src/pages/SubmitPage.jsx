@@ -14,7 +14,7 @@ export const SubmitPage = () => {
   }, []);
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
+    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
       <div className="flex flex-col justify-between h-full bg-primaryColor">
         <Header />
 
@@ -29,7 +29,7 @@ export const SubmitPage = () => {
               συντομότερο δυνατό!
             </p>
             <button
-              className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-lightColor rounded-xl h-16 sm:h-20 w-full"
+              className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-lightColor rounded-rad h-16 sm:h-20 w-full"
               onClick={() => {
                 dispatch(setChatState(true));
                 window.history.pushState({}, "", "/");

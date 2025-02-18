@@ -11,7 +11,7 @@ const Response = ({ text }) => {
         <img src={ChatLogo} alt="Chatbot Logo" />
       </div>
       {/* Chat Message */}
-      <div className="w-fit bg-lightColor text-darkColor font-light p-4 rounded-[20px]">
+      <div className="w-fit bg-lightColor text-darkColor font-light p-4 rounded-rad">
         {text.includes("Γεια σας!") && <div>Γεια σας!</div>}
         {modifiedText}
       </div>

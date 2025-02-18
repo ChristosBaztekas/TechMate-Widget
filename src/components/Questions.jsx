@@ -13,10 +13,7 @@ const Questions = ({ questionsArr }) => {
       {questionsArr.map((item, index) => (
         // Option Container
         <div key={index} onClick={() => handleQuestionClick(item.id)}>
-          <p
-            style={{ borderRadius: "10px" }}
-            className="w-fit text-center text-lightColor border border-primaryColor hover:bg-primaryColor px-2 py-3 cursor-pointer transition-all"
-          >
+          <p className="w-fit text-center text-lightColor border border-primaryColor hover:bg-primaryColor px-2 py-3 cursor-pointer rounded-rad transition-all">
             {item.question}
           </p>
         </div>

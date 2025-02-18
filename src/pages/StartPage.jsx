@@ -65,7 +65,7 @@ export const StartPage = () => {
   };
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50 rounded-rad">
+    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-3 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
         <span className="absolute right-0 left-0 top-0 w-full h-fit">
@@ -78,7 +78,7 @@ export const StartPage = () => {
             className="cursor-pointer hover:text-hoverColor"
             onClick={() => {
               dispatch(setChatState(true));
-              navigate(-1); // Go back to the previous page properly
+              navigate("/"); // Go back to the previous page properly
             }}
             aria-label="Go back"
           >
@@ -144,7 +144,7 @@ export const StartPage = () => {
         {/* Textarea for typing the message */}
         <textarea
           placeholder="Πληκτρολογήστε την ερώτησή σας..."
-          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-[20px] pl-5 p-2 outline-none resize-none overflow-hidden"
+          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-rad pl-5 p-2 outline-none resize-none overflow-hidden"
           aria-label="Message input field"
           rows={1}
           onInput={(e) => {

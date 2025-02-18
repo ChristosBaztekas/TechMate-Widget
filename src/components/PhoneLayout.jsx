@@ -31,7 +31,7 @@ export const PhoneLayout = ({ icon }) => {
   };
 
   return (
-    <section className="flex flex-col h-screen w-full bg-primaryColor fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-primaryColor fixed bottom-0 right-0 z-50 overflow-x-hidden">
       <div className="flex flex-col justify-between h-full">
         <Header />
 
@@ -40,25 +40,25 @@ export const PhoneLayout = ({ icon }) => {
           <div className="w-full">
             <input
               placeholder="Ονοματεπώνυμο"
-              className="bg-lightColor text-xl p-5 text-black/70 rounded-xl w-full mb-4 outline-none"
+              className="bg-lightColor text-xl p-5 text-black/70 rounded-rad w-full mb-4 outline-none"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <input
               placeholder="Τηλέφωνο*"
-              className="bg-lightColor text-xl p-5 text-black/70 rounded-xl w-full outline-none"
+              className="bg-lightColor text-xl p-5 text-black/70 rounded-rad w-full outline-none"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <div className="w-full flex flex-col vsm:flex-row gap-2 sm:gap-5 mt-5">
               <button
-                className="bg-lightColor hover:bg-lightColor/85 text-xl sm:text-2xl font-bold text-hoverColor rounded-xl h-16 w-full"
+                className="bg-lightColor hover:bg-lightColor/85 text-xl sm:text-2xl font-bold text-hoverColor rounded-rad h-16 w-full"
                 onClick={() => navigate("/newsletter")}
               >
                 Newsletter!
               </button>
               <button
-                className="text-xl sm:text-2xl font-bold text-lightColor bg-hoverColor hover:bg-hoverColor/70 rounded-xl h-16 w-full"
+                className="text-xl sm:text-2xl font-bold text-lightColor bg-hoverColor hover:bg-hoverColor/70 rounded-rad h-16 w-full"
                 style={{ boxShadow: "0px 4px 4px 0px #00000040" }}
                 onClick={handleSend}
               >

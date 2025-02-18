@@ -41,14 +41,14 @@ export const EmailLayout = ({ icon }) => {
             <input
               placeholder="E-mail"
               type="email"
-              className="bg-lightColor text-xl p-5 text-black/70 rounded-xl h-20 vsm:h-[70px] w-full mb-4 outline-none"
+              className="bg-lightColor text-xl p-5 text-black/70 rounded-rad h-20 vsm:h-[70px] w-full mb-4 outline-none"
               aria-label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-lightColor hover:bg-lightColor/85 text-2xl font-black text-footerColor rounded-xl h-20 vsm:h-[70px] w-full"
+                className="bg-lightColor hover:bg-lightColor/85 text-2xl font-black text-footerColor rounded-rad h-20 vsm:h-[70px] w-full"
                 aria-label="I want an OFFER!"
                 onClick={handleSend}
               >
