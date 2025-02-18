@@ -1,6 +1,7 @@
 # Chatbot Widget V1
 
 ## Project Overview
+
 A well-designed chatbot widget that you can integrate into any website, with the ability to customize its themes.
 
 ## How to Use (script.js)
@@ -9,46 +10,73 @@ Just integrate this script into your website.
 
    ```script
 <script>
-    // Define the variable isChatClosed
-    let isChatClosed = false;
+    (() => {
+        const CHATBOT_URL = 'http://localhost:5173';
 
-    // Create an iframe for the chatbot
-    const chatbotIframe = document.createElement('iframe');
-    chatbotIframe.src = 'https://tech-mate-chatbot.vercel.app';
-    chatbotIframe.style.position = 'fixed';
-    chatbotIframe.style.bottom = '10px';
-    chatbotIframe.style.right = '10px';
-    chatbotIframe.style.borderRadius = '16px';
-    chatbotIframe.style.zIndex = '100000';
-    chatbotIframe.style.minWidth = '431px';
-    chatbotIframe.style.maxHeight = '588px';
-    chatbotIframe.style.border = 'none'; // Remove any default borders
-    chatbotIframe.style.transition = 'width 0.05s ease-in, height 0.05s ease-in';
-    document.body.appendChild(chatbotIframe);
+        let isChatClosed = false;
 
-    // Listen for messages from the iframe
-    window.addEventListener('message', (event) => {
-        // Check the origin and message type
-        if (event.origin !== 'https://tech-mate-chatbot.vercel.app' || event.data.type !== "chatbot-dimensions") return;
+        // Create chatbot iframe
+        const chatbotIframe = document.createElement('iframe');
+        Object.assign(chatbotIframe.style, {
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+            borderRadius: '10px',
+            zIndex: '100000',
+            minWidth: '431px',
+            maxHeight: '588px',
+            border: 'none',
+            transition: 'width 0.05s ease-in, height 0.05s ease-in'
+        });
+        chatbotIframe.src = CHATBOT_URL;
+        document.body.appendChild(chatbotIframe);
 
-        const { width, height, isChatClosed: newIsChatClosed } = event.data;
-        // Handle different window sizes and chat states
-        if (window.innerWidth < 574 && !newIsChatClosed) {
-            chatbotIframe.style.width = '100%';
-            chatbotIframe.style.height = '100%';
-            chatbotIframe.style.bottom = '0';
-            chatbotIframe.style.right = '0';
-            chatbotIframe.style.minWidth = 'auto';
-            chatbotIframe.style.maxHeight = 'none';
-            chatbotIframe.style.borderRadius = '0';
-        } else if (window.innerWidth < 1150 && !newIsChatClosed) {
-            chatbotIframe.style.width = '33%';
-            chatbotIframe.style.height = '70%';
-        } else if (width && height) {
-            chatbotIframe.style.width = width;
-            chatbotIframe.style.height = height;
+        // Function to update iframe dimensions based on window size and chat state
+        function updateChatbotSize(width = chatbotIframe.style.width, height = chatbotIframe.style.height, newIsChatClosed = isChatClosed) {
+            isChatClosed = newIsChatClosed;
+
+            if (window.innerWidth < 574 && !isChatClosed) {
+                // FullScreen mode for small screens
+                Object.assign(chatbotIframe.style, {
+                    width: '100%',
+                    height: '100%',
+                    bottom: '0',
+                    right: '0',
+                    minWidth: 'auto',
+                    maxHeight: 'none',
+                    borderRadius: '0'
+                });
+            } else if (window.innerWidth < 1150 && !isChatClosed) {
+                // Adjust dimensions for medium-sized screens
+                Object.assign(chatbotIframe.style, {
+                    width: '33%',
+                    height: '70%'
+                });
+            } else if (width && height) {
+                // Use received width and height if provided
+                chatbotIframe.style.width = width;
+                chatbotIframe.style.height = height;
+            }
+
+            // Set minWidth based on chat state
+            if (window.innerWidth < 574) {
+                chatbotIframe.style.minWidth = isChatClosed ? 'auto' : '100%';
+            } else {
+                chatbotIframe.style.minWidth = isChatClosed ? 'auto' : '431px';
+            }
         }
-    });
+
+        // Listen for messages from the chatbot iframe
+        window.addEventListener('message', (event) => {
+            if (event.origin !== CHATBOT_URL || event.data?.type !== "chatbot-dimensions") return;
+
+            const { width, height, isChatClosed: newIsChatClosed } = event.data;
+            updateChatbotSize(width, height, newIsChatClosed);
+        });
+
+        // Update chatbot dimensions dynamically when the window is resized (without refreshing)
+        window.addEventListener('resize', () => updateChatbotSize());
+    })();
 </script>
    ```
 
@@ -58,7 +86,6 @@ Just integrate this script into your website.
 - **Tailwind CSS** (global and modular) for styling.
 - **Redux** for state management.
 - **Axois** for handling API requests.
-
 
 ## Installation
 
@@ -73,7 +100,7 @@ npm run dev
 
 - Visit `http://localhost:5173` to see the project in action.
 - Change the source and origin in script.js to `http://localhost:5173` to enable developer mode.
-- Run your webiste and see chatbot
+- Run your website and see chatbot
 
 ---
 
@@ -154,7 +181,7 @@ export default {
         footerColor: "#370E92",            --> Change Footer Theme
       },
       borderRadius: {
-        rad: "18px",                       --> Change Border Raduis
+        rad: "10px",                       --> Change Border Radius For All Chatbot 
       },
       screens: {
         sm: "500px",
@@ -178,7 +205,6 @@ export default {
 
 ## 🎨 Some Suggested Color Palettes From US
 
-
 | Color Name   | Hex Code   |                       Preview                                    |
 |-------------|-----------|--------------------------------------------------------------------|
 | Dark Color  | `#000000` | ![#000000](https://placehold.co/15x15/000000/000000.png) `#000000` |
@@ -187,9 +213,6 @@ export default {
 | Hover       | `#B366CF` | ![#B366CF](https://placehold.co/15x15/B366CF/B366CF.png) `#B366CF` |
 | Gradient    | `#1C064C` | ![#1C064C](https://placehold.co/15x15/1C064C/1C064C.png) `#1C064C` |
 | Footer      | `#370E92` | ![#370E92](https://placehold.co/15x15/370E92/370E92.png) `#370E92` |
-
-
-
 
 | Color Name   | Hex Code   |                       Preview                                    |
 |-------------|-----------|--------------------------------------------------------------------|
@@ -200,10 +223,6 @@ export default {
 | Gradient    | `#03421C` | ![#03421C](https://placehold.co/15x15/03421C/03421C.png) `#03421C` |
 | Footer      | `#508A0F` | ![#508A0F](https://placehold.co/15x15/508A0F/508A0F.png) `#508A0F` |
 
-
-
-
-
 | Color Name   | Hex Code   |                       Preview                                    |
 |-------------|-----------|--------------------------------------------------------------------|
 | Dark Color  | `#000000` | ![#000000](https://placehold.co/15x15/000000/000000.png) `#000000` |
@@ -213,11 +232,6 @@ export default {
 | Gradient    | `#681017` | ![#681017](https://placehold.co/15x15/681017/681017.png) `#681017` |
 | Footer      | `#9D2816` | ![#9D2816](https://placehold.co/15x15/9D2816/9D2816.png) `#9D2816` |
 
-
-
-
-
-
 | Color Name   | Hex Code   |                       Preview                                    |
 |-------------|-----------|--------------------------------------------------------------------|
 | Dark Color  | `#000000` | ![#000000](https://placehold.co/15x15/000000/000000.png) `#000000` |
@@ -226,4 +240,3 @@ export default {
 | Hover       | `#0077B6` | ![#0077B6](https://placehold.co/15x15/0077B6/0077B6.png) `#0077B6` |
 | Gradient    | `#03045E` | ![#03045E](https://placehold.co/15x15/03045E/03045E.png) `#03045E` |
 | Footer      | `#14577B` | ![#14577B](https://placehold.co/15x15/14577B/14577B.png) `#14577B` |
-
