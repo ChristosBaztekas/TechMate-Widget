@@ -4,9 +4,10 @@ import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ onCancel }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   return (
     <header className="relative flex justify-between items-center text-primaryColor py-2 px-5 vsm:px-7 bg-primaryColor transition-all">
       {/* Logo and Greeting */}
@@ -15,7 +16,7 @@ const Header = () => {
           className="cursor-pointer hover:text-hoverColor"
           aria-label="Go back"
           onClick={() => {
-            navigate(-1);
+            onCancel();
           }}
         >
           <Icons.ArrowIcon />

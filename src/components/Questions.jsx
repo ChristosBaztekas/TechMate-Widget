@@ -9,7 +9,7 @@ const Questions = ({ questionsArr }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-end gap-2 sm:gap-3 text-xs">
+    <div className="flex flex-col justify-center items-end gap-2 sm:gap-3 text-xs animate-fadeIn">
       {questionsArr.map((item, index) => (
         // Option Container
         <div key={index} onClick={() => handleQuestionClick(item.id)}>
