@@ -51,7 +51,10 @@ export const PhoneLayout = ({ icon }) => {
               onChange={(e) => setPhone(e.target.value)}
             />
             <div className="w-full flex flex-col vsm:flex-row gap-2 sm:gap-5 mt-5">
-              <button className="bg-lightColor hover:bg-lightColor/85 text-xl sm:text-2xl font-bold text-hoverColor rounded-xl h-16 w-full">
+              <button
+                className="bg-lightColor hover:bg-lightColor/85 text-xl sm:text-2xl font-bold text-hoverColor rounded-xl h-16 w-full"
+                onClick={() => navigate("/newsletter")}
+              >
                 Newsletter!
               </button>
               <button

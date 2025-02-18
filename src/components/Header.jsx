@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ onCancel }) => {
+const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,7 +16,8 @@ const Header = ({ onCancel }) => {
           className="cursor-pointer hover:text-hoverColor"
           aria-label="Go back"
           onClick={() => {
-            onCancel();
+            navigate("/");
+            dispatch(setChatState(false));
           }}
         >
           <Icons.ArrowIcon />
