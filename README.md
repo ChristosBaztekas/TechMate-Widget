@@ -99,7 +99,7 @@ npm run dev
 ```
 
 - Visit `http://localhost:5173` to see the project in action.
-- Change the source and origin in script.js to `http://localhost:5173` to enable developer mode.
+- Change the CHATBOT_URL in script.js to `http://localhost:5173` to enable developer mode.
 - Run your website and see chatbot
 
 ---
