@@ -11,7 +11,7 @@ Just integrate this script into your website.
    ```script
 <script>
     (() => {
-        const CHATBOT_URL = 'http://localhost:5173';
+        const CHATBOT_URL = 'https://tech-mate-chatbot.vercel.app';
 
         let isChatClosed = false;
 
