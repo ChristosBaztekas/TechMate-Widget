@@ -47,7 +47,7 @@ export const Notifications = ({ radius = "10px" }) => {
           >
             <article
               style={{ borderRadius: radius }}
-              className="w-fit text-darkColor bg-lightColor border-2 border-primaryColor hover:bg-primaryColor hover:text-white text-center px-2 py-2 cursor-pointer transition-all"
+              className="w-fit text-darkColor bg-lightColor border-2 border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
             >
               {item.question}
             </article>

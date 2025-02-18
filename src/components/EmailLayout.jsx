@@ -32,7 +32,7 @@ export const EmailLayout = ({ icon }) => {
 
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
-      <div className="flex flex-col justify-between h-full bg-[#501AC8]">
+      <div className="flex flex-col justify-between h-full bg-primaryColor">
         <Header />
 
         <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">

@@ -31,7 +31,7 @@ export const PhoneLayout = ({ icon }) => {
   };
 
   return (
-    <section className="flex flex-col h-screen w-full bg-[#501AC8] fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
+    <section className="flex flex-col h-screen w-full bg-primaryColor fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
       <div className="flex flex-col justify-between h-full">
         <Header />
 

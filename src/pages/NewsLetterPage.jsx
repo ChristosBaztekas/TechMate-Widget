@@ -31,7 +31,7 @@ export const NewsLetterPage = () => {
 
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-x-hidden rounded-rad">
-      <div className="flex flex-col justify-between h-full bg-[#501AC8]">
+      <div className="flex flex-col justify-between h-full bg-primaryColor">
         <Header />
 
         <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">
@@ -45,14 +45,14 @@ export const NewsLetterPage = () => {
             <input
               placeholder="E-mail*"
               type="email"
-              className="bg-lightColor text-xl p-5 text-black/70 rounded-xl h-16 vsm:h-20 w-full mb-4 outline-none"
+              className="bg-lightColor text-xl p-5 text-darkColor/70 rounded-xl h-16 vsm:h-20 w-full mb-4 outline-none"
               aria-label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-hoverColor hover:bg-hoverColor/85 text-xl vsm:text-2xl font-black text-white rounded-xl h-16 vsm:h-20 w-full"
+                className="bg-hoverColor hover:bg-hoverColor/85 text-xl vsm:text-2xl font-black text-lightColor rounded-xl h-16 vsm:h-20 w-full"
                 aria-label="I want an OFFER!"
                 style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
                 onClick={handleSend}
