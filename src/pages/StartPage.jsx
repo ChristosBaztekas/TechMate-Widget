@@ -11,6 +11,12 @@ import Query from "@/components/Query";
 import Questions from "@/components/Questions";
 import Response from "@/components/Response";
 
+const formsMap = {
+  a: "phone-form1",
+  b: "newsletter",
+  c: "congratulations",
+};
+
 export const StartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,12 +39,6 @@ export const StartPage = () => {
     if (e.key === "Enter") {
       handleSendClick();
     }
-  };
-
-  const formsMap = {
-    a: "phone-form1",
-    b: "newsletter",
-    c: "congratulations",
   };
 
   useEffect(() => {

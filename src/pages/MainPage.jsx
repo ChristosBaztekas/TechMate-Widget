@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
 import { setChatState, setNotificationState } from "@/store/Slices/userSlice";
@@ -37,9 +37,9 @@ export const MainPage = () => {
   }, [dispatch]);
 
   return (
-    <Fragment>
+    <>
       {!isChatClosed ? (
-        <StartPage radius="10px" />
+        <StartPage />
       ) : (
         <>
           {notification && <Notifications />}
@@ -55,11 +55,11 @@ export const MainPage = () => {
             <img
               src={Logo}
               alt="logo"
-                className="absolute -top-1 -left-7 w-16" loading="lazy"
+              className="absolute -top-1 -left-7 w-16" loading="lazy"
             />
           </button>
         </>
       )}
-    </Fragment>
+    </>
   );
 };

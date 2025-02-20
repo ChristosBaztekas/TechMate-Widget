@@ -6,7 +6,7 @@ import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 
-export const Notifications = ({ radius = "10px" }) => {
+export const Notifications = () => {
   const dispatch = useDispatch();
   const { messages, isLoading, error } = useSelector(
     (state) => state.chatbotApi
@@ -45,9 +45,7 @@ export const Notifications = ({ radius = "10px" }) => {
               sendDimensionsToParent("33%", "70%", false);
             }}
           >
-            <article
-              style={{ borderRadius: radius }}
-              className="w-fit text-darkColor bg-lightColor border-2 border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
+            <article className="w-fit text-darkColor bg-lightColor border-2 rounded-rad border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
             >
               {item.question}
             </article>
