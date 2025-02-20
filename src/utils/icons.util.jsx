@@ -72,7 +72,7 @@ export const HideNotificationIcon = () => (
 );
 
 export const HideWidgetIcon = () => (
-    <svg className="absolute top-1/2 -right-3 cursor-pointer" width="25" height="25" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className="absolute -bottom-3 right-1/2 rotate-90 vsm:rotate-0 vsm:top-1/2 vsm:-right-3 cursor-pointer" width="25" height="25" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="17.5" cy="17.5" r="17.5" fill="#501AC8" />
         <path d="M14.2221 23.789C14.5183 24.0703 14.9985 24.0703 15.2946 23.789L20.3336 19.0029C21.2219 18.1591 21.2221 16.7914 20.3342 15.9474L15.3515 11.211C15.0553 10.9297 14.5751 10.9297 14.279 11.211C13.9828 11.4923 13.9828 11.9484 14.279 12.2297L19.263 16.9636C19.5592 17.245 19.5592 17.701 19.263 17.9823L14.2221 22.7703C13.926 23.0516 13.926 23.5077 14.2221 23.789Z" fill="white" />
     </svg>

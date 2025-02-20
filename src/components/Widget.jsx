@@ -1,11 +1,11 @@
-import Logo from "@/assets/images/Logo.webp"; // Import logo image
-import * as Icons from "@/utils/icons.util"; // Import all icons
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from '@/utils/functions.util';
-import { fetchAllQuestions, fetchGivenQuestion } from './../store/Slices/chatbotApiSlice';
+import { fetchAllQuestions, fetchGivenQuestion } from '@/store/Slices/chatbotApiSlice';
+import Logo from "@/assets/images/Logo.webp"; // Import logo image
+import * as Icons from "@/utils/icons.util"; // Import all icons
 
 export const Widget = ({ onClose }) => {
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const Widget = ({ onClose }) => {
     if (error) return null;
 
     return (
-        <div className="relative bg-darkColor rounded-[20px] text-lightColor p-3 ml-auto max-w-[320px] mr-5">
+        <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:max-w-[320px] vsm:mr-5">
             <span className="flex justify-start items-center">
                 <img src={Logo} alt="logo" className="w-18 flex-shrink-0" loading="lazy" />
                 <p>

@@ -18,7 +18,7 @@ export const MainPage = () => {
   // Effect to update parent with chat dimensions based on its state
   useEffect(() => {
     if (!isWidgetClosed) {
-      sendDimensionsToParent("200px", "230px", false, isWidgetClosed);
+      sendDimensionsToParent("200px", "260px", false, isWidgetClosed);
     } else if (isChatClosed && notification) {
       sendDimensionsToParent("290px", "220px", true, isWidgetClosed);
     } else if (isChatClosed) {
