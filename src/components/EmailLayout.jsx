@@ -34,7 +34,7 @@ export const EmailLayout = ({ icon }) => {
         <Header />
 
         <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">
-          <img src={icon} alt="email" className="vsm:w-40" />
+          <img src={icon} alt="email" className="vsm:w-40" loading="lazy" />
           <div className="w-full mt-8">
             <input
               placeholder="E-mail"

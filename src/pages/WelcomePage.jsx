@@ -21,7 +21,7 @@ export const WelcomePage = () => {
             <img
               src={Logo}
               alt="logo"
-              className="w-14 vsm:w-auto xl:w-20 my-5"
+              className="w-14 vsm:w-auto xl:w-20 my-5" loading="lazy"
               onClick={() => {
                 dispatch(setChatState(false));
                 navigate("/first");

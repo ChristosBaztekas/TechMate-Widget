@@ -19,7 +19,7 @@ export const SubmitPage = () => {
         <Header />
 
         <main className="flex flex-col justify-around items-center h-full text-lightColor mx-6 vsm:mx-5">
-          <img src={Icon} alt="Congratulations" className="bg-contain w-36" />
+          <img src={Icon} alt="Congratulations" className="bg-contain w-36" loading="lazy" />
           <p className="text-center font-bold text-3xl sm:text-4xl">
             Συγχαρητήρια!
           </p>

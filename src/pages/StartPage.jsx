@@ -85,9 +85,7 @@ export const StartPage = () => {
             <Icons.ArrowIcon />
           </button>
           <img
-            src={Logo}
-            alt="logo"
-            className="w-16 vsm:w-auto"
+            src={Logo} alt="logo" className="w-16 vsm:w-auto" loading="lazy"
             onClick={() => {
               navigate("/first");
             }}

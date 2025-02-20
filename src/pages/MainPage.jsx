@@ -55,7 +55,7 @@ export const MainPage = () => {
             <img
               src={Logo}
               alt="logo"
-              className="absolute -top-1 -left-7 w-16"
+                className="absolute -top-1 -left-7 w-16" loading="lazy"
             />
           </button>
         </>

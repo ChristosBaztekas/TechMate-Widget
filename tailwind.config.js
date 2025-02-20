@@ -6,10 +6,10 @@ export default {
       colors: {
         darkColor: "#000000", // Default Dark Color
         lightColor: "#FFF", // Default Light Color
-        primaryColor: "#C7313D", // Change Chatbot Theme
-        hoverColor: "#E55640", // Change Chatbot Hover Theme
-        gradientColor: "#681017", // Change Chatbot Send Gradient Theme
-        footerColor: "#9D2816", // Change Footer Theme
+        primaryColor: "#501AC8", // Change Chatbot Theme
+        hoverColor: "#B366CF", // Change Chatbot Hover Theme
+        gradientColor: "#1C064C", // Change Chatbot Send Gradient Theme
+        footerColor: "#370E92", // Change Footer Theme
       },
       borderRadius: {
         rad: "10px",

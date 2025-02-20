@@ -36,7 +36,7 @@ export const PhoneLayout = ({ icon }) => {
         <Header />
 
         <main className="flex flex-col justify-around  overflow-scroll items-center h-full text-lightColor mx-5">
-          <img src={icon} alt="phone" className="vsm:w-40" />
+          <img src={icon} alt="phone" className="vsm:w-40" loading="lazy" />
           <div className="w-full">
             <input
               placeholder="Ονοματεπώνυμο"
