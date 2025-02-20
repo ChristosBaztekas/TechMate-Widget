@@ -26,7 +26,6 @@ Just integrate this script into your website.
             minWidth: '431px',
             maxHeight: '588px',
             border: 'none',
-            transition: 'width 0.05s ease-in, height 0.05s ease-in'
         });
         chatbotIframe.src = CHATBOT_URL;
         document.body.appendChild(chatbotIframe);
