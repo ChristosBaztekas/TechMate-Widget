@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import ChatLogo from "../assets/images/ChatLogo.jpg"
+import ChatLogo from "../assets/images/bot.webp"; // Image
+
 const Response = ({ text }) => {
   // Remove "Γεια σας!" from the text
   const modifiedText = text.replace("Γεια σας!", "");

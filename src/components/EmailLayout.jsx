@@ -1,24 +1,22 @@
-import Header from "./Header";
-import Footer from "./Footer";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 import { postUserEmail } from "@/API/techMateApi";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setFormID } from "@/store/Slices/chatbotApiSlice";
 import { setFormSubmitted } from "@/store/Slices/userSlice";
-import { useState } from "react";
+// Components
+import Header from "./Header";
+import Footer from "./Footer";
 
 export const EmailLayout = ({ icon }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
-
   const { conversationId } = useSelector((state) => state.chatbotApi);
 
   const handleSend = async () => {
     if (!email) return;
-
     try {
       const response = await postUserEmail(conversationId, email);
       dispatch(setFormID(response.form_id));

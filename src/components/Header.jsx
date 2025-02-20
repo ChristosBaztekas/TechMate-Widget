@@ -1,8 +1,8 @@
-import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
-import Logo from "@/assets/images/Logo.png"; // Import the logo image
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
-import { useNavigate } from "react-router-dom";
+import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
+import Logo from "@/assets/images/Logo.webp"; // Import the logo image
 
 const Header = () => {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
-import Logo from "@/assets/images/Logo.png"; // Import the logo image
+import Logo from "@/assets/images/Logo.webp"; // Import the logo image
 
 export const WelcomePage = () => {
   const dispatch = useDispatch();

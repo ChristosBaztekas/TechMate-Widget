@@ -1,18 +1,17 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { useState } from "react";
 import { postUserEmail } from "@/API/techMateApi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setFormID } from "@/store/Slices/chatbotApiSlice";
 import { setFormSubmitted } from "@/store/Slices/userSlice";
-import { useState } from "react";
+// Components
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export const NewsLetterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
-
   const { conversationId } = useSelector((state) => state.chatbotApi);
 
   const handleSend = async () => {

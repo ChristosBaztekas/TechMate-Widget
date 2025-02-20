@@ -1,5 +1,5 @@
-import Phone from "@/assets/images/phone.png"; // Import the phone image
-import { PhoneLayout } from "@/components/PhoneLayout"; // Import the PhoneLayout component
+import { PhoneLayout } from "@/components/PhoneLayout"; // Components
+import Phone from "@/assets/images/phone.webp"; // Image
 
 export const PhonePageForm1 = () => {
   return <PhoneLayout icon={Phone} />;

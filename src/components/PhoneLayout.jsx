@@ -1,17 +1,17 @@
-import Header from "./Header";
-import Footer from "./Footer";
-import propTypes from "prop-types";
-import { postUserInfo } from "@/API/techMateApi";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import propTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux"
+import { postUserInfo } from "@/API/techMateApi";
 import { useNavigate } from "react-router-dom";
 import { setFormID } from "@/store/Slices/chatbotApiSlice";
 import { setFormSubmitted } from "@/store/Slices/userSlice";
+// Components
+import Header from "./Header";
+import Footer from "./Footer";
 
 export const PhoneLayout = ({ icon }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-
   const { conversationId } = useSelector((state) => state.chatbotApi);
   const dispatch = useDispatch();
   const navigate = useNavigate();

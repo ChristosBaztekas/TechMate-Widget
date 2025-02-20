@@ -1,20 +1,20 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setChatState } from "@/store/Slices/userSlice";
 import propTypes from "prop-types";
+import { setChatState } from "@/store/Slices/userSlice";
+import { fetchUserQuestion } from "@/store/Slices/chatbotApiSlice";
 import * as Icons from "@/utils/icons.util"; // Import all icons
-import Logo from "@/assets/images/Logo.png"; // Import logo image
-import { useEffect, useState } from "react";
+import Logo from "@/assets/images/Logo.webp"; // Import logo image
+// Components
+import Query from "@/components/Query";
 import Questions from "@/components/Questions";
 import Response from "@/components/Response";
-import Query from "@/components/Query";
-import { fetchUserQuestion } from "@/store/Slices/chatbotApiSlice";
 
 export const StartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userInput, setUserInput] = useState("");
-
   const { messages, conversationId } = useSelector((state) => state.chatbotApi);
 
   const handleSendClick = async () => {
@@ -68,7 +68,7 @@ export const StartPage = () => {
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-3 px-5 vsm:px-7 h-20 transition-all">
         {/* Pattern Icon */}
-        <span className="absolute right-0 left-0 top-0 w-full h-fit">
+        <span className="absolute right-0 left-0 top-0 sm:-top-3 w-full h-fit">
           <Icons.PatternIcon />
         </span>
 

@@ -1,10 +1,10 @@
+import propTypes from "prop-types";
 import { Link } from "react-router-dom";
-import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import { useDispatch, useSelector } from "react-redux";
+import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
 import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
-import propTypes from "prop-types";
-import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
+import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 
 export const Notifications = ({ radius = "10px" }) => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const Notifications = ({ radius = "10px" }) => {
     <main className="flex justify-center items-start gap-2">
       {/* Button to hide the notification */}
       <button
-        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1 ml-auto"
+        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1"
         onClick={() => {
           dispatch(setNotificationState(false));
         }}

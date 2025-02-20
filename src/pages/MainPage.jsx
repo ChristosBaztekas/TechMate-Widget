@@ -2,10 +2,10 @@ import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
 import { setChatState, setNotificationState } from "@/store/Slices/userSlice";
-import Logo from "@/assets/images/Logo.png"; // Import logo image
-import { StartPage } from "@/pages"; // Import StartPage component
-import { Notifications } from "@/components/Notifications"; // Import Notifications component
 import { sendDimensionsToParent } from "@/utils/functions.util"; // Import sendDimensionsToParent function
+import { Notifications } from "@/components/Notifications"; // Import Notifications component
+import { StartPage } from "@/pages"; // Import StartPage component
+import Logo from "@/assets/images/Logo.webp"; // Import logo image
 
 export const MainPage = () => {
   const dispatch = useDispatch();

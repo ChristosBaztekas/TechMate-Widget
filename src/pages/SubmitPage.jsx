@@ -1,9 +1,9 @@
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setChatState } from "@/store/Slices/userSlice";
 import Header from "@/components/Header"; // Components
-import Icon from "@/assets/images/congrats.png"; // Icons
-import { useNavigate } from "react-router-dom";
+import Icon from "@/assets/images/congrats.webp"; // Image
 
 export const SubmitPage = () => {
   const dispatch = useDispatch();

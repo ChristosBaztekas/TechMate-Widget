@@ -1,5 +1,5 @@
-import Email from "@/assets/images/emailOffer.png"; // Import the phone image
-import { EmailLayout } from "@/components/EmailLayout"; // Import the EmailLayout component
+import { EmailLayout } from "@/components/EmailLayout"; // Components
+import Email from "@/assets/images/emailOffer.webp"; // Image
 
 export const EmailPageForm3 = () => {
   return <EmailLayout icon={Email} />;

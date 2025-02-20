@@ -1,9 +1,9 @@
 import propTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
+
 const Questions = ({ questionsArr }) => {
   const dispatch = useDispatch();
-
   const handleQuestionClick = (question_id) => {
     dispatch(fetchGivenQuestion(question_id));
   };

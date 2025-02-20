@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "@/components/Header"; // Components
 
 export const CongratulationsPage = () => {
   const navigate = useNavigate();
