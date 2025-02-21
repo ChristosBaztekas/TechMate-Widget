@@ -43,7 +43,7 @@ export const Widget = ({ onClose }) => {
                             onClose(true)
                         }}
                     >
-                        <article className="w-72 text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor text-center px-2 py-2 cursor-pointer transition-all">
+                        <article className="w-full min-w-[310px] vsm:w-72 text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor text-center px-2 py-2 cursor-pointer transition-all">
                             {item.question}
                         </article>
                     </Link>
