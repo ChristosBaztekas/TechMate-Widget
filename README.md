@@ -61,7 +61,7 @@ Just integrate this script into your website.
             } else if (!Widget && window.innerWidth < 574) {
                 // Handle Widget When Opened
                 Object.assign(chatbotIframe.style, {
-                    bottom: '2%',
+                    bottom: '10px',
                 });
                 // Use received width and height if provided
                 if (width) chatbotIframe.style.width = width;
