@@ -14,6 +14,7 @@ Just integrate this script into your website.
         const CHATBOT_URL = 'https://tech-mate-chatbot.vercel.app';
 
         let isChatClosed = false;
+        let Widget = false;
 
         // Create chatbot iframe
         const chatbotIframe = document.createElement('iframe');
@@ -30,47 +31,82 @@ Just integrate this script into your website.
         chatbotIframe.src = CHATBOT_URL;
         document.body.appendChild(chatbotIframe);
 
-        // Function to update iframe dimensions based on window size and chat state
-        function updateChatbotSize(width = chatbotIframe.style.width, height = chatbotIframe.style.height, newIsChatClosed = isChatClosed) {
+        /**
+           * Function to update iframe dimensions and position based on window size and chat state
+           *
+           * @param {string} width - The width of the iframe
+           * @param {string} height - The height of the iframe
+           * @param {boolean} newIsChatClosed - The new state of the chat (closed or open)
+           * @param {boolean} newIsWidgetClosed - The new state of the widget (closed or open)
+           */
+        function updateChatbotSize(
+            width = chatbotIframe.style.width,
+            height = chatbotIframe.style.height,
+            newIsChatClosed = isChatClosed,
+            newIsWidgetClosed = Widget
+        ) {
             isChatClosed = newIsChatClosed;
+            Widget = newIsWidgetClosed;
 
-            if (window.innerWidth < 574 && !isChatClosed) {
-                // FullScreen mode for small screens
+            if (!Widget && window.innerWidth > 574) {
+                // Handle Widget When Opened
                 Object.assign(chatbotIframe.style, {
-                    width: '100%',
-                    height: '100%',
-                    bottom: '0',
                     right: '0',
-                    minWidth: 'auto',
-                    maxHeight: 'none',
-                    borderRadius: '0'
+                    top: '10%',
+                    bottom: 'auto',
                 });
-            } else if (window.innerWidth < 1150 && !isChatClosed) {
-                // Adjust dimensions for medium-sized screens
-                Object.assign(chatbotIframe.style, {
-                    width: '33%',
-                    height: '70%'
-                });
-            } else if (width && height) {
                 // Use received width and height if provided
-                chatbotIframe.style.width = width;
-                chatbotIframe.style.height = height;
+                if (width) chatbotIframe.style.width = width;
+                if (height) chatbotIframe.style.height = height;
+            } else if (!Widget && window.innerWidth < 574) {
+                // Handle Widget When Opened
+                Object.assign(chatbotIframe.style, {
+                    bottom: '2%',
+                });
+                // Use received width and height if provided
+                if (width) chatbotIframe.style.width = width;
+                if (height) chatbotIframe.style.height = height;
+            } else {
+                if (window.innerWidth < 574 && !isChatClosed) {
+                    // FullScreen mode for small screens
+                    Object.assign(chatbotIframe.style, {
+                        width: '100%',
+                        height: '100%',
+                        bottom: '0',
+                        right: '0',
+                        minWidth: 'auto',
+                        maxHeight: 'none',
+                        borderRadius: '0',
+                        top: 'auto',
+                    });
+                } else if (window.innerWidth < 1150 && !isChatClosed) {
+                    // Adjust dimensions for medium-sized screens
+                    Object.assign(chatbotIframe.style, {
+                        width: '33%',
+                        height: '70%',
+                        top: 'auto',
+                        transform: 'none',
+                    });
+                } else if (width && height) {
+                    // Use received width and height if provided
+                    chatbotIframe.style.width = width;
+                    chatbotIframe.style.height = height;
+                    chatbotIframe.style.top = 'auto';
+                    chatbotIframe.style.bottom = '10px';
+                    chatbotIframe.style.transform = 'none';
+                }
             }
 
             // Set minWidth based on chat state
-            if (window.innerWidth < 574) {
-                chatbotIframe.style.minWidth = isChatClosed ? 'auto' : '100%';
-            } else {
-                chatbotIframe.style.minWidth = isChatClosed ? 'auto' : '431px';
-            }
+            chatbotIframe.style.minWidth = window.innerWidth < 574 ? (isChatClosed ? 'auto' : '100%') : (isChatClosed ? 'auto' : '431px');
         }
 
         // Listen for messages from the chatbot iframe
         window.addEventListener('message', (event) => {
             if (event.origin !== CHATBOT_URL || event.data?.type !== "chatbot-dimensions") return;
 
-            const { width, height, isChatClosed: newIsChatClosed } = event.data;
-            updateChatbotSize(width, height, newIsChatClosed);
+            const { width, height, isChatClosed: newIsChatClosed, Widget: newIsWidgetClosed } = event.data;
+            updateChatbotSize(width, height, newIsChatClosed, newIsWidgetClosed);
         });
 
         // Update chatbot dimensions dynamically when the window is resized (without refreshing)
