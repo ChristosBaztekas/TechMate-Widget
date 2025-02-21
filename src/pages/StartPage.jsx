@@ -142,7 +142,7 @@ export const StartPage = () => {
         {/* Textarea for typing the message */}
         <textarea
           placeholder="Πληκτρολογήστε την ερώτησή σας..."
-          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-rad pl-5 p-2 outline-none resize-none overflow-hidden"
+          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-full pl-5 p-2 outline-none resize-none overflow-hidden"
           aria-label="Message input field"
           rows={1}
           onInput={(e) => {
