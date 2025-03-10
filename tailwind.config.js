@@ -1,15 +1,17 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import("tailwindcss").Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
-        darkColor: "#000000", // Default Dark Color
-        lightColor: "#FFF", // Default Light Color
-        primaryColor: "#501AC8", // Change Chatbot Theme
-        hoverColor: "#B366CF", // Change Chatbot Hover Theme
-        gradientColor: "#1C064C", // Change Chatbot Send Gradient Theme
-        footerColor: "#370E92", // Change Footer Theme
+        darkColor: "#000000",
+        lightColor: "#FFF",
+        primaryColor: "#501AC8",
+        hoverColor: "#B366CF",
+        gradientColor: "#1C064C",
+        footerColor: "#370E92",
       },
       borderRadius: {
         rad: "10px",
@@ -29,5 +31,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    typography, 
+  ],
 };

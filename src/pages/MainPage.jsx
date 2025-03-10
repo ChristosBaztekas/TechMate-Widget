@@ -12,6 +12,7 @@ import { Notifications } from "@/components/Notifications";
 export const MainPage = () => {
   const dispatch = useDispatch();
   const { isChatClosed, notification } = useSelector((state) => state.user);
+  const { imageUrl } = useSelector((state) => state.chatbotApi);
   const NOTIFICATION_DELAY = 2000; // Delay of 2 seconds
   const [isWidgetClosed, setIsWidgetClosed] = useState(false); // State to manage widget visibility
 
@@ -62,11 +63,15 @@ export const MainPage = () => {
                 onClick={() => {
                   dispatch(setChatState(false));
                 }}
-                className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 bg-gray-400 rounded-full cursor-pointer"
+                style={{
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+                className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
                 role="button"
                 aria-label="Open chat"
               >
-                {/* Logo */}
                 <img src={Logo} alt="logo" className="absolute -top-1 -left-7 w-16" loading="lazy" />
               </button>
             </>

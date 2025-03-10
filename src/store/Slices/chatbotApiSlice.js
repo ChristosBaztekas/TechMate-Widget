@@ -10,9 +10,10 @@ export const fetchAllQuestions = createAsyncThunk(
   "questions/fetchAllQuestions",
   async (_, thunkAPI) => {
     try {
-      const questions = await getQuestions();
-      console.log(questions);
-      return questions;
+      const response = await getQuestions();
+      const { questions, image, conversation_id } = response; // Get company image and conversation ID
+      console.log(response);
+      return { questions, imageUrl: image, conversation_id };
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -52,6 +53,7 @@ export const fetchGivenQuestion = createAsyncThunk(
       }
 
       const response = await ansGivenQuestion(conversation_id, question);
+      console.log(response)
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -74,6 +76,7 @@ const initialState = {
   questionId: "",
   isLoading: false,
   error: null,
+  imageUrl: "", // add imageUrl to initialState
 };
 
 const chatbotApiSlice = createSlice({
@@ -112,6 +115,7 @@ const chatbotApiSlice = createSlice({
         state.isLoading = false;
         state.messages[0].questions = action.payload.questions;
         state.conversationId = action.payload.conversation_id;
+        state.imageUrl = action.payload.imageUrl; // 🔥 store imageUrl in state
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;
@@ -182,6 +186,7 @@ export const {
   setQuestions,
   setFormID,
   setQuestionId,
+  removeLastMessage,
 } = chatbotApiSlice.actions;
 
 export default chatbotApiSlice.reducer;
