@@ -35,12 +35,6 @@ export const StartPage = () => {
     chatSection.scrollTop = chatSection.scrollHeight;
   }, [messages]); // Ensure it runs when messages change
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSendClick();
-    }
-  };
-
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
@@ -142,7 +136,7 @@ export const StartPage = () => {
         {/* Textarea for typing the message */}
         <textarea
           placeholder="Πληκτρολογήστε την ερώτησή σας..."
-          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-full pl-5 p-2 outline-none resize-none overflow-hidden"
+          className="w-full min-h-10 max-h-24 text-sm vsm:text-base rounded-rad pl-5 p-2 outline-none "
           aria-label="Message input field"
           rows={1}
           onInput={(e) => {
@@ -151,13 +145,18 @@ export const StartPage = () => {
           }}
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault(); // Prevents adding a new line
+              handleSendClick();
+            }
+          }}
         />
         {/* Submit button for sending the message */}
         <button
           type="submit"
           className="ml-6 mt-2 text-white font-bold hover:text-hoverColor"
           onClick={handleSendClick}
-          onKeyDown={handleKeyDown}
         >
           Send
         </button>
