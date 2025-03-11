@@ -51,7 +51,7 @@ export const Widget = ({ onClose }) => {
                             className={activeQuestion === item.id ? "active" : ""}
                             style={{ width: '100%', textAlign: 'center' }}
                         >
-                            <article className="w-full text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor text-center px-2 py-2 font-medium cursor-pointer transition-all">
+                            <article className="w-full text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor line-clamp-2 text-center px-2 py-2 font-medium cursor-pointer transition-all">
                                 {item.question}
                             </article>
                         </Link>
