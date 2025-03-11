@@ -24,7 +24,7 @@ export const SubmitPage = () => {
             Συγχαρητήρια!
           </p>
           <div className="flex flex-col items-center w-full">
-            <p className="text-center text-xl sm:text-2xl mb-6 sm:w-[85%] mt-4 font-black">
+            <p className="text-center text-xl sm:text-2xl mb-6 sm:w-[85%] mt-4 font-semibold">
               Έλαβες τη προσφορά σου και θα επικοινωνήσουμε μαζί σου το
               συντομότερο δυνατό!
             </p>

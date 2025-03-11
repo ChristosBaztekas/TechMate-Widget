@@ -19,9 +19,9 @@ export const MainPage = () => {
   // Effect to update parent with chat dimensions based on its state
   useEffect(() => {
     if (!isWidgetClosed) {
-      sendDimensionsToParent("200px", "260px", false, isWidgetClosed);
+      sendDimensionsToParent("200px", "280px", false, isWidgetClosed);
     } else if (isChatClosed && notification) {
-      sendDimensionsToParent("290px", "220px", true, isWidgetClosed);
+      sendDimensionsToParent("290px", "280px", true, isWidgetClosed);
     } else if (isChatClosed) {
       sendDimensionsToParent("95px", "87px", true, isWidgetClosed);
     } else {
@@ -53,11 +53,11 @@ export const MainPage = () => {
       {!isWidgetClosed ? (
         <Widget onClose={handleWidgetClose} />
       ) : (
-        <>
+        <div className="mt-auto">
           {!isChatClosed ? (
             <StartPage />
           ) : (
-            <>
+            <div className="flex justify-end items-end flex-col fixed bottom-0 right-0 mb-5 mr-5">
               {notification && <Notifications />}
               <button
                 onClick={() => {
@@ -68,15 +68,15 @@ export const MainPage = () => {
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}
-                className="fixed m-3 bottom-0 right-0 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
+                className="relative mt-5 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
                 role="button"
                 aria-label="Open chat"
               >
                 <img src={Logo} alt="logo" className="absolute -top-1 -left-7 w-16" loading="lazy" />
               </button>
-            </>
+            </div>
           )}
-        </>
+        </div>
       )}
     </>
   );

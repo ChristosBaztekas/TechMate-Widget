@@ -33,7 +33,7 @@ export const Widget = ({ onClose }) => {
     };
 
     return (
-        <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:max-w-[320px] vsm:mr-5">
+        <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:mr-5">
             <span className="flex justify-start items-center">
                 <img src={Logo} alt="logo" className="w-18 flex-shrink-0" loading="lazy" />
                 <p>
@@ -42,15 +42,16 @@ export const Widget = ({ onClose }) => {
             </span>
 
             {/* Section containing the notification links */}
-            <nav className="flex flex-col justify-center items-center gap-3 text-xs mt-5">
+            <nav className="flex flex-col justify-center items-center gap-3 text-xs mt-5 w-full">
                 {messages[0].questions.slice(0, 3).map((item, index) => (
                     activeQuestion === null || activeQuestion === item.id ? (
                         <Link
                             key={index}
                             onClick={() => handleQuestionClick(item.id)}
                             className={activeQuestion === item.id ? "active" : ""}
+                            style={{ width: '100%', textAlign: 'center' }}
                         >
-                            <article className="w-full min-w-[310px] vsm:min-w-fit vsm:w-72 text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor text-center px-2 py-2 cursor-pointer transition-all">
+                            <article className="w-full text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor text-center px-2 py-2 cursor-pointer transition-all">
                                 {item.question}
                             </article>
                         </Link>

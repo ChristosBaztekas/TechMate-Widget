@@ -36,7 +36,7 @@ export const NewsLetterPage = () => {
         <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">
           <div className="flex flex-col text-center gap-7 items-center">
             <h1 className="text-4xl font-bold">Newsletter!</h1>
-            <p className="text-2xl font-black w-[90%]">
+            <p className="text-2xl font-semibold w-[90%]">
               Θα λαμβάνετε εντελώς δωρεάν, newsletter με επιμορφωτικό υλικό!
             </p>
           </div>
@@ -51,7 +51,7 @@ export const NewsLetterPage = () => {
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-hoverColor hover:bg-hoverColor/85 text-xl vsm:text-2xl font-black text-lightColor rounded-rad h-16 vsm:h-20 w-full"
+                className="bg-hoverColor hover:bg-hoverColor/85 text-xl vsm:text-2xl font-semibold text-lightColor rounded-rad h-16 vsm:h-20 w-full"
                 aria-label="I want an OFFER!"
                 style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
                 onClick={handleSend}

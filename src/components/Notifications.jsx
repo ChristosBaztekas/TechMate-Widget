@@ -19,10 +19,10 @@ export const Notifications = () => {
   if (error) return null;
 
   return (
-    <main className="flex justify-center items-start gap-2">
+    <main className="flex justify-center items-start gap-2 mt-auto">
       {/* Button to hide the notification */}
       <button
-        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1"
+        className="hover:text-hoverColor text-primaryColor cursor-pointer rounded-full overflow-hidden mt-1 flex-shrink-0"
         onClick={() => {
           dispatch(setNotificationState(false));
         }}
@@ -37,6 +37,7 @@ export const Notifications = () => {
       >
         {messages[0].questions.slice(0, 3).map((item, index) => (
           <Link
+            className="w-full"
             key={index}
             onClick={() => {
               dispatch(setNotificationState(true));
@@ -45,7 +46,7 @@ export const Notifications = () => {
               sendDimensionsToParent("33%", "70%", false);
             }}
           >
-            <article className="w-fit text-darkColor bg-lightColor border-2 rounded-rad border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
+            <article className="ml-auto w-fit text-darkColor bg-lightColor border-2 rounded-rad border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
             >
               {item.question}
             </article>
