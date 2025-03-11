@@ -21,7 +21,7 @@ const Questions = ({ questionsArr }) => {
             onClick={() => handleQuestionClick(item.id)}
             className={activeQuestion === item.id ? "bg-primaryColor rounded-rad active" : ""}
           >
-            <p className="w-fit text-center text-lightColor border border-primaryColor hover:bg-primaryColor px-2 py-3 cursor-pointer rounded-rad transition-all">
+            <p className="w-fit text-center text-lightColor border border-primaryColor hover:bg-primaryColor px-2 py-3 cursor-pointer font-medium rounded-rad transition-all">
               {item.question}
             </p>
           </div>

@@ -68,7 +68,7 @@ export const MainPage = () => {
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}
-                className="relative mt-5 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
+                className="relative mt-2 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
                 role="button"
                 aria-label="Open chat"
               >

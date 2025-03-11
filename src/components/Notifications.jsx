@@ -46,9 +46,9 @@ export const Notifications = () => {
               sendDimensionsToParent("33%", "70%", false);
             }}
           >
-            <article className="ml-auto w-fit text-darkColor bg-lightColor border-2 rounded-rad border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
+            <article className="ml-auto w-fit text-darkColor bg-lightColor border-2 rounded-rad font-medium border-primaryColor hover:bg-primaryColor hover:text-lightColor text-center px-2 py-2 cursor-pointer transition-all"
             >
-              {item.question}
+              {item.question} test long qs test
             </article>
           </Link>
         ))}
