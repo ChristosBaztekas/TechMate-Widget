@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
+import { setNotificationState, setChatState, setWidgetState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from '@/utils/functions.util';
 import { fetchAllQuestions, fetchGivenQuestion } from '@/store/Slices/chatbotApiSlice';
-import Logo from "@/assets/images/Logo.webp"; // Import logo image
-import * as Icons from "@/utils/icons.util"; // Import all icons
+import Logo from "@/assets/images/Logo.webp";
+import * as Icons from "@/utils/icons.util";
 
-export const Widget = ({ onClose }) => {
+export const Widget = () => {
     const dispatch = useDispatch();
     const { messages, isLoading, error } = useSelector(
         (state) => state.chatbotApi
@@ -18,9 +18,7 @@ export const Widget = ({ onClose }) => {
         dispatch(fetchAllQuestions());
     }, [dispatch]);
 
-    // Don't render anything if data is still loading
     if (isLoading) return null;
-    // Don't render anything if there is an error
     if (error) return null;
 
     const handleQuestionClick = (question_id) => {
@@ -29,13 +27,22 @@ export const Widget = ({ onClose }) => {
         dispatch(setNotificationState(true));
         dispatch(setChatState(false));
         sendDimensionsToParent("33%", "70%", false);
-        onClose(true);
+        dispatch(setWidgetState(true));
+    };
+
+    const handleCloseWidget = () => {
+        dispatch(setWidgetState(true));
     };
 
     return (
         <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:mr-5">
             <span className="flex justify-start items-center">
-                <img src={Logo} alt="logo" className="w-18 flex-shrink-0" loading="lazy" />
+                <img
+                    src={Logo}
+                    alt="logo"
+                    className="w-18 flex-shrink-0"
+                    loading="lazy"
+                />
                 <p>
                     Γεια σου!<br />Πώς μπορώ να σε βοηθήσω;
                 </p>
@@ -60,9 +67,12 @@ export const Widget = ({ onClose }) => {
             </nav>
 
             {/* Close Button */}
-            <span onClick={onClose} className="w-5 text-primaryColor hover:text-hoverColor transition-all">
+            <span
+                onClick={handleCloseWidget}
+                className="w-5 text-primaryColor hover:text-hoverColor transition-all cursor-pointer"
+            >
                 <Icons.HideWidgetIcon />
             </span>
         </div>
-    )
-}
+    );
+};
