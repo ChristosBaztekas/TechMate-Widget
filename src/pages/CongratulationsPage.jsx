@@ -52,10 +52,10 @@ export const CongratulationsPage = () => {
         </main>
 
         <footer
-          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
+          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1 cursor-pointer"
           onClick={handleCancelAndNavigate}
         >
-          Supported by TechMate
+          Supported by TechMate 
         </footer>
       </div>
     </section>

@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setChatState } from "@/store/Slices/userSlice";
 import Header from "@/components/Header"; // Components
 import Icon from "@/assets/images/congrats.webp"; // Image
+import Footer from "../components/Footer";
 
 export const SubmitPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.history.pushState({}, "", "/congratulations");
@@ -46,14 +45,7 @@ export const SubmitPage = () => {
           </p>
         </main>
 
-        <footer
-          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
-          onClick={() => {
-            navigate("/first");
-          }}
-        >
-          Supported by TechMate
-        </footer>
+        <Footer />
       </div>
     </section>
   );

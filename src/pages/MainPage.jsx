@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
-import { setChatState, setNotificationState } from "@/store/Slices/userSlice";
-import { sendDimensionsToParent } from "@/utils/functions.util"; // Import sendDimensionsToParent function
-import { StartPage } from "@/pages"; // Import StartPage component
-import Logo from "@/assets/images/Logo.webp"; // Import logo image
-// Components
+import { setChatState, setNotificationState, setWidgetState, } from "@/store/Slices/userSlice";
+import { sendDimensionsToParent } from "@/utils/functions.util";
+import { StartPage } from "@/pages";
+import Logo from "@/assets/images/Logo.webp";
 import { Widget } from "../components/Widget";
 import { Notifications } from "@/components/Notifications";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
-  const { isChatClosed, notification } = useSelector((state) => state.user);
+  const { isChatClosed, notification, isWidgetClosed } = useSelector((state) => state.user);
   const { imageUrl } = useSelector((state) => state.chatbotApi);
+
   const NOTIFICATION_DELAY = 2000; // Delay of 2 seconds
-  const [isWidgetClosed, setIsWidgetClosed] = useState(false); // State to manage widget visibility
 
   // Effect to update parent with chat dimensions based on its state
   useEffect(() => {
@@ -29,25 +28,22 @@ export const MainPage = () => {
     }
   }, [isChatClosed, notification, isWidgetClosed]);
 
-  // Effect to show notification after a delay
+  // Show notification after delay
   useEffect(() => {
-    const timer = setTimeout(
-      () => dispatch(setNotificationState(true)),
-      NOTIFICATION_DELAY
-    ); // Delay of 2 seconds
-    return () => clearTimeout(timer); // Cleanup the timer if the component is unmount
+    const timer = setTimeout(() => dispatch(setNotificationState(true)), NOTIFICATION_DELAY);
+    return () => clearTimeout(timer);
   }, [dispatch]);
 
+  // Fetch questions on mount
   useEffect(() => {
     dispatch(fetchAllQuestions());
   }, [dispatch]);
 
   // Handle widget close action
   const handleWidgetClose = () => {
-    setIsWidgetClosed(true);
+    dispatch(setWidgetState(true));
   };
 
-  // Render Widget first, then the rest of the content based on isWidgetClosed state
   return (
     <>
       {!isWidgetClosed ? (
@@ -62,6 +58,7 @@ export const MainPage = () => {
               <button
                 onClick={() => {
                   dispatch(setChatState(false));
+                  dispatch(setWidgetState(true));
                 }}
                 style={{
                   backgroundImage: `url(${imageUrl})`,
@@ -72,7 +69,7 @@ export const MainPage = () => {
                 role="button"
                 aria-label="Open chat"
               >
-                <img src={Logo} alt="logo" className="absolute -top-1 -left-7 w-16" loading="lazy" />
+                <img src={Logo} alt="logo" className="absolute -top-1 -left-3 w-8" loading="lazy" />
               </button>
             </div>
           )}

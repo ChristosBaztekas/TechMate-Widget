@@ -4,6 +4,7 @@ const initialState = {
   isChatClosed: true,
   formSubmitted: false,
   notification: false,
+  isWidgetClosed: false,
 };
 
 const userInteractionsSlice = createSlice({
@@ -19,10 +20,17 @@ const userInteractionsSlice = createSlice({
     setNotificationState: (state, action) => {
       state.notification = action.payload;
     },
+    setWidgetState: (state, action) => {
+      state.isWidgetClosed = action.payload;
+    },
   },
 });
 
-export const { setChatState, setFormSubmitted, setNotificationState } =
-  userInteractionsSlice.actions;
+export const {
+  setChatState,
+  setFormSubmitted,
+  setNotificationState,
+  setWidgetState,
+} = userInteractionsSlice.actions;
 
 export default userInteractionsSlice.reducer;

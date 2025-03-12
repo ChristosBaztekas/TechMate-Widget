@@ -4,7 +4,7 @@ const Footer = () => {
   const navigate = useNavigate();
   return (
     <footer
-      className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor py-1 w-full"
+      className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor py-1 w-full cursor-pointer"
       onClick={() => {
         navigate("/first");
       }}

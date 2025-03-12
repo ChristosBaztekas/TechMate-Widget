@@ -18,7 +18,7 @@ const Response = ({ text }) => {
       </div>
 
       {/* Chat Message */}
-      <div className="prose w-fit bg-lightColor text-darkColor font-light p-4 rounded-rad prose prose-sm max-w-none">
+      <div className="prose w-fit bg-lightColor text-darkColor font-light p-4 rounded-rad prose-sm max-w-none">
         {text.includes("Γεια σας!") && (
           <div className="mb-2 font-semibold">Γεια σας!</div>
         )}

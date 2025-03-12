@@ -10,6 +10,7 @@ import Logo from "@/assets/images/Logo.webp";
 import Query from "@/components/Query";
 import Questions from "@/components/Questions";
 import Response from "@/components/Response";
+import Footer from "../components/Footer";
 
 const formsMap = {
   a: "phone-form1",
@@ -94,7 +95,7 @@ export const StartPage = () => {
           <Icons.PatternIcon />
         </span>
 
-        <div className="flex justify-center items-center z-20 text-lightColor">
+        <div className="flex justify-center items-center gap-3 z-20 text-lightColor">
           <button
             className="cursor-pointer hover:text-hoverColor"
             onClick={() => {
@@ -108,7 +109,7 @@ export const StartPage = () => {
           <img
             src={Logo}
             alt="logo"
-            className="w-16 vsm:w-auto"
+            className="w-16 vsm:w-auto cursor-pointer"
             loading="lazy"
             onClick={() => navigate("/first")}
           />
@@ -188,12 +189,7 @@ export const StartPage = () => {
         </button>
       </div>
 
-      <footer
-        className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1"
-        onClick={() => navigate("/first")}
-      >
-        Supported by TechMate
-      </footer>
+      <Footer />
     </section>
   );
 };

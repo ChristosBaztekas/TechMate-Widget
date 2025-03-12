@@ -52,10 +52,15 @@ export const WelcomePage = () => {
               Μην ανησυχείτε, δεν έχετε χάσει την συνομιλία σας!
             </p>
           </div>
-          <Link to="/" className="text-primaryColor hover:text-hoverColor cursor-pointer">
+          <Link
+            to="/"
+            onClick={() => dispatch(setChatState(false))}
+            className="text-primaryColor hover:text-hoverColor cursor-pointer"
+          >
             <Icons.SendIcon />
           </Link>
         </aside>
+
 
         <main className="sm:flex flex-col vsm:flex-row text-lightColor overflow-scroll justify-evenly mx-10">
           <section className="flex flex-col gap-5 justify-center items-center p-5">

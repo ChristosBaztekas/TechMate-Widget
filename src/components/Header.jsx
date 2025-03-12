@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <header className="relative flex justify-between items-center text-primaryColor py-2 px-5 vsm:px-7 bg-primaryColor transition-all">
       {/* Logo and Greeting */}
-      <div className="flex justify-center items-center z-20 text-lightColor my-1 p-2 vsm:p-0">
+      <div className="flex justify-center items-center gap-3 z-20 text-lightColor my-1 p-2 vsm:p-0">
         <button
           className="cursor-pointer hover:text-hoverColor"
           aria-label="Go back"
@@ -25,7 +25,7 @@ const Header = () => {
         <img
           src={Logo}
           alt="logo"
-          className="w-[73px] vsm:w-20 hover:cursor-pointer hover:scale-95 transition-all duration-300" loading="lazy"
+          className="w-16 vsm:w-auto cursor-pointer hover:cursor-pointer hover:scale-95 transition-all duration-300" loading="lazy"
           onClick={() => {
             dispatch(setChatState(false));
             navigate("/first");
