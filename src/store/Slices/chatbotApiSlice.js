@@ -53,7 +53,7 @@ export const fetchGivenQuestion = createAsyncThunk(
       }
 
       const response = await ansGivenQuestion(conversation_id, question);
-      console.log(response)
+      console.log(response);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -102,6 +102,19 @@ const chatbotApiSlice = createSlice({
       if (state.messages.length > 0) {
         state.messages.pop();
       }
+    },
+    resetMessages: (state) => {
+      state.messages = [];
+    },
+    restartChat: (state) => {
+      state.messages = [
+        {
+          id: 1,
+          text: "Γεια σας! Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλε τις απορίες σας σχετικά με ασφάλειες και καλύψεις.",
+          questions: [],
+          query: "",
+        },
+      ];
     },
   },
   extraReducers: (builder) => {
@@ -187,6 +200,8 @@ export const {
   setFormID,
   setQuestionId,
   removeLastMessage,
+  resetMessages,
+  restartChat,
 } = chatbotApiSlice.actions;
 
 export default chatbotApiSlice.reducer;

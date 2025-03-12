@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotificationState, setChatState, setWidgetState } from "@/store/Slices/userSlice";
-import { sendDimensionsToParent } from '@/utils/functions.util';
-import { fetchAllQuestions, fetchGivenQuestion } from '@/store/Slices/chatbotApiSlice';
+import {
+    setNotificationState,
+    setChatState,
+    setWidgetState,
+} from "@/store/Slices/userSlice";
+import { sendDimensionsToParent } from "@/utils/functions.util";
+import {
+    fetchAllQuestions,
+    fetchGivenQuestion,
+    resetMessages,
+} from "@/store/Slices/chatbotApiSlice";
 import Logo from "@/assets/images/Logo.webp";
 import * as Icons from "@/utils/icons.util";
 
@@ -43,25 +51,33 @@ export const Widget = () => {
                     className="w-18 flex-shrink-0"
                     loading="lazy"
                 />
-                <p> Γεια σου!<br />Πώς μπορώ να σε βοηθήσω;</p>
+                <p>
+                    {" "}
+                    Γεια σου!
+                    <br />
+                    Πώς μπορώ να σε βοηθήσω;
+                </p>
             </span>
 
             {/* Section containing the notification links */}
             <nav className="flex flex-col justify-center items-center gap-3 text-xs mt-5 w-full">
-                {messages[0].questions.slice(0, 3).map((item, index) => (
+                {messages[0].questions.slice(0, 3).map((item, index) =>
                     activeQuestion === null || activeQuestion === item.id ? (
                         <Link
                             key={index}
-                            onClick={() => handleQuestionClick(item.id)}
+                            onClick={() => {
+                                dispatch(resetMessages());
+                                handleQuestionClick(item.id);
+                            }}
                             className={activeQuestion === item.id ? "active" : ""}
-                            style={{ width: '100%', textAlign: 'center' }}
+                            style={{ width: "100%", textAlign: "center" }}
                         >
                             <article className="w-full text-lightColor border-2 rounded-full border-primaryColor hover:bg-primaryColor line-clamp-2 text-center px-2 py-2 font-medium cursor-pointer transition-all">
                                 {item.question}
                             </article>
                         </Link>
                     ) : null
-                ))}
+                )}
             </nav>
 
             {/* Close Button */}
