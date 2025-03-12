@@ -36,16 +36,14 @@ export const Widget = () => {
 
     return (
         <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:mr-5">
-            <span className="flex justify-start items-center">
+            <span className="flex justify-start items-center gap-3">
                 <img
                     src={Logo}
                     alt="logo"
                     className="w-18 flex-shrink-0"
                     loading="lazy"
                 />
-                <p>
-                    Γεια σου!<br />Πώς μπορώ να σε βοηθήσω;
-                </p>
+                <p> Γεια σου!<br />Πώς μπορώ να σε βοηθήσω;</p>
             </span>
 
             {/* Section containing the notification links */}
