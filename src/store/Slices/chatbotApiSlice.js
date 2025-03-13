@@ -128,7 +128,7 @@ const chatbotApiSlice = createSlice({
         state.isLoading = false;
         state.messages[0].questions = action.payload.questions;
         state.conversationId = action.payload.conversation_id;
-        state.imageUrl = action.payload.imageUrl; // 🔥 store imageUrl in state
+        state.imageUrl = action.payload.imageUrl; // store imageUrl in state
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;
