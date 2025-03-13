@@ -39,6 +39,20 @@ export const MainPage = () => {
     dispatch(fetchAllQuestions());
   }, [dispatch]);
 
+  // Allow user to control the widget state via URL parameters
+  useEffect(() => {
+    // Parse URL parameters
+    const queryParams = new URLSearchParams(window.location.search);
+    // Get the 'showWidget' parameter value
+    const showWidgetParam = queryParams.get('showWidget');
+
+    if (showWidgetParam === 'false') {
+      dispatch(setWidgetState(true));
+    } else {
+      dispatch(setWidgetState(false));
+    }
+  }, [dispatch]);
+
   // Handle widget close action
   const handleWidgetClose = () => {
     dispatch(setWidgetState(true));
