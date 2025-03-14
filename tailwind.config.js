@@ -6,12 +6,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkColor: "#000000",
-        lightColor: "#FFF",
-        primaryColor: "#501AC8",
-        hoverColor: "#B366CF",
-        gradientColor: "#1C064C",
-        footerColor: "#370E92",
+        darkColor: "var(--dark-color)",
+        lightColor: "var(--light-color)",
+        primaryColor: "var(--primary-color)",
+        hoverColor: "var(--hover-color)",
+        gradientColor: "var(--gradient-color)",
+        footerColor: "var(--footer-color)",
       },
       borderRadius: {
         rad: "10px",
@@ -32,6 +32,6 @@ export default {
     },
   },
   plugins: [
-    typography, 
+    typography,
   ],
 };

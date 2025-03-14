@@ -5,11 +5,12 @@ const initialState = {
   formSubmitted: false,
   notification: false,
   isWidgetClosed: false,
+  theme: "purple",
 };
 
 const userInteractionsSlice = createSlice({
   name: "userInteractions",
-  initialState: initialState,
+  initialState,
   reducers: {
     setChatState: (state, action) => {
       state.isChatClosed = action.payload;
@@ -23,6 +24,10 @@ const userInteractionsSlice = createSlice({
     setWidgetState: (state, action) => {
       state.isWidgetClosed = action.payload;
     },
+    setTheme: (state, action) => {
+      const selectedTheme = action.payload;
+      state.theme = selectedTheme;
+    },
   },
 });
 
@@ -31,6 +36,7 @@ export const {
   setFormSubmitted,
   setNotificationState,
   setWidgetState,
+  setTheme,
 } = userInteractionsSlice.actions;
 
 export default userInteractionsSlice.reducer;
