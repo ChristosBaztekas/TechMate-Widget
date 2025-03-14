@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// Create an instance of Axios
 const axiosInstance = axios.create({
-  baseURL: "https://api-test.techmate.gr/",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
