@@ -6,7 +6,6 @@ import { setChatState } from "@/store/Slices/userSlice";
 import { fetchUserQuestion } from "@/store/Slices/chatbotApiSlice";
 import * as Icons from "@/utils/icons.util";
 import Logo from "@/assets/images/Logo.webp";
-
 import Query from "@/components/Query";
 import Questions from "@/components/Questions";
 import Response from "@/components/Response";
@@ -109,7 +108,7 @@ export const StartPage = () => {
           <img
             src={Logo}
             alt="logo"
-            className="w-16 vsm:w-auto cursor-pointer"
+            className="w-12 cursor-pointer"
             loading="lazy"
             onClick={() => navigate("/first")}
           />

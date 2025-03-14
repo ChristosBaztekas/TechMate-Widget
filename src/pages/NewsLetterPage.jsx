@@ -44,7 +44,7 @@ export const NewsLetterPage = () => {
             <input
               placeholder="E-mail*"
               type="email"
-              className="bg-lightColor text-xl p-5 text-darkColor/70 rounded-rad h-16 vsm:h-20 w-full mb-4 outline-none"
+              className="text-xl p-5 text-black/70 rounded-rad h-16 vsm:h-20 w-full mb-4 outline-none"
               aria-label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

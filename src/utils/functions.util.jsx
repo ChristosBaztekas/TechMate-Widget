@@ -9,5 +9,5 @@ export const sendDimensionsToParent = (width, height, isClosed, isWidgetClosed) 
 
   console.log("Sending message to parent:", message);
 
-  window.parent.postMessage(message, "*"); // Replace * with specific origin in production
+  window.parent.postMessage(message, "*");
 };

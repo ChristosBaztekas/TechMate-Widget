@@ -25,7 +25,7 @@ const Header = () => {
         <img
           src={Logo}
           alt="logo"
-          className="w-16 vsm:w-auto cursor-pointer hover:cursor-pointer hover:scale-95 transition-all duration-300" loading="lazy"
+          className="w-12 cursor-pointer hover:cursor-pointer hover:scale-95 transition-all duration-300" loading="lazy"
           onClick={() => {
             dispatch(setChatState(false));
             navigate("/first");

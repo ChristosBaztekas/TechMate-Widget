@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    setNotificationState,
-    setChatState,
-    setWidgetState,
-} from "@/store/Slices/userSlice";
+import { setNotificationState, setChatState, setWidgetState, } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util";
-import {
-    fetchAllQuestions,
-    fetchGivenQuestion,
-    resetMessages,
-} from "@/store/Slices/chatbotApiSlice";
+import { fetchAllQuestions, fetchGivenQuestion, resetMessages, } from "@/store/Slices/chatbotApiSlice";
 import Logo from "@/assets/images/Logo.webp";
 import * as Icons from "@/utils/icons.util";
 
@@ -52,7 +44,6 @@ export const Widget = () => {
                     loading="lazy"
                 />
                 <p>
-                    {" "}
                     Γεια σου!
                     <br />
                     Πώς μπορώ να σε βοηθήσω;
