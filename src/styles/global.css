@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --dark-color: #000000;
+  --light-color: #FFFFFF;
+  --primary-color: #501AC8;
+  --hover-color: #B366CF;
+  --gradient-color: #1C064C;
+  --footer-color: #370E92;
+}
+
 * {
   /* outline: 1px solid red; */
 }

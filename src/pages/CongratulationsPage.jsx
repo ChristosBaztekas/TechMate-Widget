@@ -43,7 +43,7 @@ export const CongratulationsPage = () => {
               ενημερώσουμε για τη προσφορά σου!
             </p>
             <button
-              className="bg-lightColor hover:bg-lightColor/85 text-xl font-semibold text-footerColor rounded-rad h-20 w-full"
+              className="bg-lightColor hover:opacity-90 text-xl font-semibold text-footerColor rounded-rad h-20 w-full"
               onClick={() => navigate("/email-form2")}
             >
               Θέλω ΠΡΟΣΦΟΡΑ!

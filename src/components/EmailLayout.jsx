@@ -46,7 +46,7 @@ export const EmailLayout = ({ icon }) => {
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-lightColor hover:bg-lightColor/85 text-2xl font-semibold text-footerColor rounded-rad h-20 vsm:h-[70px] w-full"
+                className="bg-lightColor hover:opacity-90 text-2xl font-semibold text-footerColor rounded-rad h-20 vsm:h-[70px] w-full"
                 aria-label="I want an OFFER!"
                 onClick={handleSend}
               >

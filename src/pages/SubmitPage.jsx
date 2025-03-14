@@ -28,7 +28,7 @@ export const SubmitPage = () => {
               συντομότερο δυνατό!
             </p>
             <button
-              className="bg-hoverColor hover:bg-hoverColor/85 text-xl font-bold text-lightColor rounded-rad h-16 sm:h-20 w-full"
+              className="bg-hoverColor hover:opacity-90 text-xl font-bold text-lightColor rounded-rad h-16 sm:h-20 w-full"
               onClick={() => {
                 dispatch(setChatState(true));
                 window.history.pushState({}, "", "/");

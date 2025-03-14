@@ -51,7 +51,7 @@ export const NewsLetterPage = () => {
             />
             <div className="w-full flex mt-1">
               <button
-                className="bg-hoverColor hover:bg-hoverColor/85 text-xl vsm:text-2xl font-semibold text-lightColor rounded-rad h-16 vsm:h-20 w-full"
+                className="bg-hoverColor hover:opacity-90 text-xl vsm:text-2xl font-semibold text-lightColor rounded-rad h-16 vsm:h-20 w-full"
                 aria-label="I want an OFFER!"
                 style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
                 onClick={handleSend}

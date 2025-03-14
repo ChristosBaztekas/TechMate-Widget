@@ -189,7 +189,7 @@ export const StartPage = () => {
       </div>
 
       <Footer />
-    </section>
+    </section >
   );
 };
 
