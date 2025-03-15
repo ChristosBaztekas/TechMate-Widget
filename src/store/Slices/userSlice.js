@@ -6,6 +6,7 @@ const initialState = {
   notification: false,
   isWidgetClosed: false,
   theme: "purple",
+  identifier: null,
 };
 
 const userInteractionsSlice = createSlice({
@@ -28,6 +29,9 @@ const userInteractionsSlice = createSlice({
       const selectedTheme = action.payload;
       state.theme = selectedTheme;
     },
+    setIdentifier: (state, action) => {
+      state.identifier = action.payload;
+    },
   },
 });
 
@@ -37,6 +41,7 @@ export const {
   setNotificationState,
   setWidgetState,
   setTheme,
+  setIdentifier,
 } = userInteractionsSlice.actions;
 
 export default userInteractionsSlice.reducer;

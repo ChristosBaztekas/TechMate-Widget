@@ -1,11 +1,21 @@
 import axiosInstance from "./axiosInstance";
+import store from '@/store/index';
 
-const websiteId = "a15e78dc-e063-409f-8b7e-9639f3ed7f38";
+const getIdentifier = () => {
+  const state = store.getState();
+  return state.user.identifier;
+};
 
 // first call when website starts
 export const getQuestions = async () => {
+  const identifier = getIdentifier();
+
+  if (!identifier) {
+    console.error("Identifier is not available.");
+    return null;
+  }
   try {
-    const response = await axiosInstance.get(`/${websiteId}`);
+    const response = await axiosInstance.get(`/${identifier}`);
     return response.data;
   } catch (error) {
     console.error("Error while fetching questions", error);
