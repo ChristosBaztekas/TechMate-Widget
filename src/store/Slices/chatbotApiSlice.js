@@ -1,9 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  getQuestions,
-  ansUserQuestion,
-  ansGivenQuestion,
-} from "@/API/techMateApi";
+import { getQuestions, ansUserQuestion, ansGivenQuestion, } from "@/API/techMateApi";
 
 // Get All questions when the page loads
 export const fetchAllQuestions = createAsyncThunk(
@@ -11,9 +7,21 @@ export const fetchAllQuestions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions();
-      const { questions, image, logo, conversation_id } = response; // Get company image and conversation ID
-      console.log(response);
-      return { questions, imageUrl: image, logoUrl: logo, conversation_id };
+      const {
+        questions,
+        image,
+        logo,
+        conversation_id,
+        texts,
+      } = response;
+
+      return {
+        questions,
+        imageUrl: image,
+        logoUrl: logo,
+        conversation_id,
+        texts,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -53,7 +61,6 @@ export const fetchGivenQuestion = createAsyncThunk(
       }
 
       const response = await ansGivenQuestion(conversation_id, question);
-      console.log(response);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -78,6 +85,7 @@ const initialState = {
   error: null,
   imageUrl: "",
   logoUrl: "",
+  texts: {},
 };
 
 const chatbotApiSlice = createSlice({
@@ -131,6 +139,7 @@ const chatbotApiSlice = createSlice({
         state.conversationId = action.payload.conversation_id;
         state.imageUrl = action.payload.imageUrl;
         state.logoUrl = action.payload.logoUrl;
+        state.texts = action.payload.texts;
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;
@@ -180,6 +189,7 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchGivenQuestion.fulfilled, (state, action) => {
         state.isLoading = false;
         state.lastResponse = action.payload;
+
         const lastMessage = state.messages[state.messages.length - 1];
         lastMessage.text = action.payload.answer;
         lastMessage.questions = action.payload.follow_up;

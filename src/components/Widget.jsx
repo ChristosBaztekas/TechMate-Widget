@@ -9,9 +9,10 @@ import * as Icons from "@/utils/icons.util";
 
 export const Widget = () => {
     const dispatch = useDispatch();
-    const { messages, isLoading, error, logoUrl } = useSelector(
+    const { messages, isLoading, error, logoUrl, texts } = useSelector(
         (state) => state.chatbotApi
     );
+
     const [activeQuestion, setActiveQuestion] = useState(null);
 
     useEffect(() => {
@@ -34,6 +35,12 @@ export const Widget = () => {
         dispatch(setWidgetState(true));
     };
 
+    // Get greeting bubble array from API response
+    const greetingBubble = texts?.greetings?.bubble || [
+        "Γεια σου!",
+        "Πώς μπορώ να σε βοηθήσω;",
+    ];
+
     return (
         <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:mr-5">
             <span className="flex justify-start items-center gap-3">
@@ -43,16 +50,20 @@ export const Widget = () => {
                     className="w-18 flex-shrink-0"
                     loading="lazy"
                 />
-                <p>
-                    Γεια σου!
-                    <br />
-                    Πώς μπορώ να σε βοηθήσω;
+
+                <p className="text-left">
+                    {greetingBubble.map((line, index) => (
+                        <span key={index}>
+                            {line}
+                            <br />
+                        </span>
+                    ))}
                 </p>
             </span>
 
-            {/* Section containing the notification links */}
+            {/* Notification links (questions) */}
             <nav className="flex flex-col justify-center items-center gap-3 text-xs mt-5 w-full">
-                {messages[0].questions.slice(0, 3).map((item, index) =>
+                {messages[0]?.questions.slice(0, 3).map((item, index) =>
                     activeQuestion === null || activeQuestion === item.id ? (
                         <Link
                             key={index}

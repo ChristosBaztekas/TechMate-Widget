@@ -7,7 +7,8 @@ import Logo from "@/assets/images/Logo.webp"; // Import the logo image
 export const WelcomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { logoUrl } = useSelector((state) => state.chatbotApi);
+  const { logoUrl, texts } = useSelector((state) => state.chatbotApi);
+  const greetingHeader = texts?.greetings?.header || "Γεια σας! 👋";
 
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50">
@@ -29,7 +30,7 @@ export const WelcomePage = () => {
                 navigate("/first");
               }}
             />
-            <h1 className="text-3xl font-bold ml-5">Γεια σας! 👋</h1>
+            <h1 className="text-3xl font-bold ml-5">{greetingHeader}</h1>
             <h2 className="text-lg sm:text-xl my-4 vsm:my-1 ml-5">
               Καλωσήρθατε στην υποστήριξη της TechMate! Είμαστε στη διάθεσή σας!
             </h2>

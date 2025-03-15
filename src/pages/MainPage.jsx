@@ -61,10 +61,9 @@ export const MainPage = () => {
 
   const camelToKebab = (str) => str.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
 
-  // Listen to parent messages (from SDK)
+  // Listen to parent messages 
   useEffect(() => {
     const handleMessage = (event) => {
-      // OPTIONAL: validate origin => event.origin === "https://client-domain.com"
       const data = event.data;
 
       if (data?.type === "chatbot-config") {

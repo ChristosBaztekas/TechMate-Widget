@@ -25,7 +25,8 @@ export const StartPage = () => {
 
   const textareaRef = useRef(null);
 
-  const { messages, conversationId, logoUrl } = useSelector((state) => state.chatbotApi);
+  const { messages, conversationId, logoUrl, texts } = useSelector((state) => state.chatbotApi);
+  const greetingHeader = texts?.greetings?.header || "Γεια σας! 👋";
 
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId) return;
@@ -112,7 +113,7 @@ export const StartPage = () => {
             loading="lazy"
             onClick={() => navigate("/first")}
           />
-          <h1 className="font-bold">Γεια σας! 👋</h1>
+          <h1 className="font-bold">{greetingHeader}</h1>
         </div>
 
         <div className="flex justify-center items-center gap-2 z-20 text-lightColor">
