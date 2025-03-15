@@ -89,7 +89,7 @@ export const StartPage = () => {
 
   return (
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-      <header className="relative flex justify-between items-start vsm:items-center text-primaryColor py-3 px-5 vsm:px-7 h-20 transition-all">
+      <header className="relative flex justify-between items-start vsm:items-center text-primaryColor pt-3 px-5 vsm:px-7 transition-all">
         <span className="absolute right-0 left-0 top-0 sm:-top-3 w-full h-fit">
           <Icons.PatternIcon />
         </span>
@@ -108,7 +108,7 @@ export const StartPage = () => {
           <img
             src={Logo}
             alt="logo"
-            className="w-12 cursor-pointer"
+            className="w-10 cursor-pointer"
             loading="lazy"
             onClick={() => navigate("/first")}
           />
@@ -136,7 +136,7 @@ export const StartPage = () => {
         </div>
       </header>
 
-      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll overflow-x-hidden flex-grow">
+      <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll sm:pt-8 overflow-x-hidden flex-grow">
         {messages.map((message, index) => {
           if (message.text.startsWith("form")) {
             const lastChar = message.text.slice(-1);
