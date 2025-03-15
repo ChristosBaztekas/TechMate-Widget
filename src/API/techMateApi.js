@@ -6,21 +6,28 @@ const getIdentifier = () => {
   return state.user.identifier;
 };
 
-// first call when website starts
-export const getQuestions = async () => {
+const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1000) => {
   const identifier = getIdentifier();
 
-  if (!identifier) {
-    console.error("Identifier is not available.");
+  if (identifier) {
+    try {
+      const response = await axiosInstance.get(`/${identifier}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error while fetching questions", error);
+      return null;
+    }
+  } else if (retryCount < maxRetries) {
+    console.log(`Identifier not available, retrying in ${delay}ms... (Retry ${retryCount + 1}/${maxRetries})`);
+    return new Promise(resolve => setTimeout(() => resolve(fetchQuestionsWithRetry(retryCount + 1, maxRetries, delay)), delay));
+  } else {
+    console.error("Max retries reached, identifier not available.");
     return null;
   }
-  try {
-    const response = await axiosInstance.get(`/${identifier}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error while fetching questions", error);
-    return null;
-  }
+};
+
+export const getQuestions = () => {
+  return fetchQuestionsWithRetry();
 };
 
 // Send a question from user input

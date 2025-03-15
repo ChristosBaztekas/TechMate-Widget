@@ -6,8 +6,5 @@ export const sendDimensionsToParent = (width, height, isClosed, isWidgetClosed) 
     isChatClosed: isClosed,
     Widget: isWidgetClosed,
   };
-
-  console.log("Sending message to parent:", message);
-
   window.parent.postMessage(message, "*");
 };

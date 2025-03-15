@@ -11,7 +11,7 @@ import { setIdentifier } from "../store/Slices/userSlice";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
-  const { isChatClosed, notification, isWidgetClosed, theme, identifier } = useSelector((state) => state.user);
+  const { isChatClosed, notification, isWidgetClosed, theme } = useSelector((state) => state.user);
   const { imageUrl } = useSelector((state) => state.chatbotApi);
   const NOTIFICATION_DELAY = 2000;
 
@@ -70,11 +70,8 @@ export const MainPage = () => {
       if (data?.type === "chatbot-config") {
         const { theme, showWidget, identifier: receivedIdentifier } = data.payload;
 
-        console.log("Received config from parent:", data.payload);
-
         if (receivedIdentifier) {
           dispatch(setIdentifier(receivedIdentifier));
-          console.log("Identifier received:", receivedIdentifier);
         }
 
         if (theme) {
