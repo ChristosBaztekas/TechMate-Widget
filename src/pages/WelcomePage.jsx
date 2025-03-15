@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
@@ -7,6 +7,8 @@ import Logo from "@/assets/images/Logo.webp"; // Import the logo image
 export const WelcomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { logoUrl } = useSelector((state) => state.chatbotApi);
+
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50">
       <div className="flex flex-col justify-between h-full">
@@ -19,7 +21,7 @@ export const WelcomePage = () => {
           {/* Logo and Greeting */}
           <div className="flex flex-col justify-center items-start vsm:gap-2 z-20 text-lightColor">
             <img
-              src={Logo}
+              src={logoUrl || Logo}
               alt="logo"
               className="w-14 vsm:w-auto xl:w-20 my-5" loading="lazy"
               onClick={() => {

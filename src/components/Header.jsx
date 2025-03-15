@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setChatState } from "@/store/Slices/userSlice";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 import Logo from "@/assets/images/Logo.webp"; // Import the logo image
@@ -7,6 +7,7 @@ import Logo from "@/assets/images/Logo.webp"; // Import the logo image
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { logoUrl } = useSelector((state) => state.chatbotApi);
 
   return (
     <header className="relative flex justify-between items-center text-primaryColor py-2 px-5 vsm:px-7 bg-primaryColor transition-all">
@@ -23,7 +24,7 @@ const Header = () => {
           <Icons.ArrowIcon />
         </button>
         <img
-          src={Logo}
+          src={logoUrl || Logo}
           alt="logo"
           className="w-12 cursor-pointer hover:cursor-pointer hover:scale-95 transition-all duration-300" loading="lazy"
           onClick={() => {

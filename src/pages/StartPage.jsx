@@ -25,7 +25,7 @@ export const StartPage = () => {
 
   const textareaRef = useRef(null);
 
-  const { messages, conversationId } = useSelector((state) => state.chatbotApi);
+  const { messages, conversationId, logoUrl } = useSelector((state) => state.chatbotApi);
 
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId) return;
@@ -106,7 +106,7 @@ export const StartPage = () => {
             <Icons.ArrowIcon />
           </button>
           <img
-            src={Logo}
+            src={logoUrl || Logo}
             alt="logo"
             className="w-10 cursor-pointer"
             loading="lazy"

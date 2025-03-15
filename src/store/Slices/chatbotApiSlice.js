@@ -11,9 +11,9 @@ export const fetchAllQuestions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions();
-      const { questions, image, conversation_id } = response; // Get company image and conversation ID
+      const { questions, image, logo, conversation_id } = response; // Get company image and conversation ID
       console.log(response);
-      return { questions, imageUrl: image, conversation_id };
+      return { questions, imageUrl: image, logoUrl: logo, conversation_id };
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -76,7 +76,8 @@ const initialState = {
   questionId: "",
   isLoading: false,
   error: null,
-  imageUrl: "", // add imageUrl to initialState
+  imageUrl: "",
+  logoUrl: "",
 };
 
 const chatbotApiSlice = createSlice({
@@ -128,7 +129,8 @@ const chatbotApiSlice = createSlice({
         state.isLoading = false;
         state.messages[0].questions = action.payload.questions;
         state.conversationId = action.payload.conversation_id;
-        state.imageUrl = action.payload.imageUrl; // store imageUrl in state
+        state.imageUrl = action.payload.imageUrl;
+        state.logoUrl = action.payload.logoUrl;
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;

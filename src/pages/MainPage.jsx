@@ -7,12 +7,12 @@ import { StartPage } from "@/pages";
 import Logo from "@/assets/images/Logo.webp";
 import { Widget } from "../components/Widget";
 import { Notifications } from "@/components/Notifications";
-import { setIdentifier } from "../store/Slices/userSlice";
+import { setIdentifier } from "@/store/Slices/userSlice";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
   const { isChatClosed, notification, isWidgetClosed, theme } = useSelector((state) => state.user);
-  const { imageUrl } = useSelector((state) => state.chatbotApi);
+  const { imageUrl, logoUrl } = useSelector((state) => state.chatbotApi);
   const NOTIFICATION_DELAY = 2000;
 
   // Dynamic Theme Application
@@ -98,7 +98,7 @@ export const MainPage = () => {
     } else if (isChatClosed && notification) {
       sendDimensionsToParent("290px", "280px", true, isWidgetClosed);
     } else if (isChatClosed) {
-      sendDimensionsToParent("95px", "87px", true, isWidgetClosed);
+      sendDimensionsToParent("95px", "88px", true, isWidgetClosed);
     } else {
       sendDimensionsToParent("33%", "588px", false, isWidgetClosed);
     }
@@ -144,7 +144,7 @@ export const MainPage = () => {
                 role="button"
                 aria-label="Open chat"
               >
-                <img src={Logo} alt="logo" className="absolute -top-1 -left-3 w-8" loading="lazy" />
+                <img src={logoUrl || Logo} alt="logo" className="absolute -top-1 -left-3 w-8" loading="lazy" />
               </button>
             </div>
           )}

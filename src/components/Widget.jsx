@@ -9,7 +9,7 @@ import * as Icons from "@/utils/icons.util";
 
 export const Widget = () => {
     const dispatch = useDispatch();
-    const { messages, isLoading, error } = useSelector(
+    const { messages, isLoading, error, logoUrl } = useSelector(
         (state) => state.chatbotApi
     );
     const [activeQuestion, setActiveQuestion] = useState(null);
@@ -38,7 +38,7 @@ export const Widget = () => {
         <div className="relative bg-darkColor rounded-[20px] text-lightColor px-3 py-5 mx-auto ml-5 mb-5 vsm:mb-0 vsm:ml-auto vsm:mr-5">
             <span className="flex justify-start items-center gap-3">
                 <img
-                    src={Logo}
+                    src={logoUrl || Logo}
                     alt="logo"
                     className="w-18 flex-shrink-0"
                     loading="lazy"
