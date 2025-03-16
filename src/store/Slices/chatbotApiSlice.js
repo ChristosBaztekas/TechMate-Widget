@@ -1,19 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getQuestions, ansUserQuestion, ansGivenQuestion, } from "@/API/techMateApi";
 
-// Get All questions when the page loads
+/**
+ * Fetch all questions when the page loads.
+ */
 export const fetchAllQuestions = createAsyncThunk(
   "questions/fetchAllQuestions",
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions();
-      const {
-        questions,
-        image,
-        logo,
-        conversation_id,
-        texts,
-      } = response;
+
+      const { questions, image, logo, conversation_id, texts } = response;
 
       return {
         questions,
@@ -23,12 +20,17 @@ export const fetchAllQuestions = createAsyncThunk(
         texts,
       };
     } catch (error) {
+      console.error("Error fetching all questions:", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-// Get ans for user input question
+/**
+ * Fetch an answer for a user's input question.
+ *
+ * @param {string} question - User's question.
+ */
 export const fetchUserQuestion = createAsyncThunk(
   "questions/fetchUserQuestion",
   async (question, thunkAPI) => {
@@ -37,18 +39,24 @@ export const fetchUserQuestion = createAsyncThunk(
       const conversation_id = state.chatbotApi.conversationId;
 
       if (!conversation_id) {
+        console.error("No conversation_id found in fetchUserQuestion");
         return thunkAPI.rejectWithValue("No conversation_id found");
       }
 
       const response = await ansUserQuestion(conversation_id, question);
       return response;
     } catch (error) {
+      console.error("Error fetching answer for user question:", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-// Get ans for given question
+/**
+ * Fetch an answer for a pre-defined question.
+ *
+ * @param {string} question - Predefined question identifier.
+ */
 export const fetchGivenQuestion = createAsyncThunk(
   "questions/fetchGivenQuestion",
   async (question, thunkAPI) => {
@@ -57,12 +65,14 @@ export const fetchGivenQuestion = createAsyncThunk(
       const conversation_id = state.chatbotApi.conversationId;
 
       if (!conversation_id) {
+        console.error("No conversation_id found in fetchGivenQuestion");
         return thunkAPI.rejectWithValue("No conversation_id found");
       }
 
       const response = await ansGivenQuestion(conversation_id, question);
       return response;
     } catch (error) {
+      console.error("Error fetching answer for given question:", error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -90,7 +100,7 @@ const initialState = {
 
 const chatbotApiSlice = createSlice({
   name: "chatbotApi",
-  initialState: initialState,
+  initialState,
   reducers: {
     setLastResponse: (state, action) => {
       state.lastResponse = action.payload;
@@ -128,13 +138,14 @@ const chatbotApiSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch All Questions When the App Starts
+      // Fetch All Questions
       .addCase(fetchAllQuestions.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchAllQuestions.fulfilled, (state, action) => {
         state.isLoading = false;
+
         state.messages[0].questions = action.payload.questions;
         state.conversationId = action.payload.conversation_id;
         state.imageUrl = action.payload.imageUrl;
@@ -146,7 +157,7 @@ const chatbotApiSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch Answer for User Input Question
+      // Fetch Answer for User Question
       .addCase(fetchUserQuestion.pending, (state, action) => {
         state.isLoading = true;
         state.error = null;
@@ -161,6 +172,10 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
         state.isLoading = false;
         state.lastResponse = action.payload;
+
+        if (action.payload.form_id) {
+          state.formID = action.payload.form_id;
+        }
 
         const lastMessage = state.messages[state.messages.length - 1];
         lastMessage.text = action.payload.answer;
@@ -189,6 +204,10 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchGivenQuestion.fulfilled, (state, action) => {
         state.isLoading = false;
         state.lastResponse = action.payload;
+
+        if (action.payload.form_id) {
+          state.formID = action.payload.form_id;
+        }
 
         const lastMessage = state.messages[state.messages.length - 1];
         lastMessage.text = action.payload.answer;
