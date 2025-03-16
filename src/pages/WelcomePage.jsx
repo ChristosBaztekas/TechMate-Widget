@@ -66,20 +66,20 @@ export const WelcomePage = () => {
 
 
         <main className="sm:flex flex-col vsm:flex-row text-lightColor overflow-scroll justify-evenly mx-10">
-          <section className="flex flex-col gap-5 justify-center items-center p-5">
+          <Link to="https://techai.gr/el/" target="_blank" className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all">
             <Icons.ClockIcon />
             <p className="max-w-24 text-center text-sm">
               Υποστήριξη όλο το 24ωρο
             </p>
-          </section>
-          <section className="flex flex-col gap-5 justify-center items-center p-5">
+          </Link>
+          <Link to="https://techai.gr/el/" target="_blank" className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all">
             <Icons.PaintIcon />
             <p className="max-w-24 text-center text-sm">Προσωπική διαμόρφωση</p>
-          </section>
-          <section className="flex flex-col gap-5 justify-center items-center p-5">
+          </Link>
+          <Link to="https://techai.gr/el/" target="_blank" className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all">
             <Icons.CalenderIcon />
             <p className="max-w-24 text-center text-sm">Δημιουργία ραντεβού</p>
-          </section>
+          </Link>
         </main>
 
         <footer className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1">
