@@ -4,12 +4,11 @@ const Footer = () => {
   const navigate = useNavigate();
   return (
     <footer
-      className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor py-1 w-full cursor-pointer"
-      onClick={() => {
-        navigate("/first");
-      }}
+      className="flex justify-center items-center border border-primaryColor bg-footerColor py-1 w-full"
     >
-      Supported by TechMate
+      <p className="text-lightColor font-light text-sm cursor-pointer" onClick={() => { navigate("/first"); }}>
+        Supported by TechMate
+      </p>
     </footer>
   );
 };

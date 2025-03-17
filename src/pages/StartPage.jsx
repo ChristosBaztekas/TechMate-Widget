@@ -26,7 +26,11 @@ export const StartPage = () => {
   const textareaRef = useRef(null);
 
   const { messages, conversationId, logoUrl, texts } = useSelector((state) => state.chatbotApi);
+
+  // Grab text content safely with fallback defaults
   const greetingHeader = texts?.greetings?.header || "Γεια σας! 👋";
+  const placeholderInput = texts?.greetings?.chatBody?.placeholderInputSend || "Πληκτρολογήστε την ερώτησή σας...";
+  const sendButtonText = texts?.greetings?.chatBody?.sendQuestionText || "Send";
 
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId) return;
@@ -90,6 +94,7 @@ export const StartPage = () => {
 
   return (
     <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
+      {/* Header */}
       <header className="relative flex justify-between items-start vsm:items-center text-primaryColor pt-3 px-5 vsm:px-7 transition-all">
         <span className="absolute right-0 left-0 top-0 sm:-top-3 w-full h-fit">
           <Icons.PatternIcon />
@@ -137,6 +142,7 @@ export const StartPage = () => {
         </div>
       </header>
 
+      {/* Messages */}
       <div className="flex flex-col gap-5 px-4 py-4 sm:px-8 overflow-scroll sm:pt-8 overflow-x-hidden flex-grow">
         {messages.map((message, index) => {
           if (message.text.startsWith("form")) {
@@ -158,10 +164,11 @@ export const StartPage = () => {
         })}
       </div>
 
+      {/* Input + Send */}
       <div className="flex p-6 justify-center items-start bg-gradient-to-r from-primaryColor to-gradientColor h-18">
         <textarea
           ref={textareaRef}
-          placeholder="Πληκτρολογήστε την ερώτησή σας..."
+          placeholder={placeholderInput}
           className={`
             w-full min-h-10 max-h-24 text-sm vsm:text-base pl-5 p-2 outline-none resize-none overflow-hidden
             transition-all duration-300
@@ -185,12 +192,12 @@ export const StartPage = () => {
           className="ml-6 mt-2 text-white font-bold hover:text-hoverColor"
           onClick={handleSendClick}
         >
-          Send
+          {sendButtonText}
         </button>
       </div>
 
       <Footer />
-    </section >
+    </section>
   );
 };
 

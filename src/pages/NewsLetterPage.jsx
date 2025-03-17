@@ -12,7 +12,18 @@ export const NewsLetterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const { conversationId } = useSelector((state) => state.chatbotApi);
+
+  const { conversationId, texts } = useSelector((state) => state.chatbotApi);
+
+  // Get form-b data from redux state
+  const formData = texts?.forms?.["form-b"]?.form || {
+    title: "Newsletter!",
+    description: "Θα λαμβάνετε εντελώς δωρεάν, newsletter με επιμορφωτικό υλικό!",
+    input: "E-mail*",
+    button: "Δωρεάν Ανάλυση Αναγκών!",
+    disclaimerText:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  };
 
   const handleSend = async () => {
     if (!email) return;
@@ -21,7 +32,7 @@ export const NewsLetterPage = () => {
       const response = await postUserEmail(conversationId, email);
       dispatch(setFormID(response.form_id));
       dispatch(setFormSubmitted(true));
-      navigate("/submitted");
+      navigate("/submitted", { state: { formType: "form-b" } });
       console.log(response);
     } catch (error) {
       console.error("Error while posting user email", error);
@@ -31,18 +42,23 @@ export const NewsLetterPage = () => {
   return (
     <section className="flex flex-col h-screen w-full bg-darkColor fixed bottom-0 right-0 z-50 overflow-x-hidden">
       <div className="flex flex-col justify-between h-full bg-primaryColor">
+
+        {/* Header */}
         <Header />
 
+        {/* Main */}
         <main className="flex flex-col justify-around items-center overflow-scroll h-full text-lightColor mx-5">
+
+          {/* Title + Description */}
           <div className="flex flex-col text-center gap-7 items-center">
-            <h1 className="text-4xl font-bold">Newsletter!</h1>
-            <p className="text-2xl font-semibold w-[90%]">
-              Θα λαμβάνετε εντελώς δωρεάν, newsletter με επιμορφωτικό υλικό!
-            </p>
+            <h1 className="text-4xl font-bold">{formData.title}</h1>
+            <p className="text-2xl font-semibold w-[90%]">{formData.description}</p>
           </div>
+
+          {/* Email Input + Button */}
           <div className="w-full sm:mt-8">
             <input
-              placeholder="E-mail*"
+              placeholder={formData.input}
               type="email"
               className="text-xl p-5 text-black/70 rounded-rad h-16 vsm:h-20 w-full mb-4 outline-none"
               aria-label="Email"
@@ -56,16 +72,18 @@ export const NewsLetterPage = () => {
                 style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
                 onClick={handleSend}
               >
-                Δωρεάν Ανάλυση Αναγκών!
+                {formData.button}
               </button>
             </div>
           </div>
+
+          {/* Disclaimer */}
           <p className="text-left font-medium text-xs">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua
+            {formData.disclaimerText}
           </p>
         </main>
 
+        {/* Footer */}
         <Footer />
       </div>
     </section>
