@@ -1,96 +1,68 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
-import { setChatState, setNotificationState, setWidgetState, setTheme } from "@/store/Slices/userSlice";
+import { setChatState, setNotificationState, setWidgetState, setTheme, setIdentifier, setNotificationDelay } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util";
 import { StartPage } from "@/pages";
 import Logo from "@/assets/images/Logo.webp";
 import { Widget } from "../components/Widget";
 import { Notifications } from "@/components/Notifications";
-import { setIdentifier } from "@/store/Slices/userSlice";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
-  const { isChatClosed, notification, isWidgetClosed, theme } = useSelector((state) => state.user);
-  const { imageUrl, logoUrl } = useSelector((state) => state.chatbotApi);
-  const NOTIFICATION_DELAY = 2000;
 
-  // Dynamic Theme Application
+  const { isChatClosed, notification, isWidgetClosed, theme, notificationDelay } = useSelector((state) => state.user);
+  const { imageUrl, logoUrl } = useSelector((state) => state.chatbotApi);
+  const notificationTimerRef = useRef(null);
+
+  // Theme handling
   useEffect(() => {
     const themes = {
-      purple: {
-        darkColor: "#000000",
-        lightColor: "#FFF",
-        primaryColor: "#501AC8",
-        hoverColor: "#B366CF",
-        gradientColor: "#1C064C",
-        footerColor: "#370E92"
-      },
-      green: {
-        darkColor: "#000000",
-        lightColor: "#FFF",
-        primaryColor: "#0D642F",
-        hoverColor: "#7CB937",
-        gradientColor: "#03421C",
-        footerColor: "#508A0F"
-      },
-      red: {
-        darkColor: "#000000",
-        lightColor: "#FFF",
-        primaryColor: "#C7313D",
-        hoverColor: "#E55640",
-        gradientColor: "#681017",
-        footerColor: "#9D2816"
-      },
-      blue: {
-        darkColor: "#000000",
-        lightColor: "#FFF",
-        primaryColor: "#184A88",
-        hoverColor: "#0077B6",
-        gradientColor: "#03045E",
-        footerColor: "#14577B"
-      }
+      purple: { primaryColor: "#501AC8", hoverColor: "#B366CF", gradientColor: "#1C064C", footerColor: "#370E92" },
+      green: { primaryColor: "#0D642F", hoverColor: "#7CB937", gradientColor: "#03421C", footerColor: "#508A0F" },
+      red: { primaryColor: "#C7313D", hoverColor: "#E55640", gradientColor: "#681017", footerColor: "#9D2816" },
+      blue: { primaryColor: "#184A88", hoverColor: "#0077B6", gradientColor: "#03045E", footerColor: "#14577B" }
     };
 
     const selectedTheme = themes[theme] || themes["purple"];
 
     Object.keys(selectedTheme).forEach((key) => {
-      document.documentElement.style.setProperty(`--${camelToKebab(key)}`, selectedTheme[key]);
+      document.documentElement.style.setProperty(
+        `--${camelToKebab(key)}`,
+        selectedTheme[key]
+      );
     });
   }, [theme]);
 
-  const camelToKebab = (str) => str.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+  const camelToKebab = (str) =>
+    str.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
 
-  // Listen to parent messages 
+  // Parent message listener
   useEffect(() => {
     const handleMessage = (event) => {
       const data = event.data;
 
       if (data?.type === "chatbot-config") {
-        const { theme, showWidget, identifier: receivedIdentifier } = data.payload;
+        const { theme, showWidget, identifier: receivedIdentifier, notificationDelay: delayFromParent } = data.payload;
 
-        if (receivedIdentifier) {
-          dispatch(setIdentifier(receivedIdentifier));
-        }
-
-        if (theme) {
-          dispatch(setTheme(theme));
-        }
-
-        if (typeof showWidget === "boolean") {
+        if (receivedIdentifier) dispatch(setIdentifier(receivedIdentifier));
+        if (theme) dispatch(setTheme(theme));
+        if (typeof showWidget === "boolean")
           dispatch(setWidgetState(!showWidget));
-        }
+
+        dispatch(
+          setNotificationDelay(
+            delayFromParent !== undefined ? delayFromParent * 1000 : 10000
+          )
+        );
       }
     };
 
     window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
+    return () => window.removeEventListener("message", handleMessage);
   }, [dispatch]);
 
-  // Dimensions handler
+  // Send widget/chat size to parent
   useEffect(() => {
     if (!isWidgetClosed) {
       sendDimensionsToParent("200px", "280px", false, isWidgetClosed);
@@ -103,19 +75,86 @@ export const MainPage = () => {
     }
   }, [isChatClosed, notification, isWidgetClosed]);
 
-  // Notification after delay
+  // Show notification immediately on mount if needed
   useEffect(() => {
-    const timer = setTimeout(() => dispatch(setNotificationState(true)), NOTIFICATION_DELAY);
-    return () => clearTimeout(timer);
-  }, [dispatch]);
+    if (notificationDelay === null || notificationDelay === 1111) {
+      dispatch(setNotificationState(false));
+      return;
+    }
 
-  // Fetch questions
+    dispatch(setNotificationState(true));
+  }, [notificationDelay, dispatch]);
+
+  // 🔥 Schedule notification re-show after user closes it
+  const scheduleNotification = () => {
+    if (notificationTimerRef.current) {
+      clearTimeout(notificationTimerRef.current);
+    }
+
+    // Skip scheduling if chat is open
+    if (!isChatClosed) {
+      return;
+    }
+
+    if (notificationDelay === null || notificationDelay === 1111) {
+      return;
+    }
+
+    if (notificationDelay <= 3000) {
+      return;
+    }
+
+    notificationTimerRef.current = setTimeout(() => {
+      dispatch(setNotificationState(true));
+    }, notificationDelay);
+  };
+
+  // Watch for notification closing to reschedule if needed
+  useEffect(() => {
+    if (notificationDelay === null || notificationDelay === 1111) {
+      clearTimeout(notificationTimerRef.current);
+      dispatch(setNotificationState(false));
+      return;
+    }
+
+    // Pause notification rescheduling if chat is open
+    if (!isChatClosed) {
+      clearTimeout(notificationTimerRef.current);
+      return;
+    }
+
+    if (!notification) {
+      scheduleNotification();
+    }
+
+    return () => {
+      clearTimeout(notificationTimerRef.current);
+    };
+  }, [notification, notificationDelay, isChatClosed, dispatch]);
+
+  // Fetch initial questions
   useEffect(() => {
     dispatch(fetchAllQuestions());
   }, [dispatch]);
 
+  // Close widget handler
   const handleWidgetClose = () => {
     dispatch(setWidgetState(true));
+  };
+
+  // Close notification handler
+  const handleCloseNotification = () => {
+    dispatch(setNotificationState(false));
+
+    if (notificationDelay === null || notificationDelay === 1111) {
+      return;
+    }
+
+    if (notificationDelay <= 3000) {
+      return;
+    }
+
+    scheduleNotification();
   };
 
   return (
@@ -127,17 +166,21 @@ export const MainPage = () => {
           {!isChatClosed ? (
             <StartPage />
           ) : (
-            <div className="flex justify-end items-end flex-col fixed bottom-0 right-0 mb-5 mr-5">
-              {notification && <Notifications />}
+            <div className="flex justify-end items-end flex-col fixed bottom-0 right-0 mb-5 mr-5 z-50">
+              {/* Notification */}
+              {notification &&
+                notificationDelay !== null &&
+                notificationDelay !== 1111000 && (
+                  <Notifications onClose={handleCloseNotification} />
+                )}
+
+              {/* Button to open chat */}
               <button
-                onClick={() => {
-                  dispatch(setChatState(false));
-                  dispatch(setWidgetState(true));
-                }}
+                onClick={() => { dispatch(setChatState(false)); dispatch(setWidgetState(true)); }}
                 style={{
                   backgroundImage: `url(${imageUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
+                  backgroundSize: "cover",
+                  backgroundPosition: "center"
                 }}
                 className="relative mt-2 z-50 flex justify-center text-sm items-center w-16 h-16 rounded-full cursor-pointer"
                 role="button"
