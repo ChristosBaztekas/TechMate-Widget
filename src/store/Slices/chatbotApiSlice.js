@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getQuestions, ansUserQuestion, ansGivenQuestion, } from "@/API/techMateApi";
 
+// Default fallback greeting message
+const DEFAULT_GREETING_BODY =
+  "Γεια σας! Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλε τις απορίες σας σχετικά με ασφάλειες και καλύψεις.";
+
 /**
  * Fetch all questions when the page loads.
  */
@@ -84,7 +88,7 @@ const initialState = {
   messages: [
     {
       id: 1,
-      text: "Γεια σας! Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλε τις απορίες σας σχετικά με ασφάλειες και καλύψεις.",
+      text: DEFAULT_GREETING_BODY,
       questions: [],
       query: "",
     },
@@ -122,14 +126,14 @@ const chatbotApiSlice = createSlice({
         state.messages.pop();
       }
     },
-    resetMessages: (state) => {
-      state.messages = [];
-    },
     restartChat: (state) => {
+      const greetingBody =
+        state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY;
+
       state.messages = [
         {
           id: 1,
-          text: "Γεια σας! Είμαι εδώ για να κάνω τη ζωή σας πιο εύκολη και να απαντήσω σε όλε τις απορίες σας σχετικά με ασφάλειες και καλύψεις.",
+          text: greetingBody,
           questions: [],
           query: "",
         },
@@ -146,11 +150,26 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchAllQuestions.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        state.messages[0].questions = action.payload.questions;
         state.conversationId = action.payload.conversation_id;
         state.imageUrl = action.payload.imageUrl;
         state.logoUrl = action.payload.logoUrl;
         state.texts = action.payload.texts;
+
+        const greetingBody =
+          action.payload.texts?.greetings?.chatBody?.greetingBody ||
+          DEFAULT_GREETING_BODY;
+
+        if (state.messages.length > 0) {
+          state.messages[0].text = greetingBody;
+          state.messages[0].questions = action.payload.questions || [];
+        } else {
+          state.messages.push({
+            id: 1,
+            text: greetingBody,
+            questions: action.payload.questions || [],
+            query: "",
+          });
+        }
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;
@@ -231,7 +250,6 @@ export const {
   setFormID,
   setQuestionId,
   removeLastMessage,
-  resetMessages,
   restartChat,
 } = chatbotApiSlice.actions;
 

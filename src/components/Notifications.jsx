@@ -1,8 +1,7 @@
-import { useEffect } from "react";
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGivenQuestion, restartChat, resetMessages, fetchAllQuestions } from "@/store/Slices/chatbotApiSlice";
+import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
 import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
@@ -12,11 +11,6 @@ export const Notifications = () => {
   const { messages, isLoading, error } = useSelector(
     (state) => state.chatbotApi
   );
-
-  useEffect(() => {
-    dispatch(restartChat());
-    dispatch(fetchAllQuestions());
-  }, [dispatch]);
 
   // Don't render anything if data is still loading
   if (isLoading) return null;
@@ -48,7 +42,6 @@ export const Notifications = () => {
             onClick={() => {
               dispatch(setNotificationState(true));
               dispatch(setChatState(false));
-              dispatch(resetMessages());
               dispatch(fetchGivenQuestion(item.id));
               sendDimensionsToParent("33%", "70%", false);
             }}

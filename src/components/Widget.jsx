@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotificationState, setChatState, setWidgetState, } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util";
-import { fetchAllQuestions, fetchGivenQuestion, resetMessages, } from "@/store/Slices/chatbotApiSlice";
+import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
 import Logo from "@/assets/images/Logo.webp";
 import * as Icons from "@/utils/icons.util";
 
@@ -14,10 +14,6 @@ export const Widget = () => {
     );
 
     const [activeQuestion, setActiveQuestion] = useState(null);
-
-    useEffect(() => {
-        dispatch(fetchAllQuestions());
-    }, [dispatch]);
 
     if (isLoading) return null;
     if (error) return null;
@@ -68,7 +64,6 @@ export const Widget = () => {
                         <Link
                             key={index}
                             onClick={() => {
-                                dispatch(resetMessages());
                                 handleQuestionClick(item.id);
                             }}
                             className={activeQuestion === item.id ? "active" : ""}
