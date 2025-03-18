@@ -1,9 +1,9 @@
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGivenQuestion } from "@/store/Slices/chatbotApiSlice";
+import { fetchGivenQuestion, resetMessages } from "@/store/Slices/chatbotApiSlice";
 import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
-import { sendDimensionsToParent } from "@/utils/functions.util"; // Import the sendDimensionsToParent function
+import { sendDimensionsToParent } from "@/utils/functions.util";
 import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
 
 export const Notifications = () => {
@@ -42,6 +42,7 @@ export const Notifications = () => {
             onClick={() => {
               dispatch(setNotificationState(true));
               dispatch(setChatState(false));
+              dispatch(resetMessages({ question: item }));
               dispatch(fetchGivenQuestion(item.id));
               sendDimensionsToParent("33%", "70%", false);
             }}

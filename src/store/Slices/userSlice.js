@@ -33,8 +33,6 @@ const userInteractionsSlice = createSlice({
     setIdentifier: (state, action) => {
       state.identifier = action.payload;
     },
-
-    // Accepts null or number. If null, notification is disabled forever.
     setNotificationDelay: (state, action) => {
       state.notificationDelay = action.payload;
     },

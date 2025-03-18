@@ -89,7 +89,7 @@ export const WelcomePage = () => {
           <Link
             to="https://techai.gr/el/"
             target="_blank"
-            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all"
+            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-primaryColor transition-all"
           >
             <Icons.ClockIcon />
             <p className="max-w-24 text-center text-sm">{support24hTitle}</p>
@@ -98,7 +98,7 @@ export const WelcomePage = () => {
           <Link
             to="https://techai.gr/el/"
             target="_blank"
-            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all"
+            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-primaryColor transition-all"
           >
             <Icons.PaintIcon />
             <p className="max-w-24 text-center text-sm">{personalizationTitle}</p>
@@ -107,7 +107,7 @@ export const WelcomePage = () => {
           <Link
             to="https://techai.gr/el/"
             target="_blank"
-            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-hoverColor transition-all"
+            className="flex flex-col gap-5 justify-center items-center p-5 hover:text-primaryColor transition-all"
           >
             <Icons.CalenderIcon />
             <p className="max-w-24 text-center text-sm">{createAppointmentTitle}</p>

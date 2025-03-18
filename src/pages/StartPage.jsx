@@ -156,9 +156,21 @@ export const StartPage = () => {
 
           return (
             <div key={index} className="flex flex-col gap-5">
-              {message.query ? <Query query={message.query} /> : null}
-              <Response text={message.text} />
-              <Questions questionsArr={message.questions} />
+              {message.query && !message.isQuestion && (
+                <Query query={message.query} />
+              )}
+
+              {message.text && !message.isQuestion && (
+                <Response text={message.text} />
+              )}
+
+              {message.questions?.length > 0 && (
+                <Questions
+                  questionsArr={message.questions}
+                  isChosenQuestion={message.isQuestion}
+                />
+              )}
+
             </div>
           );
         })}

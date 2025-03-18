@@ -126,6 +126,37 @@ const chatbotApiSlice = createSlice({
         state.messages.pop();
       }
     },
+    resetMessages: (state, action) => {
+      const greetingBody =
+        state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY;
+      if (action.payload?.question) {
+        state.messages = [
+          {
+            id: 1,
+            text: greetingBody,
+            questions: [],
+            query: "",
+          },
+          {
+            id: 2,
+            text: "",
+            questions: [action.payload.question],
+            query: "",
+            isQuestion: true,
+          },
+        ];
+      } else {
+        state.messages = [
+          {
+            id: 1,
+            text: greetingBody,
+            questions: [],
+            query: "",
+          },
+        ];
+      }
+    }
+    ,
     restartChat: (state) => {
       const greetingBody =
         state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY;
@@ -250,6 +281,7 @@ export const {
   setFormID,
   setQuestionId,
   removeLastMessage,
+  resetMessages,
   restartChat,
 } = chatbotApiSlice.actions;
 
