@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchGivenQuestion, resetMessages } from "@/store/Slices/chatbotApiSlice";
 import { setNotificationState, setChatState } from "@/store/Slices/userSlice";
 import { sendDimensionsToParent } from "@/utils/functions.util";
-import * as Icons from "@/utils/icons.util"; // Import all icons as Icons
+import * as Icons from "@/utils/icons.util";
 
 export const Notifications = () => {
   const dispatch = useDispatch();
@@ -12,10 +12,7 @@ export const Notifications = () => {
     (state) => state.chatbotApi
   );
 
-  // Don't render anything if data is still loading
   if (isLoading) return null;
-
-  // Don't render anything if there is an error
   if (error) return null;
 
   return (
@@ -35,7 +32,7 @@ export const Notifications = () => {
         className="flex flex-col justify-center items-end gap-2 text-xs"
         aria-label="Notifications"
       >
-        {messages[0].questions.slice(0, 3).map((item, index) => (
+        {messages[0]?.questions.slice(0, 3).map((item, index) => (
           <Link
             className="w-full"
             key={index}
