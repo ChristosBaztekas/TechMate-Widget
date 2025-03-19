@@ -78,11 +78,9 @@ export const fetchGivenQuestion = createAsyncThunk(
 const initialState = {
   lastResponse: null,
   conversationId: "",
-  // Global state to store selected questions
   activeQuestions: [],
-  // New global property to store the IDs of questions that should be hidden.
   hiddenQuestions: [],
-  // messages: contains chat and widget messages.
+  notificationQuestions: [],
   messages: [
     {
       id: 1,
@@ -200,20 +198,40 @@ const chatbotApiSlice = createSlice({
         state.imageUrl = action.payload.imageUrl;
         state.logoUrl = action.payload.logoUrl;
         state.texts = action.payload.texts;
-        if (state.messages.length > 0 && state.messages[0].source === "chat") {
-          state.messages[0].questions = action.payload.questions || [];
+        // If no active question exists, update the greeting message with the full questions list.
+        if (state.activeQuestions.length === 0) {
+          if (state.messages.length > 0 && state.messages[0].source === "chat") {
+            state.messages[0].questions = action.payload.questions || [];
+          } else {
+            state.messages.unshift({
+              id: 1,
+              text:
+                state.texts?.greetings?.chatBody?.greetingBody ||
+                DEFAULT_GREETING_BODY,
+              questions: action.payload.questions || [],
+              query: "",
+              source: "chat",
+            });
+          }
+          console.log("[fetchAllQuestions.fulfilled] Updated state.messages (no active question):", state.messages);
         } else {
-          state.messages.unshift({
-            id: 1,
-            text:
-              state.texts?.greetings?.chatBody?.greetingBody ||
-              DEFAULT_GREETING_BODY,
-            questions: action.payload.questions || [],
-            query: "",
-            source: "chat",
-          });
+          // If there is an active question, update only the greeting text.
+          if (state.messages.length > 0 && state.messages[0].source === "chat") {
+            state.messages[0].text = state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY;
+          } else {
+            state.messages.unshift({
+              id: 1,
+              text: state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY,
+              questions: [],
+              query: "",
+              source: "chat",
+            });
+          }
+          console.log("[fetchAllQuestions.fulfilled] Active question present, greeting text updated:", state.messages[0]);
         }
-        console.log("[fetchAllQuestions.fulfilled] Updated state.messages:", state.messages);
+        // Store the first 3 questions for notifications permanently.
+        state.notificationQuestions = (action.payload.questions || []).slice(0, 3);
+        console.log("[fetchAllQuestions.fulfilled] notificationQuestions:", state.notificationQuestions);
       })
       .addCase(fetchAllQuestions.rejected, (state, action) => {
         state.isLoading = false;
