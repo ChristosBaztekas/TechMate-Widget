@@ -18,7 +18,7 @@ const getIdentifier = () => {
  * @param {number} delay - Delay between retries in milliseconds.
  * @returns {Promise<Object|null>} Response data or null on failure.
  */
-const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1000) => {
+const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 20, delay = 1000) => {
   const identifier = getIdentifier();
 
   if (identifier) {
