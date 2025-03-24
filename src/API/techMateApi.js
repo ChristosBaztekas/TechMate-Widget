@@ -19,24 +19,29 @@ const getIdentifier = () => {
  * @returns {Promise<Object|null>} Response data or null on failure.
  */
 const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1000) => {
-  const identifier = getIdentifier();
+  const identifier = "a15e78dc-e063-409f-8b7e-9639f3ed7f38";
 
-  if (!identifier) {
-    if (retryCount >= maxRetries) {
-      console.error("Max retries reached. Identifier not available.");
+  if (identifier) {
+    try {
+      const response = await axiosInstance.get(`/${identifier}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching questions:", error);
       return null;
     }
-    await new Promise(resolve => setTimeout(resolve, delay));
-    return fetchQuestionsWithRetry(retryCount + 1, maxRetries, delay);
   }
 
-  try {
-    const response = await axiosInstance.get(`/${identifier}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching questions:", error);
-    return null;
+  if (retryCount < maxRetries) {
+    return new Promise((resolve) =>
+      setTimeout(
+        () => resolve(fetchQuestionsWithRetry(retryCount + 1, maxRetries, delay)),
+        delay
+      )
+    );
   }
+
+  console.error("Max retries reached. Identifier not available.");
+  return null;
 };
 
 /**
