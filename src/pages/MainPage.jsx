@@ -85,7 +85,7 @@ export const MainPage = () => {
     dispatch(setNotificationState(true));
   }, [notificationDelay, dispatch]);
 
-  // 🔥 Schedule notification re-show after user closes it
+  // Schedule notification re-show after user closes it
   const scheduleNotification = () => {
     if (notificationTimerRef.current) {
       clearTimeout(notificationTimerRef.current);
