@@ -1,119 +1,91 @@
-# Chatbot Widget V1
+# TechMate Chatbot Integration Guide
 
-## Project Overview
+This guide provides clear instructions on how to integrate and configure the TechMate Chatbot on your website.
 
-A well-designed chatbot widget that you can integrate into any website, with the ability to customize its themes.
+---
 
-## How to Use (script.js)
+## Client Script Integration
 
-Just integrate this script into your website.
+Add the following script to your HTML file, ideally just before the closing `</body>` tag.
 
-   ```script
+```html
+<script src="YOUR_CDN_LINK/techmate-chatbot.js"></script>
 <script>
-    (() => {
-        const CHATBOT_URL = 'https://tech-mate-chatbot.vercel.app';
-
-        let isChatClosed = false;
-        let Widget = false;
-
-        // Create chatbot iframe
-        const chatbotIframe = document.createElement('iframe');
-        Object.assign(chatbotIframe.style, {
-            position: 'fixed',
-            bottom: '10px',
-            right: '10px',
-            borderRadius: '10px',
-            zIndex: '100000',
-            minWidth: '431px',
-            maxHeight: '588px',
-            border: 'none',
-        });
-        chatbotIframe.src = CHATBOT_URL;
-        document.body.appendChild(chatbotIframe);
-
-        /**
-           * Function to update iframe dimensions and position based on window size and chat state
-           *
-           * @param {string} width - The width of the iframe
-           * @param {string} height - The height of the iframe
-           * @param {boolean} newIsChatClosed - The new state of the chat (closed or open)
-           * @param {boolean} newIsWidgetClosed - The new state of the widget (closed or open)
-           */
-        function updateChatbotSize(
-            width = chatbotIframe.style.width,
-            height = chatbotIframe.style.height,
-            newIsChatClosed = isChatClosed,
-            newIsWidgetClosed = Widget
-        ) {
-            isChatClosed = newIsChatClosed;
-            Widget = newIsWidgetClosed;
-
-            if (!Widget && window.innerWidth > 574) {
-                // Handle Widget When Opened
-                Object.assign(chatbotIframe.style, {
-                    right: '0',
-                    top: '10%',
-                    bottom: 'auto',
-                });
-                // Use received width and height if provided
-                if (width) chatbotIframe.style.width = width;
-                if (height) chatbotIframe.style.height = height;
-            } else if (!Widget && window.innerWidth < 574) {
-                // Handle Widget When Opened
-                Object.assign(chatbotIframe.style, {
-                    bottom: '10px',
-                });
-                // Use received width and height if provided
-                if (width) chatbotIframe.style.width = width;
-                if (height) chatbotIframe.style.height = height;
-            } else {
-                if (window.innerWidth < 574 && !isChatClosed) {
-                    // FullScreen mode for small screens
-                    Object.assign(chatbotIframe.style, {
-                        width: '100%',
-                        height: '100%',
-                        bottom: '0',
-                        right: '0',
-                        minWidth: 'auto',
-                        maxHeight: 'none',
-                        borderRadius: '0',
-                        top: 'auto',
-                    });
-                } else if (window.innerWidth < 1150 && !isChatClosed) {
-                    // Adjust dimensions for medium-sized screens
-                    Object.assign(chatbotIframe.style, {
-                        width: '33%',
-                        height: '70%',
-                        top: 'auto',
-                        transform: 'none',
-                    });
-                } else if (width && height) {
-                    // Use received width and height if provided
-                    chatbotIframe.style.width = width;
-                    chatbotIframe.style.height = height;
-                    chatbotIframe.style.top = 'auto';
-                    chatbotIframe.style.bottom = '10px';
-                    chatbotIframe.style.transform = 'none';
-                }
-            }
-
-            // Set minWidth based on chat state
-            chatbotIframe.style.minWidth = window.innerWidth < 574 ? (isChatClosed ? 'auto' : '100%') : (isChatClosed ? 'auto' : '431px');
-        }
-
-        // Listen for messages from the chatbot iframe
-        window.addEventListener('message', (event) => {
-            if (event.origin !== CHATBOT_URL || event.data?.type !== "chatbot-dimensions") return;
-
-            const { width, height, isChatClosed: newIsChatClosed, Widget: newIsWidgetClosed } = event.data;
-            updateChatbotSize(width, height, newIsChatClosed, newIsWidgetClosed);
-        });
-
-        // Update chatbot dimensions dynamically when the window is resized (without refreshing)
-        window.addEventListener('resize', () => updateChatbotSize());
-    })();
+  TechMateChatbot.init({
+    identifier: 'USER_IDENTIFIER',         // Required: Unique identifier for the user or session.
+    elementId: 'YOUR_CONTAINER_ID',        // Optional: ID of the container where the chatbot should appear. Defaults to <body>.
+    showWidget: false,                     // Optional: Show the widget on page load. Defaults to false.
+    theme: 'purple',                       // Optional: Theme color. Options: 'purple', 'red', 'green', 'blue'.
+    notificationDelay: null                // Optional: Controls notification timing (see below for details).
+  })
+  .then((message) => console.log(message))   // Optional: Logs a success message after initialization.
+  .catch((error) => console.error(error));   // Optional: Logs an error if initialization fails.
 </script>
-   ```
+```
+
+---
+
+## Configuration Parameters
+
+| Parameter            | Type                          | Required | Description                                                                                                                                 |
+|----------------------|-------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `identifier`         | String                        | Yes      | Unique ID for the user or session. Essential for user-specific data and conversation history.                                               |
+| `elementId`          | String                        | No       | HTML element ID where the chatbot will be appended. If omitted, it defaults to the `<body>`.                                                |
+| `showWidget`         | Boolean                       | No       | Determines if the widget should be visible on page load. `false` by default.                                                               |
+| `theme`              | String                        | No       | Defines the chatbot’s theme color. Available options: `'purple'`, `'red'`, `'green'`, `'blue'`. Defaults to `'purple'`.                    |
+| `notificationDelay`  | Number / null / undefined     | No       | Controls the notification timing behavior. Detailed explanation below.                                                                     |
+
+---
+
+## Notification Delay Options
+
+| Value                | Behavior                                                                                                            |
+|----------------------|---------------------------------------------------------------------------------------------------------------------|
+| `null`               | Notification shows immediately on first render. If closed, it will not reappear.                                    |
+| `undefined` (omit)   | Default behavior. Notification appears after 3 seconds on first load. If closed, it reappears after 10 seconds.     |
+| Number (in seconds)  | Custom delay. Notification shows after 3 seconds on first load. If closed, it reappears after the specified delay.  |
+| `1111`               | Disables notifications completely. No notifications will appear at any time.                                       |
+
+---
+
+## Notification Timing Behavior Explained
+
+### `null`
+- Displays the notification immediately on first render.
+- Once closed, it does not reappear.
+- Recommended for one-time notifications.
+
+### `undefined`
+- Standard behavior.
+- Shows the notification after 3 seconds.
+- If the user closes it, it will reappear after 10 seconds.
+- Ideal if you want persistent gentle reminders.
+
+### Custom Number
+- Shows notification after 3 seconds initially.
+- If closed, it will reappear after the provided delay (in seconds).
+- Example: `notificationDelay: 20` means it reappears after 20 seconds.
+- Useful for custom timing control.
+
+### `1111`
+- Completely disables notifications.
+- No initial notification, no repeat reminders.
+
+---
+
+
+## Implementation Notes
+
+- Provide a valid `USER_IDENTIFIER` to maintain user session context.
+- If using a custom container, ensure `YOUR_CONTAINER_ID` matches an existing element in your HTML.
+- The script communicates with the chatbot iframe using `postMessage`.
+- The script manages CSS styling and window resizing automatically.
+- If the specified `elementId` does not exist, the chatbot defaults to the `<body>` container.
+
+---
+
+
+# Chatbot Widget 
 
 ## Technologies Used
 
@@ -134,6 +106,7 @@ npm run dev
 ```
 
 - Visit `http://localhost:5173` to see the project in action.
+- Create .env file `export VITE_API_BASE_URL=`.
 - Change the CHATBOT_URL in script.js to `http://localhost:5173` to enable developer mode.
 - Run your website and see chatbot
 
@@ -144,101 +117,74 @@ npm run dev
 The project follows a well-organized folder structure for scalability and maintainability:
 
 ```
-└── 📁src
-    └── 📁API
-        └── axiosInstance.js
-        └── techMateApi.js
-    └── 📁assets
-        └── 📁images
-            └── ChatLogo.jpg
-            └── congrats.png
-            └── email.png
-            └── emailOffer.png
-            └── Logo.png
-            └── phone.png
-            └── phoneOffer.png
-            └── phoneWhite.png
-    └── 📁components
-        └── EmailLayout.jsx
-        └── Footer.jsx
-        └── Header.jsx
-        └── Notifications.jsx
-        └── PhoneLayout.jsx
-        └── Query.jsx
-        └── Questions.jsx
-        └── Response.jsx
-    └── 📁pages
-        └── CongratulationsPage.jsx
-        └── EmailPageForm1.jsx
-        └── EmailPageForm2.jsx
-        └── EmailPageForm3.jsx
-        └── index.js
-        └── MainPage.jsx
-        └── NewsLetterPage.jsx
-        └── PhonePageForm1.jsx
-        └── PhonePageForm2.jsx
-        └── PhonePageForm3.jsx
-        └── StartPage.jsx
-        └── SubmitPage.jsx
-        └── WelcomePage.jsx
-    └── 📁router
-        └── index.jsx
-    └── 📁store
-        └── index.js
-        └── 📁Slices
-            └── chatbotApiSlice.js
-            └── userSlice.js
-    └── 📁styles
-        └── global.css
-    └── 📁utils
-        └── functions.util.jsx
-        └── icons.util.jsx
-    └── App.jsx
-    └── main.jsx
+└── 📁TechMate-Chatbot
+    └── 📁src
+        └── 📁API
+            └── axiosInstance.js
+            └── techMateApi.js
+        └── App.jsx
+        └── 📁assets
+            └── 📁images
+                └── bot.webp
+                └── congrats.webp
+                └── email.webp
+                └── emailOffer.webp
+                └── Logo.webp
+                └── phone.webp
+                └── phoneOffer.webp
+                └── phoneWhite.webp
+        └── 📁components
+            └── EmailLayout.jsx
+            └── Footer.jsx
+            └── Header.jsx
+            └── Notifications.jsx
+            └── PhoneLayout.jsx
+            └── Query.jsx
+            └── Questions.jsx
+            └── Response.jsx
+            └── Widget.jsx
+        └── main.jsx
+        └── 📁pages
+            └── CongratulationsPage.jsx
+            └── EmailPageForm1.jsx
+            └── EmailPageForm2.jsx
+            └── EmailPageForm3.jsx
+            └── index.js
+            └── MainPage.jsx
+            └── NewsLetterPage.jsx
+            └── PhonePageForm1.jsx
+            └── PhonePageForm2.jsx
+            └── PhonePageForm3.jsx
+            └── StartPage.jsx
+            └── SubmitPage.jsx
+            └── WelcomePage.jsx
+        └── 📁router
+            └── index.jsx
+        └── 📁store
+            └── index.js
+            └── 📁Slices
+                └── chatbotApiSlice.js
+                └── userSlice.js
+        └── 📁styles
+            └── global.css
+        └── 📁utils
+            └── functions.util.jsx
+            └── icons.util.jsx
+    └── .env.development
+    └── .env.production
+    └── .gitignore
+    └── eslint.config.js
+    └── index.html
+    └── package-lock.json
+    └── package.json
+    └── postcss.config.js
+    └── prettier.config.js
+    └── README.md
+    └── tailwind.config.js
+    └── vite.config.js
 ```
 
-## Try Our Themes
-
-To change the theme, go to `tailwind.config.js`.
-
-```
-/** @type {import("tailwindcss").Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        darkColor: "#000000",              -->  Default Dark Color
-        lightColor: "#FFF",                -->  Default Light Color
-        primaryColor: "#501AC8",           -->  Change Chatbot Theme
-        hoverColor: "#B366CF",             -->  Change Chatbot Hover Theme
-        gradientColor: "#1C064C",          -->  Change Chatbot Send Gradient Theme
-        footerColor: "#370E92",            --> Change Footer Theme
-      },
-      borderRadius: {
-        rad: "10px",                       --> Change Border Radius For All Chatbot 
-      },
-      screens: {
-        sm: "500px",
-        vsm: "430px",
-      },
-      animation: {
-        fadeIn: "fadeIn 0.5s ease-in",    --> Change message appears Animations
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: 0, transform: "translateY(20px)" },
-          "100%": { opacity: 1, transform: "translateY(0)" },
-        },
-      },
-    },
-  },
-  plugins: [],
-};
-
-```
-
-## 🎨 Some Suggested Color Palettes From US
+## 🎨 Some Suggested Color Palettes
 
 | Color Name   | Hex Code   |                       Preview                                    |
 |-------------|-----------|--------------------------------------------------------------------|
