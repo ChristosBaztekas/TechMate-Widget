@@ -40,27 +40,26 @@ export const MainPage = () => {
   // Parent message listener
   useEffect(() => {
     const handleMessage = (event) => {
-      const data = event.data;
+      console.log("Received message:", event.data);
+      console.log("Event Origin:", event.origin);
 
+      const data = event.data;
       if (data?.type === "chatbot-config") {
         const { theme, showWidget, identifier: receivedIdentifier, notificationDelay: delayFromParent } = data.payload;
 
+        console.log("Received Identifier:", receivedIdentifier);
+
         if (receivedIdentifier) dispatch(setIdentifier(receivedIdentifier));
         if (theme) dispatch(setTheme(theme));
-        if (typeof showWidget === "boolean")
-          dispatch(setWidgetState(!showWidget));
-
-        dispatch(
-          setNotificationDelay(
-            delayFromParent !== undefined ? delayFromParent * 1000 : 10000
-          )
-        );
+        if (typeof showWidget === "boolean") dispatch(setWidgetState(!showWidget));
+        dispatch(setNotificationDelay(delayFromParent !== undefined ? delayFromParent * 1000 : 10000));
       }
     };
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, [dispatch]);
+
 
   // Send widget/chat size to parent
   useEffect(() => {
