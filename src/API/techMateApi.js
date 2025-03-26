@@ -18,7 +18,7 @@ const getIdentifier = () => {
  * @param {number} delay - Delay between retries in milliseconds.
  * @returns {Promise<Object|null>} Response data or null on failure.
  */
-const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1000) => {
+const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 10, delay = 1000) => {
   const identifier = getIdentifier();
 
   if (identifier) {
@@ -32,10 +32,13 @@ const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1
   }
 
   if (retryCount < maxRetries) {
+    const nextDelay = delay * 1.5;
+    console.warn(`Retrying... Attempt ${retryCount + 1}/${maxRetries}, next try in ${nextDelay}ms`);
+
     return new Promise((resolve) =>
       setTimeout(
-        () => resolve(fetchQuestionsWithRetry(retryCount + 1, maxRetries, delay)),
-        delay
+        () => resolve(fetchQuestionsWithRetry(retryCount + 1, maxRetries, nextDelay)),
+        nextDelay
       )
     );
   }
@@ -43,6 +46,7 @@ const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 5, delay = 1
   console.error("Max retries reached. Identifier not available.");
   return null;
 };
+
 
 /**
  * Public function to get chatbot questions.
