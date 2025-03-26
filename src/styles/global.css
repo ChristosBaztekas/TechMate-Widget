@@ -6,11 +6,11 @@
 
 :root {
   --dark-color: #000000;
-  --light-color: #FFFFFF;
-  --primary-color: #501AC8;
-  --hover-color: #B366CF;
-  --gradient-color: #1C064C;
-  --footer-color: #370E92;
+  --light-color: #ffffff;
+  --primary-color: #501ac8;
+  --hover-color: #b366cf;
+  --gradient-color: #1c064c;
+  --footer-color: #370e92;
 }
 
 * {
@@ -20,7 +20,7 @@
 /* Hide scrollbar in all browsers */
 body,
 html {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

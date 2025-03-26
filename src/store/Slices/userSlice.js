@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 // Initial state for user interactions in the chatbot
 const initialState = {
@@ -6,38 +6,38 @@ const initialState = {
   formSubmitted: false,
   notification: false,
   isWidgetClosed: false,
-  theme: "purple",
+  theme: 'purple',
   identifier: null,
   notificationDelay: 3000, // Default delay in ms (3 seconds)
-};
+}
 
 const userInteractionsSlice = createSlice({
-  name: "userInteractions",
+  name: 'userInteractions',
   initialState,
   reducers: {
     setChatState: (state, action) => {
-      state.isChatClosed = action.payload;
+      state.isChatClosed = action.payload
     },
     setFormSubmitted: (state, action) => {
-      state.formSubmitted = action.payload;
+      state.formSubmitted = action.payload
     },
     setNotificationState: (state, action) => {
-      state.notification = action.payload;
+      state.notification = action.payload
     },
     setWidgetState: (state, action) => {
-      state.isWidgetClosed = action.payload;
+      state.isWidgetClosed = action.payload
     },
     setTheme: (state, action) => {
-      state.theme = action.payload;
+      state.theme = action.payload
     },
     setIdentifier: (state, action) => {
-      state.identifier = action.payload;
+      state.identifier = action.payload
     },
     setNotificationDelay: (state, action) => {
-      state.notificationDelay = action.payload;
+      state.notificationDelay = action.payload
     },
   },
-});
+})
 
 export const {
   setChatState,
@@ -47,6 +47,6 @@ export const {
   setTheme,
   setIdentifier,
   setNotificationDelay,
-} = userInteractionsSlice.actions;
+} = userInteractionsSlice.actions
 
-export default userInteractionsSlice.reducer;
+export default userInteractionsSlice.reducer

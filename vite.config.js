@@ -1,25 +1,24 @@
-import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig, loadEnv } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => {
-  // Load environment variables
-  const env = loadEnv(mode, process.cwd());
+  const env = loadEnv(mode, process.cwd())
 
   return {
     plugins: [react()],
     resolve: {
       alias: {
-        "@": "/src",
+        '@': '/src',
       },
     },
     server: {
       proxy: {
-        "/api": {
-          target: "https://api-test.techmate.gr/",
+        '/api': {
+          target: env.VITE_API_BASE_URL,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },
-  };
-});
+  }
+})

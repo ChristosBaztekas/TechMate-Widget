@@ -1,83 +1,83 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import Header from "@/components/Header"; // Components
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import Header from '@/components/Header' // Components
 
 export const CongratulationsPage = () => {
-  const navigate = useNavigate();
-  const [counter, setCounter] = useState(10);
-  const timeoutRef = useRef(null);
+  const navigate = useNavigate()
+  const [counter, setCounter] = useState(10)
+  const timeoutRef = useRef(null)
 
-  const { texts } = useSelector((state) => state.chatbotApi);
+  const { texts } = useSelector((state) => state.chatbotApi)
 
   /**
    * Default timer frame content
    */
   const timerFrameDefaults = {
-    title: "Συγχαρητήρια!",
+    title: 'Συγχαρητήρια!',
     description:
-      "Συμπλήρωσε το τηλέφωνό σου για να σε καλέσουμε και να σε ενημερώσουμε για τη προσφορά σου!",
-    button: "Θέλω ΠΡΟΣΦΟΡΑ!",
-  };
+      'Συμπλήρωσε το τηλέφωνό σου για να σε καλέσουμε και να σε ενημερώσουμε για τη προσφορά σου!',
+    button: 'Θέλω ΠΡΟΣΦΟΡΑ!',
+  }
 
   /**
    * Merge defaults with API response
    */
   const timerFrameData = {
     ...timerFrameDefaults,
-    ...(texts?.forms?.["form-c"]?.timerFrame || {}),
-  };
+    ...(texts?.forms?.['form-c']?.timerFrame || {}),
+  }
 
   useEffect(() => {
     if (counter <= 0) {
-      navigate("/email-form2");
-      return;
+      navigate('/email-form2')
+      return
     }
 
     timeoutRef.current = setTimeout(() => {
-      setCounter((prevCounter) => prevCounter - 1);
-    }, 1000);
+      setCounter((prevCounter) => prevCounter - 1)
+    }, 1000)
 
-    return () => clearTimeout(timeoutRef.current);
-  }, [counter, navigate]);
+    return () => clearTimeout(timeoutRef.current)
+  }, [counter, navigate])
 
   /**
    * Cancel Timer and navigate to home page
    */
   const handleCancelAndNavigate = () => {
-    clearTimeout(timeoutRef.current);
-    navigate("/");
-  };
+    clearTimeout(timeoutRef.current)
+    navigate('/')
+  }
 
   /**
    * Navigate to the next form directly
    */
   const handleNavigateToForm = () => {
-    clearTimeout(timeoutRef.current);
-    navigate("/email-form2");
-  };
+    clearTimeout(timeoutRef.current)
+    navigate('/email-form2')
+  }
 
   return (
-    <section className="flex flex-col h-screen overflow-hidden w-full bg-darkColor fixed bottom-0 right-0 z-50">
-      <div className="flex flex-col justify-between h-full bg-primaryColor">
+    <section className="fixed bottom-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden bg-darkColor">
+      <div className="flex h-full flex-col justify-between bg-primaryColor">
         <Header onCancel={handleCancelAndNavigate} />
 
-        <main className="flex flex-col justify-around items-stretch h-full text-lightColor mx-6 vsm:mx-5">
-          <p className="text-center font-bold text-3xl vsm:text-4xl">
+        <main className="mx-6 flex h-full flex-col items-stretch justify-around text-lightColor vsm:mx-5">
+          <p className="text-center text-3xl font-bold vsm:text-4xl">
             {timerFrameData.title}
           </p>
 
-          <p className="text-center font-bold text-8xl text-hoverColor">
+          <p className="text-center text-8xl font-bold text-hoverColor">
             {counter}
           </p>
 
-          <div className="flex flex-col items-center w-full">
-            <p className="text-center text-2xl mb-9 w-[85%]">
+          <div className="flex w-full flex-col items-center">
+            <p className="mb-9 w-[85%] text-center text-2xl">
               {timerFrameData.description}
             </p>
 
             <button
-              className="bg-lightColor hover:opacity-90 text-xl font-semibold text-footerColor rounded-rad h-20 w-full"
+              className="h-20 w-full rounded-rad bg-lightColor text-xl font-semibold text-footerColor hover:opacity-90"
               onClick={handleNavigateToForm}
             >
               {timerFrameData.button}
@@ -86,12 +86,12 @@ export const CongratulationsPage = () => {
         </main>
 
         <footer
-          className="flex justify-center items-center font-light text-sm border border-primaryColor text-lightColor bg-footerColor p-1 cursor-pointer"
+          className="flex cursor-pointer items-center justify-center border border-primaryColor bg-footerColor p-1 text-sm font-light text-lightColor"
           onClick={handleCancelAndNavigate}
         >
           Supported by TechMate
         </footer>
       </div>
     </section>
-  );
-};
+  )
+}

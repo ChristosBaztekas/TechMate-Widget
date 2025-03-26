@@ -1,13 +1,13 @@
-import axiosInstance from "./axiosInstance";
-import store from "@/store/index";
+import axiosInstance from './axiosInstance'
+import store from '@/store/index'
 
 /**
  * Retrieves the user identifier from the Redux state.
  */
 const getIdentifier = () => {
-  const state = store.getState();
-  return state.user.identifier;
-};
+  const state = store.getState()
+  return state.user.identifier
+}
 
 /**
  * Fetches questions from the backend.
@@ -18,35 +18,43 @@ const getIdentifier = () => {
  * @param {number} delay - Delay between retries in milliseconds.
  * @returns {Promise<Object|null>} Response data or null on failure.
  */
-const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 10, delay = 1000) => {
-  const identifier = getIdentifier();
+const fetchQuestionsWithRetry = async (
+  retryCount = 0,
+  maxRetries = 10,
+  delay = 1000,
+) => {
+  const identifier = getIdentifier()
 
   if (identifier) {
     try {
-      const response = await axiosInstance.get(`/${identifier}`);
-      return response.data;
+      const response = await axiosInstance.get(`/${identifier}`)
+      return response.data
     } catch (error) {
-      console.error("Error fetching questions:", error);
-      return null;
+      console.error('Error fetching questions:', error)
+      return null
     }
   }
 
   if (retryCount < maxRetries) {
-    const nextDelay = delay * 1.5;
-    console.warn(`Retrying... Attempt ${retryCount + 1}/${maxRetries}, next try in ${nextDelay}ms`);
+    const nextDelay = delay * 1.5
+    console.warn(
+      `Retrying... Attempt ${retryCount + 1}/${maxRetries}, next try in ${nextDelay}ms`,
+    )
 
     return new Promise((resolve) =>
       setTimeout(
-        () => resolve(fetchQuestionsWithRetry(retryCount + 1, maxRetries, nextDelay)),
-        nextDelay
-      )
-    );
+        () =>
+          resolve(
+            fetchQuestionsWithRetry(retryCount + 1, maxRetries, nextDelay),
+          ),
+        nextDelay,
+      ),
+    )
   }
 
-  console.error("Max retries reached. Identifier not available.");
-  return null;
-};
-
+  console.error('Max retries reached. Identifier not available.')
+  return null
+}
 
 /**
  * Public function to get chatbot questions.
@@ -54,8 +62,8 @@ const fetchQuestionsWithRetry = async (retryCount = 0, maxRetries = 10, delay = 
  * @returns {Promise<Object|null>}
  */
 export const getQuestions = () => {
-  return fetchQuestionsWithRetry();
-};
+  return fetchQuestionsWithRetry()
+}
 
 /**
  * Sends a user's question to the backend.
@@ -66,13 +74,15 @@ export const getQuestions = () => {
  */
 export const ansUserQuestion = async (conversation_id, question) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/question`, { question });
-    return response.data;
+    const response = await axiosInstance.post(`/${conversation_id}/question`, {
+      question,
+    })
+    return response.data
   } catch (error) {
-    console.error("Error sending user question:", error);
-    return null;
+    console.error('Error sending user question:', error)
+    return null
   }
-};
+}
 
 /**
  * Sends a predefined question by its ID.
@@ -83,13 +93,15 @@ export const ansUserQuestion = async (conversation_id, question) => {
  */
 export const ansGivenQuestion = async (conversation_id, question_id) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/question`, { question_id });
-    return response.data;
+    const response = await axiosInstance.post(`/${conversation_id}/question`, {
+      question_id,
+    })
+    return response.data
   } catch (error) {
-    console.error("Error fetching answer for question ID:", error);
-    return null;
+    console.error('Error fetching answer for question ID:', error)
+    return null
   }
-};
+}
 
 /**
  * Submits user information (full name and phone).
@@ -104,13 +116,13 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
     const response = await axiosInstance.post(`/${conversation_id}/form?id=1`, {
       full_name,
       phone,
-    });
-    return response.data;
+    })
+    return response.data
   } catch (error) {
-    console.error("Error posting user info:", error);
-    return null;
+    console.error('Error posting user info:', error)
+    return null
   }
-};
+}
 
 /**
  * Submits user email.
@@ -121,13 +133,15 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
  */
 export const postUserEmail = async (conversation_id, email) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/form?id=3`, { email });
-    return response.data;
+    const response = await axiosInstance.post(`/${conversation_id}/form?id=3`, {
+      email,
+    })
+    return response.data
   } catch (error) {
-    console.error("Error posting user email:", error);
-    return null;
+    console.error('Error posting user email:', error)
+    return null
   }
-};
+}
 
 /**
  * Submits user phone number.
@@ -138,10 +152,16 @@ export const postUserEmail = async (conversation_id, email) => {
  */
 export const postUserPhone = async (conversationId, data) => {
   try {
-    const response = await axiosInstance.post(`/${conversationId}/form?id=4`, data);
-    return response.data;
+    const response = await axiosInstance.post(
+      `/${conversationId}/form?id=4`,
+      data,
+    )
+    return response.data
   } catch (error) {
-    console.error("Error posting user phone:", error.response?.data || error.message);
-    throw error;
+    console.error(
+      'Error posting user phone:',
+      error.response?.data || error.message,
+    )
+    throw error
   }
-};
+}

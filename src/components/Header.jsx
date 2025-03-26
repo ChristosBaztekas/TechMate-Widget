@@ -1,26 +1,26 @@
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setChatState } from "@/store/Slices/userSlice";
-import * as Icons from "@/utils/icons.util";
-import Logo from "@/assets/images/Logo.webp";
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { setChatState } from '@/store/Slices/userSlice'
+import * as Icons from '@/utils/icons.util'
+import Logo from '@/assets/images/Logo.webp'
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const { logoUrl, texts } = useSelector((state) => state.chatbotApi);
+  const { logoUrl, texts } = useSelector((state) => state.chatbotApi)
 
-  const greetingHeader = texts?.greetings?.header || "Γεια σας! 👋";
+  const greetingHeader = texts?.greetings?.header || 'Γεια σας! 👋'
 
   return (
-    <header className="relative flex justify-between items-center text-primaryColor py-2 px-5 vsm:px-7 bg-primaryColor transition-all">
-      <div className="flex justify-center items-center gap-3 z-20 text-lightColor my-1 p-2 vsm:p-0">
+    <header className="relative flex items-center justify-between bg-primaryColor px-5 py-2 text-primaryColor transition-all vsm:px-7">
+      <div className="z-20 my-1 flex items-center justify-center gap-3 p-2 text-lightColor vsm:p-0">
         <button
           className="cursor-pointer hover:text-hoverColor"
           aria-label="Go back"
           onClick={() => {
-            navigate("/");
-            dispatch(setChatState(false));
+            navigate('/')
+            dispatch(setChatState(false))
           }}
         >
           <Icons.ArrowIcon />
@@ -28,27 +28,27 @@ const Header = () => {
         <img
           src={logoUrl || Logo}
           alt="logo"
-          className="w-12 cursor-pointer hover:cursor-pointer hover:scale-95 transition-all duration-300"
+          className="w-12 cursor-pointer transition-all duration-300 hover:scale-95 hover:cursor-pointer"
           loading="lazy"
           onClick={() => {
-            dispatch(setChatState(false));
-            navigate("/first");
+            dispatch(setChatState(false))
+            navigate('/first')
           }}
         />
         <h1 className="text-lg font-bold">{greetingHeader}</h1>
       </div>
 
       <button
-        className="hover:text-hoverColor cursor-pointer text-lightColor z-20 my-5"
+        className="z-20 my-5 cursor-pointer text-lightColor hover:text-hoverColor"
         onClick={() => {
-          dispatch(setChatState(true));
-          navigate("/");
+          dispatch(setChatState(true))
+          navigate('/')
         }}
       >
         <Icons.CloseIcon />
       </button>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
