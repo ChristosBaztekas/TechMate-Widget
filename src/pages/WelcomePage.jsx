@@ -120,7 +120,9 @@ export const WelcomePage = () => {
 
         {/* Footer */}
         <footer className="flex items-center justify-center border border-primaryColor bg-footerColor p-1 text-sm font-light text-lightColor">
-          {footerText}
+          <Link target="_blank" to="http://www.techai.gr/">
+            {footerText}
+          </Link>
         </footer>
       </div>
     </section>
