@@ -1,14 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllQuestions } from '@/store/Slices/chatbotApiSlice'
-import {
-  setChatState,
-  setNotificationState,
-  setWidgetState,
-  setTheme,
-  setIdentifier,
-  setNotificationDelay,
-} from '@/store/Slices/userSlice'
+import { setChatState, setNotificationState, setWidgetState, setTheme, setIdentifier, setNotificationDelay, } from '@/store/Slices/userSlice'
 import { sendDimensionsToParent } from '@/utils/functions.util'
 import { StartPage } from '@/pages'
 import Logo from '@/assets/images/Logo.webp'

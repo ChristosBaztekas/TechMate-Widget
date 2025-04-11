@@ -1,12 +1,7 @@
 import propTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchGivenQuestion,
-  resetMessages,
-  restartChat,
-  setActiveQuestions,
-} from '@/store/Slices/chatbotApiSlice'
+import { fetchGivenQuestion, resetMessages, restartChat, setActiveQuestions, } from '@/store/Slices/chatbotApiSlice'
 import { setNotificationState, setChatState } from '@/store/Slices/userSlice'
 import { sendDimensionsToParent } from '@/utils/functions.util'
 import * as Icons from '@/utils/icons.util'

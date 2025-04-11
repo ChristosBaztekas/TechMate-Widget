@@ -10,7 +10,6 @@ import Query from '@/components/Query'
 import Questions from '@/components/Questions'
 import Response from '@/components/Response'
 import Footer from '../components/Footer'
-import { fetchAllQuestions } from '../store/Slices/chatbotApiSlice'
 
 const formsMap = {
   a: 'phone-form1',
@@ -111,7 +110,6 @@ export const StartPage = () => {
             onClick={() => {
               dispatch(setChatState(true))
               navigate('/')
-              dispatch(fetchAllQuestions())
             }}
             aria-label="Go back"
           >
@@ -140,7 +138,6 @@ export const StartPage = () => {
             onClick={() => {
               dispatch(setChatState(true))
               navigate('/')
-              dispatch(fetchAllQuestions())
             }}
             aria-label="Close"
           >
