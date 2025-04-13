@@ -44,10 +44,6 @@ export const WelcomePage = () => {
               alt="logo"
               className="my-5 w-14 vsm:w-auto xl:w-20"
               loading="lazy"
-              onClick={() => {
-                dispatch(setChatState(false))
-                navigate('/first')
-              }}
             />
             <h1 className="ml-5 text-3xl font-bold">{header}</h1>
             <h2 className="my-4 ml-5 text-lg vsm:my-1 sm:text-xl">

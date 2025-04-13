@@ -7,6 +7,7 @@ import { StartPage } from '@/pages'
 import Logo from '@/assets/images/Logo.webp'
 import { Widget } from '../components/Widget'
 import { Notifications } from '@/components/Notifications'
+import { useLocation } from 'react-router-dom'
 
 export const MainPage = () => {
   const dispatch = useDispatch()
@@ -18,8 +19,9 @@ export const MainPage = () => {
     theme,
     notificationDelay,
   } = useSelector((state) => state.user)
-  const { imageUrl, logoUrl } = useSelector((state) => state.chatbotApi)
+  const { imageUrl, logoUrl, conversationId } = useSelector((state) => state.chatbotApi)
   const notificationTimerRef = useRef(null)
+  const location = useLocation()
 
   // Theme handling
   useEffect(() => {
@@ -66,8 +68,6 @@ export const MainPage = () => {
   // Parent message listener
   useEffect(() => {
     const handleMessage = (event) => {
-      console.log('Received message:', event.data)
-      console.log('Event Origin:', event.origin)
 
       const data = event.data
       if (data?.type === 'chatbot-config') {
@@ -77,8 +77,6 @@ export const MainPage = () => {
           identifier: receivedIdentifier,
           notificationDelay: delayFromParent,
         } = data.payload
-
-        console.log('Received Identifier:', receivedIdentifier)
 
         if (receivedIdentifier) dispatch(setIdentifier(receivedIdentifier))
         if (theme) dispatch(setTheme(theme))
@@ -168,8 +166,12 @@ export const MainPage = () => {
 
   // Fetch initial questions
   useEffect(() => {
-    dispatch(fetchAllQuestions())
-  }, [dispatch])
+    // Only fetch if we don't have a conversation ID and we're not on a form page
+    if (!conversationId && !location.pathname.includes('form')) {
+      console.log('Fetching initial questions...')
+      dispatch(fetchAllQuestions())
+    }
+  }, [dispatch, conversationId, location.pathname])
 
   // Close widget handler
   const handleWidgetClose = () => {

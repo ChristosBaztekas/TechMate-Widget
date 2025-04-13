@@ -15,7 +15,21 @@ const DEFAULT_GREETING_BODY =
 export const fetchAllQuestions = createAsyncThunk(
   'questions/fetchAllQuestions',
   async (_, thunkAPI) => {
+    console.log('[API CALL] fetchAllQuestions triggered')
     try {
+      const state = thunkAPI.getState()
+      // Check if we already have a conversation ID and messages
+      if (state.chatbotApi.conversationId && state.chatbotApi.messages.length > 0) {
+        console.log('[API INFO] Using existing conversation ID:', state.chatbotApi.conversationId)
+        return {
+          questions: state.chatbotApi.messages[0]?.questions || [],
+          imageUrl: state.chatbotApi.imageUrl,
+          logoUrl: state.chatbotApi.logoUrl,
+          conversation_id: state.chatbotApi.conversationId,
+          texts: state.chatbotApi.texts,
+        }
+      }
+
       const response = await getQuestions()
       const { questions, image, logo, conversation_id, texts } = response
       return {
@@ -26,10 +40,12 @@ export const fetchAllQuestions = createAsyncThunk(
         texts,
       }
     } catch (error) {
+      console.error('[API ERROR] fetchAllQuestions:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
+
 
 /**
  * Fetch an answer for a user's input question.
@@ -37,18 +53,24 @@ export const fetchAllQuestions = createAsyncThunk(
 export const fetchUserQuestion = createAsyncThunk(
   'questions/fetchUserQuestion',
   async (question, thunkAPI) => {
+    console.log('[API CALL] fetchUserQuestion triggered with:', question)
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
-      if (!conversation_id) return thunkAPI.rejectWithValue('No conversation_id found')
+      if (!conversation_id) {
+        console.warn('[API WARN] No conversation_id found')
+        return thunkAPI.rejectWithValue('No conversation_id found')
+      }
 
       const response = await ansUserQuestion(conversation_id, question)
       return response
     } catch (error) {
+      console.error('[API ERROR] fetchUserQuestion:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
+
 
 /**
  * Fetch an answer for a pre-defined question.
@@ -56,18 +78,24 @@ export const fetchUserQuestion = createAsyncThunk(
 export const fetchGivenQuestion = createAsyncThunk(
   'questions/fetchGivenQuestion',
   async (question, thunkAPI) => {
+    console.log('[API CALL] fetchGivenQuestion triggered with:', question)
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
-      if (!conversation_id) return thunkAPI.rejectWithValue('No conversation_id found')
+      if (!conversation_id) {
+        console.warn('[API WARN] No conversation_id found')
+        return thunkAPI.rejectWithValue('No conversation_id found')
+      }
 
       const response = await ansGivenQuestion(conversation_id, question)
       return response
     } catch (error) {
+      console.error('[API ERROR] fetchGivenQuestion:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
+
 
 const initialState = {
   lastResponse: null,
@@ -162,6 +190,12 @@ const chatbotApiSlice = createSlice({
         query: '',
         source: 'chat',
       })
+    },
+    navigateToForm: (state) => {
+      // Keep the conversation state but remove the form message
+      if (state.messages.length > 0) {
+        state.messages.pop()
+      }
     },
   },
   extraReducers: (builder) => {
@@ -297,6 +331,7 @@ export const {
   removeLastMessage,
   resetMessages,
   restartChat,
+  navigateToForm,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer

@@ -41,7 +41,6 @@ export const PhoneLayout = ({ icon }) => {
       dispatch(setFormID(response.form_id))
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType: 'form-a' } })
-      console.log(response)
     } catch (error) {
       console.error('Error while posting user info', error)
     }

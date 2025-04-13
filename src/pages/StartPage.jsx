@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import propTypes from 'prop-types'
 import { setChatState } from '@/store/Slices/userSlice'
-import { fetchUserQuestion } from '@/store/Slices/chatbotApiSlice'
+import { fetchUserQuestion, navigateToForm } from '@/store/Slices/chatbotApiSlice'
 import * as Icons from '@/utils/icons.util'
 import Logo from '@/assets/images/Logo.webp'
 import Query from '@/components/Query'
@@ -22,6 +22,7 @@ export const StartPage = () => {
   const navigate = useNavigate()
   const [userInput, setUserInput] = useState('')
   const [isSingleLine, setIsSingleLine] = useState(true)
+  const [isNavigating, setIsNavigating] = useState(false)
 
   const textareaRef = useRef(null)
 
@@ -37,7 +38,7 @@ export const StartPage = () => {
   const sendButtonText = texts?.greetings?.chatBody?.sendQuestionText || 'Send'
 
   const handleSendClick = async () => {
-    if (!userInput.trim() || !conversationId) return
+    if (!userInput.trim() || !conversationId || isNavigating) return
 
     dispatch(fetchUserQuestion(userInput.trim()))
 
@@ -75,26 +76,23 @@ export const StartPage = () => {
   }, [messages])
 
   useEffect(() => {
-    if (messages.length > 0) {
+    if (messages.length > 0 && !isNavigating) {
       const lastMessage = messages[messages.length - 1]
 
       if (lastMessage.text.startsWith('form')) {
+        setIsNavigating(true)
         const lastChar = lastMessage.text.slice(-1)
         const form = formsMap[lastChar]
 
-        dispatch({
-          type: 'chatbotApi/removeLastMessage',
-        })
+        // Use the new navigateToForm action
+        dispatch(navigateToForm())
+        dispatch(setChatState(true))
 
-        navigateWithoutReload(`/${form}`)
+        // Use replace to prevent adding to history stack
+        navigate(`/${form}`, { replace: true })
       }
     }
-  }, [messages])
-
-  const navigateWithoutReload = (path) => {
-    dispatch(setChatState(true))
-    navigate(path)
-  }
+  }, [messages, dispatch, navigate])
 
   return (
     <section className="fixed bottom-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden bg-darkColor">
@@ -153,7 +151,7 @@ export const StartPage = () => {
             const lastChar = message.text.slice(-1)
             const form = formsMap[lastChar]
 
-            navigateWithoutReload(`/${form}`)
+            navigate(`/${form}`)
 
             return null
           }

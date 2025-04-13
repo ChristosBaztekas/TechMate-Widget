@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { postUserEmail } from '@/API/techMateApi'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +12,7 @@ export const NewsLetterPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { conversationId, texts } = useSelector((state) => state.chatbotApi)
 
@@ -27,18 +28,27 @@ export const NewsLetterPage = () => {
   }
 
   const handleSend = async () => {
-    if (!email) return
+    if (!email || isSubmitting) return
 
     try {
+      setIsSubmitting(true)
       const response = await postUserEmail(conversationId, email)
       dispatch(setFormID(response.form_id))
       dispatch(setFormSubmitted(true))
-      navigate('/submitted', { state: { formType: 'form-b' } })
-      console.log(response)
+      navigate('/submitted', { state: { formType: 'form-b' }, replace: true })
     } catch (error) {
       console.error('Error while posting user email', error)
+      setIsSubmitting(false)
     }
   }
+
+  // Prevent any unnecessary API calls
+  useEffect(() => {
+    if (!conversationId) {
+      console.warn('[NewsLetterPage] No conversation ID found')
+      // You might want to handle this case, perhaps redirect back to main page
+    }
+  }, [conversationId])
 
   return (
     <section className="fixed bottom-0 right-0 z-50 flex h-screen w-full flex-col overflow-x-hidden bg-darkColor">
@@ -90,3 +100,4 @@ export const NewsLetterPage = () => {
     </section>
   )
 }
+
