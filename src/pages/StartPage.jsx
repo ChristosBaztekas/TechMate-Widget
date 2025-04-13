@@ -40,6 +40,7 @@ export const StartPage = () => {
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId || isNavigating) return
 
+    // Add the user's message to the chat
     dispatch(fetchUserQuestion(userInput.trim()))
 
     setUserInput('')

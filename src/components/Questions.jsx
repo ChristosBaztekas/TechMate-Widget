@@ -14,9 +14,15 @@ const Questions = ({ questionsArr, isChosenQuestion = false }) => {
   const hiddenQuestions = useSelector(
     (state) => state.chatbotApi.hiddenQuestions,
   )
+  const messages = useSelector((state) => state.chatbotApi.messages)
+
+  // Check if the last message was a user query (not a selected question)
+  const isLastMessageUserQuery = messages.length > 0 &&
+    messages[messages.length - 1].query &&
+    !messages[messages.length - 1].isQuestion
 
   const handleQuestionClick = (questionObj) => {
-    if (!isChosenQuestion) {
+    if (!isChosenQuestion && !isLastMessageUserQuery) {
       // Append the new active question if not already present,
       // Previous active questions remain highlighted.
       if (!activeQuestions.some((q) => q.id === questionObj.id)) {
@@ -41,21 +47,26 @@ const Questions = ({ questionsArr, isChosenQuestion = false }) => {
 
   return (
     <div className="flex animate-fadeIn flex-col items-end justify-center gap-2 text-xs sm:gap-3">
-      {displayedQuestions.map((item, index) => (
-        <div
-          key={index}
-          onClick={() => !isChosenQuestion && handleQuestionClick(item)}
-          className={`outline-none transition-all duration-300 ${
-            activeQuestions.some((q) => q.id === item.id) || isChosenQuestion
-              ? 'pointer-events-none bg-primaryColor'
+      {displayedQuestions.map((item, index) => {
+        const isDisabled = activeQuestions.some((q) => q.id === item.id) ||
+          isChosenQuestion ||
+          isLastMessageUserQuery
+
+        return (
+          <div
+            key={index}
+            onClick={() => !isDisabled && handleQuestionClick(item)}
+            className={`outline-none transition-all duration-300 ${isDisabled
+              ? 'bg-primaryColor cursor-not-allowed'
               : 'cursor-pointer border border-primaryColor hover:bg-primaryColor'
-          } ${isChosenQuestion ? 'pointer-events-none' : 'cursor-pointer'} rounded-rad`}
-        >
-          <p className="w-fit px-2 py-3 text-center font-medium text-lightColor">
-            {item.question}
-          </p>
-        </div>
-      ))}
+              } rounded-rad`}
+          >
+            <p className="w-fit px-2 py-3 text-center font-medium text-lightColor">
+              {item.question}
+            </p>
+          </div>
+        )
+      })}
     </div>
   )
 }

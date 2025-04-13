@@ -15,12 +15,10 @@ const DEFAULT_GREETING_BODY =
 export const fetchAllQuestions = createAsyncThunk(
   'questions/fetchAllQuestions',
   async (_, thunkAPI) => {
-    console.log('[API CALL] fetchAllQuestions triggered')
     try {
       const state = thunkAPI.getState()
       // Check if we already have a conversation ID and messages
       if (state.chatbotApi.conversationId && state.chatbotApi.messages.length > 0) {
-        console.log('[API INFO] Using existing conversation ID:', state.chatbotApi.conversationId)
         return {
           questions: state.chatbotApi.messages[0]?.questions || [],
           imageUrl: state.chatbotApi.imageUrl,
@@ -53,7 +51,6 @@ export const fetchAllQuestions = createAsyncThunk(
 export const fetchUserQuestion = createAsyncThunk(
   'questions/fetchUserQuestion',
   async (question, thunkAPI) => {
-    console.log('[API CALL] fetchUserQuestion triggered with:', question)
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
@@ -78,7 +75,6 @@ export const fetchUserQuestion = createAsyncThunk(
 export const fetchGivenQuestion = createAsyncThunk(
   'questions/fetchGivenQuestion',
   async (question, thunkAPI) => {
-    console.log('[API CALL] fetchGivenQuestion triggered with:', question)
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
