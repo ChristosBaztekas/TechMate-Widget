@@ -34,7 +34,7 @@ export const SubmitPage = () => {
   }, [])
 
   const handleBackToChat = () => {
-    dispatch(setChatState(true))
+    dispatch(setChatState(false))
     navigate('/', { replace: true })
   }
 
