@@ -98,8 +98,8 @@ export const StartPage = () => {
   return (
     <section className="fixed bottom-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden bg-darkColor">
       {/* Header */}
-      <header className="relative flex items-start justify-between px-5 pt-3 text-primaryColor transition-all vsm:items-center vsm:px-7">
-        <span className="absolute left-0 right-0 top-0 h-fit w-full sm:-top-3">
+      <header className="relative pt-3 flex items-start justify-between px-5 text-primaryColor bg-primaryColor transition-all vsm:items-center vsm:px-7">
+        <span className="absolute left-0 right-0 top-1 h-fit w-full sm:-top-3 z-20">
           <Icons.PatternIcon />
         </span>
 
@@ -117,7 +117,7 @@ export const StartPage = () => {
           <img
             src={logoUrl || Logo}
             alt="logo"
-            className="w-10 cursor-pointer"
+            className="w-9 cursor-pointer"
             loading="lazy"
             onClick={() => navigate('/first')}
           />
