@@ -183,7 +183,7 @@ export const StartPage = () => {
         <textarea
           ref={textareaRef}
           placeholder={placeholderInput}
-          className={`min-h-10 w-full resize-none overflow-hidden p-2 pl-5 text-sm outline-none transition-all duration-300 vsm:text-base ${isSingleLine ? 'rounded-3xl' : 'rounded-rad'} `}
+          className={`min-h-10 max-h-40 w-full resize-none overflow-scroll p-2 pl-5 text-sm outline-none transition-all duration-300 vsm:text-base ${isSingleLine ? 'rounded-3xl' : 'rounded-rad'} `}
           aria-label="Message input field"
           rows={1}
           onInput={handleInput}
