@@ -5,6 +5,7 @@ import { postUserInfo } from '@/API/techMateApi'
 import { useNavigate } from 'react-router-dom'
 import { setFormID } from '@/store/Slices/chatbotApiSlice'
 import { setFormSubmitted } from '@/store/Slices/userSlice'
+import { ErrorIcon } from '@/utils/icons.util'
 
 // Components
 import Header from './Header'
@@ -13,6 +14,9 @@ import Footer from './Footer'
 export const PhoneLayout = ({ icon }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [nameError, setNameError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -33,16 +37,41 @@ export const PhoneLayout = ({ icon }) => {
   // Prioritize API icon, fallback to prop icon
   const displayedIcon = formIcon || icon
 
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/
+    return phoneRegex.test(phone)
+  }
+
   const handleSend = async () => {
-    if (!name || !phone) return
+    if (!name) {
+      setNameError('Please enter your name')
+      return
+    }
+
+    if (!phone) {
+      setPhoneError('Please enter your phone number')
+      return
+    }
+
+    if (!validatePhone(phone)) {
+      setPhoneError('Wrong answer! Please type numbers in form')
+      return
+    }
+
+    if (isSubmitting) return
 
     try {
+      setIsSubmitting(true)
+      setNameError('')
+      setPhoneError('')
       const response = await postUserInfo(conversationId, name, phone)
       dispatch(setFormID(response.form_id))
       dispatch(setFormSubmitted(true))
-      navigate('/submitted', { state: { formType: 'form-a' } })
+      navigate('/submitted', { state: { formType: 'form-a' }, replace: true })
     } catch (error) {
       console.error('Error while posting user info', error)
+      setPhoneError('An error occurred. Please try again.')
+      setIsSubmitting(false)
     }
   }
 
@@ -59,20 +88,57 @@ export const PhoneLayout = ({ icon }) => {
             loading="lazy"
           />
           <div className="w-full">
-            <input
-              placeholder={input1}
-              className="mb-4 w-full rounded-rad bg-lightColor p-5 text-xl text-black/70 outline-none"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              placeholder={input2}
-              className="w-full rounded-rad bg-lightColor p-5 text-xl text-black/70 outline-none"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+            <div className="relative">
+              <input
+                placeholder={input1}
+                className="w-full rounded-rad bg-lightColor p-5 pr-12 text-xl text-black/70 outline-none"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                  setNameError('')
+                }}
+              />
+              {nameError && (
+                <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
+                  <ErrorIcon />
+                  <div className="absolute right-6 bottom-7 translate-x-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 w-[198px]">
+                    <div className="rounded bg-[#D9D9D9] px-2 py-1 text-xs text-[#6D6D6D] font-medium">
+                      {nameError}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {nameError && (
+              <p className="my-2 text-xs">{nameError}</p>
+            )}
 
-            <div className="mt-5 flex w-full flex-col gap-2 vsm:flex-row sm:gap-5">
+            <div className="relative mt-3">
+              <input
+                placeholder={input2}
+                className="w-full rounded-rad bg-lightColor p-5 pr-12 text-xl text-black/70 outline-none"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value)
+                  setPhoneError('')
+                }}
+              />
+              {phoneError && (
+                <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
+                  <ErrorIcon />
+                  <div className="absolute right-6 bottom-7 translate-x-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 w-[198px]">
+                    <div className="rounded bg-[#D9D9D9] px-2 py-1 text-xs text-[#6D6D6D] font-medium">
+                      {phoneError}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {phoneError && (
+              <p className="mt-2 text-xs">{phoneError}</p>
+            )}
+
+            <div className="mt-4 flex w-full flex-col gap-2 vsm:flex-row sm:gap-5">
               <button
                 className="h-16 w-full rounded-rad bg-lightColor text-xl font-bold text-hoverColor hover:opacity-90 sm:text-2xl"
                 onClick={() => navigate('/newsletter')}
@@ -83,8 +149,9 @@ export const PhoneLayout = ({ icon }) => {
                 className="h-16 w-full rounded-rad bg-hoverColor text-xl font-bold text-lightColor hover:opacity-90 sm:text-2xl"
                 style={{ boxShadow: '0px 4px 4px 0px #00000040' }}
                 onClick={handleSend}
+                disabled={isSubmitting}
               >
-                {buttonRight}
+                {isSubmitting ? 'Submitting...' : buttonRight}
               </button>
             </div>
           </div>

@@ -7,12 +7,14 @@ import { setFormSubmitted } from '@/store/Slices/userSlice'
 // Components
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { ErrorIcon } from '../utils/icons.util'
 
 export const NewsLetterPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const { conversationId, texts } = useSelector((state) => state.chatbotApi)
 
@@ -27,17 +29,34 @@ export const NewsLetterPage = () => {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   }
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
   const handleSend = async () => {
-    if (!email || isSubmitting) return
+    if (!email) {
+      setError('Please enter your email address')
+      return
+    }
+
+    if (!validateEmail(email)) {
+      setError('Wrong answer! Please type text in form ******@email.com')
+      return
+    }
+
+    if (isSubmitting) return
 
     try {
       setIsSubmitting(true)
+      setError('')
       const response = await postUserEmail(conversationId, email)
       dispatch(setFormID(response.form_id))
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType: 'form-b' }, replace: true })
     } catch (error) {
       console.error('Error while posting user email', error)
+      setError('An error occurred. Please try again.')
       setIsSubmitting(false)
     }
   }
@@ -46,7 +65,6 @@ export const NewsLetterPage = () => {
   useEffect(() => {
     if (!conversationId) {
       console.warn('[NewsLetterPage] No conversation ID found')
-      // You might want to handle this case, perhaps redirect back to main page
     }
   }, [conversationId])
 
@@ -68,22 +86,41 @@ export const NewsLetterPage = () => {
 
           {/* Email Input + Button */}
           <div className="w-full sm:mt-8">
-            <input
-              placeholder={formData.input}
-              type="email"
-              className="mb-4 h-16 w-full rounded-rad p-5 text-xl text-black/70 outline-none vsm:h-20"
-              aria-label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <div className="mt-1 flex w-full">
+            <div className="relative">
+              <input
+                placeholder={formData.input}
+                type="email"
+                className="h-16 w-full rounded-rad p-5 pr-12 text-xl text-black/70 outline-none vsm:h-20"
+                aria-label="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  setError('')
+                }}
+              />
+              {error && (
+                <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
+                  <ErrorIcon />
+                  <div className="absolute right-6 bottom-7 translate-x-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 w-[198px]">
+                    <div className="rounded bg-[#D9D9D9] px-2 py-1 text-xs text-[#6D6D6D] font-medium">
+                      {error}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {error && (
+              <p className="mt-3 text-xs">{error}</p>
+            )}
+            <div className="mt-4 flex w-full">
               <button
                 className="h-16 w-full rounded-rad bg-hoverColor text-xl font-semibold text-lightColor hover:opacity-90 vsm:h-20 vsm:text-2xl"
                 aria-label="I want an OFFER!"
                 style={{ boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)' }}
                 onClick={handleSend}
+                disabled={isSubmitting}
               >
-                {formData.button}
+                {isSubmitting ? 'Submitting...' : formData.button}
               </button>
             </div>
           </div>

@@ -5,6 +5,7 @@ import propTypes from 'prop-types'
 import { postUserEmail, postUserPhone } from '@/API/techMateApi'
 import { setFormID } from '@/store/Slices/chatbotApiSlice'
 import { setFormSubmitted } from '@/store/Slices/userSlice'
+import { ErrorIcon } from '@/utils/icons.util'
 
 // Components
 import Header from './Header'
@@ -18,6 +19,9 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [localFormId, setLocalFormId] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { texts, conversationId } = useSelector((state) => state.chatbotApi)
 
@@ -57,10 +61,30 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
     },
   }
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/
+    return phoneRegex.test(phone)
+  }
+
   const handleSendEmail = async () => {
-    if (!email) return
+    if (!email) {
+      setEmailError('Please enter your email address')
+      return
+    }
+
+    if (!validateEmail(email)) {
+      setEmailError('Wrong answer! Please type text in form ******@email.com')
+      return
+    }
 
     try {
+      setIsSubmitting(true)
+      setEmailError('')
       const response = await postUserEmail(conversationId, email)
 
       if (response?.form_id) {
@@ -70,22 +94,40 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
       }
     } catch (error) {
       console.error('Error in handleSendEmail:', error)
+      setEmailError('An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleSendPhone = async () => {
-    if (!phone || !localFormId) return
+    if (!phone) {
+      setPhoneError('Please enter your phone number')
+      return
+    }
+
+    if (!validatePhone(phone)) {
+      setPhoneError('Wrong answer! Please type numbers in form')
+      return
+    }
+
+    if (!localFormId) return
 
     try {
+      setIsSubmitting(true)
+      setPhoneError('')
       await postUserPhone(conversationId, {
         phone,
         form_id: localFormId,
       })
 
       dispatch(setFormSubmitted(true))
-      navigate('/submitted', { state: { formType } })
+      navigate('/submitted', { state: { formType }, replace: true })
     } catch (error) {
       console.error('Error in handleSendPhone:', error)
+      setPhoneError('An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -106,43 +148,81 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
 
           {step === 1 ? (
             <div className="mt-8 w-full">
-              <input
-                placeholder={formData.firstForm.input}
-                type="email"
-                className="mb-4 h-20 w-full rounded-rad border border-transparent bg-lightColor p-5 text-xl text-black/70 outline-none vsm:h-[70px]"
-                aria-label="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  placeholder={formData.firstForm.input}
+                  type="email"
+                  className="h-20 w-full rounded-rad border border-transparent bg-lightColor p-5 pr-12 text-xl text-black/70 outline-none vsm:h-[70px]"
+                  aria-label="Email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setEmailError('')
+                  }}
+                />
+                {emailError && (
+                  <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
+                    <ErrorIcon />
+                    <div className="absolute right-6 bottom-7 translate-x-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 w-[198px]">
+                      <div className="rounded bg-[#D9D9D9] px-2 py-1 text-xs text-[#6D6D6D] font-medium">
+                        {emailError}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {emailError && (
+                <p className="my-2 text-xs">{emailError}</p>
+              )}
 
-              <div className="mt-1 flex w-full">
+              <div className="mt-3 flex w-full">
                 <button
                   className="h-20 w-full rounded-rad bg-lightColor text-2xl font-semibold text-footerColor hover:opacity-90 vsm:h-[70px]"
                   aria-label="I want an OFFER!"
                   onClick={handleSendEmail}
+                  disabled={isSubmitting}
                 >
-                  {formData.firstForm.button}
+                  {isSubmitting ? 'Submitting...' : formData.firstForm.button}
                 </button>
               </div>
             </div>
           ) : (
             <div className="mt-8 w-full">
-              <input
-                placeholder={formData.secondForm.input}
-                type="tel"
-                className="mb-4 h-20 w-full rounded-rad border border-transparent bg-lightColor p-5 text-xl text-black/70 outline-none vsm:h-[70px]"
-                aria-label="Phone Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  placeholder={formData.secondForm.input}
+                  type="tel"
+                  className="h-20 w-full rounded-rad border border-transparent bg-lightColor p-5 pr-12 text-xl text-black/70 outline-none vsm:h-[70px]"
+                  aria-label="Phone Number"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                    setPhoneError('')
+                  }}
+                />
+                {phoneError && (
+                  <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
+                    <ErrorIcon />
+                    <div className="absolute right-6 bottom-7 translate-x-8 opacity-0 transition-opacity duration-200 group-hover:opacity-100 w-[198px]">
+                      <div className="rounded bg-[#D9D9D9] px-2 py-1 text-xs text-[#6D6D6D] font-medium">
+                        {phoneError}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {phoneError && (
+                <p className="my-2 text-xs">{phoneError}</p>
+              )}
 
-              <div className="mt-1 flex w-full">
+              <div className="mt-3 flex w-full">
                 <button
                   className="h-20 w-full rounded-rad bg-lightColor text-2xl font-semibold text-footerColor hover:opacity-90 vsm:h-[70px]"
                   aria-label="Submit Phone Number"
                   onClick={handleSendPhone}
+                  disabled={isSubmitting}
                 >
-                  {formData.secondForm.button}
+                  {isSubmitting ? 'Submitting...' : formData.secondForm.button}
                 </button>
               </div>
             </div>
