@@ -13,10 +13,6 @@
   --footer-color: #370e92;
 }
 
-* {
-  /* outline: 1px solid red; */
-}
-
 /* Hide scrollbar in all browsers */
 body,
 html {
@@ -24,15 +20,15 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  scrollbar-width: none;
   -ms-overflow-style: none;
+  scrollbar-width: none;
   overflow: hidden;
 }
 
 /* Hide scrollbar in all scrollable elements */
 * {
-  scrollbar-width: none;
   -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Hide scrollbar in WebKit-based browsers (Chrome, Safari) */

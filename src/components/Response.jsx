@@ -59,14 +59,31 @@ const Response = ({ text }) => {
 
   const handleFeedback = (type) => {
     if (type === 'helpful') {
-      setIsLiked(true)
-      setShowFeedbackOptions(false)
-      // Here you can add API call to save feedback
+      if (isLiked) {
+        // If already liked, reset the feedback
+        setIsLiked(false)
+        setShowFeedbackOptions(true)
+      } else {
+        // If not liked, set like and reset dislike
+        setIsLiked(true)
+        setIsDisliked(false)
+        setShowFeedbackOptions(false)
+        setShowDetailedFeedback(false)
+      }
       console.log('Feedback: helpful')
     } else {
-      setIsDisliked(true)
-      setShowDetailedFeedback(true)
-      setShowFeedbackOptions(false)
+      if (isDisliked) {
+        // If already disliked, reset the feedback
+        setIsDisliked(false)
+        setShowFeedbackOptions(true)
+        setShowDetailedFeedback(false)
+      } else {
+        // If not disliked, set dislike and reset like
+        setIsDisliked(true)
+        setIsLiked(false)
+        setShowDetailedFeedback(true)
+        setShowFeedbackOptions(false)
+      }
     }
   }
 
@@ -81,24 +98,25 @@ const Response = ({ text }) => {
   }
 
   return (
-    <div className="flex animate-fadeIn items-start justify-start gap-2 sm:gap-4 pt-2">
+    <div className="flex animate-fadeInUp items-start justify-start gap-2 sm:gap-4 pt-4">
       {/* Logo Container */}
-      <div className="mt-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lightColor text-sm font-light">
+      <div className="mt-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lightColor text-sm font-light transition-all duration-300 hover:scale-105">
         <img
           src={imageUrl || ChatLogo}
           alt="Chatbot Logo"
           loading="lazy"
-          className="h-[50px] w-[50px] object-contain"
+          className="h-[50px] w-[50px] object-contain transition-transform duration-300 hover:scale-110"
         />
       </div>
 
       {/* Chat Message */}
-      <div className="relative prose prose-sm text-base font-light w-fit max-w-none rounded-rad bg-lightColor p-4 text-darkColor">
+      <div className="relative prose prose-sm text-base font-light w-fit max-w-none rounded-rad bg-lightColor p-4 text-darkColor transition-all duration-300 hover:shadow-md">
         {/* Render raw HTML from backend or thinking dots */}
         {text === '...' ? (
           <ThinkingDots />
         ) : (
           <div
+            className="animate-fadeIn"
             dangerouslySetInnerHTML={{
               __html: text,
             }}
@@ -107,17 +125,17 @@ const Response = ({ text }) => {
 
         {/* Feedback Section - Only render if message is complete */}
         {text !== '...' && (
-          <div className={`flex items-center gap-2 transition-opacity duration-300 ${isVisible ? 'opacity-100 mt-2' : 'opacity-0'}`}>
+          <div className={`flex items-center gap-2 transition-all duration-300 ${isVisible ? 'opacity-100 mt-2' : 'opacity-0'}`}>
             {isDisliked ? (
-              <div className="flex flex-col gap-2 w-full">
-                <div className="text-primaryColor cursor-pointer" onClick={toggleDetailedFeedback}>
+              <div className="flex flex-col gap-2 w-full animate-scaleIn">
+                <div className="text-primaryColor">
                   <DislikeIcon />
                 </div>
                 {showDetailedFeedback && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 animate-fadeInUp">
                     {selectedOption ? (
                       <button
-                        className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-colors"
+                        className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
                       >
                         {selectedOption}
                       </button>
@@ -127,14 +145,14 @@ const Response = ({ text }) => {
                           <button
                             key={option}
                             onClick={() => handleDetailedFeedback(option)}
-                            className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-colors"
+                            className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
                           >
                             {option}
                           </button>
                         ))}
                         <button
                           onClick={toggleDetailedFeedback}
-                          className="text-gray-500 hover:text-gray-700"
+                          className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
                           aria-label="Close feedback options"
                         >
                           <CloseFeedbackIcon />
@@ -149,19 +167,19 @@ const Response = ({ text }) => {
                 <button
                   onClick={() => handleFeedback('helpful')}
                   aria-label="Helpful response"
-                  className='text-[#6D6D6D]'
+                  className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
                 >
                   <LikeIcon />
                 </button>
                 <button
                   onClick={() => handleFeedback('not_helpful')}
-                  className='text-[#6D6D6D]'
+                  className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
                 >
                   <DislikeIcon />
                 </button>
               </>
             ) : isLiked ? (
-              <div className="text-primaryColor">
+              <div className="text-primaryColor animate-scaleIn">
                 <LikeIcon />
               </div>
             ) : null}
