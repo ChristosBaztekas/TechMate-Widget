@@ -179,11 +179,11 @@ export const StartPage = () => {
       </div>
 
       {/* Input + Send */}
-      <div className="h-18 flex items-start justify-center bg-gradient-to-r from-primaryColor to-gradientColor p-6">
+      <div className="flex items-end justify-center bg-gradient-to-r from-primaryColor to-gradientColor p-6">
         <textarea
           ref={textareaRef}
           placeholder={placeholderInput}
-          className={`max-h-24 min-h-10 w-full resize-none overflow-hidden p-2 pl-5 text-sm outline-none transition-all duration-300 vsm:text-base ${isSingleLine ? 'rounded-3xl' : 'rounded-rad'} `}
+          className={`min-h-10 w-full resize-none overflow-hidden p-2 pl-5 text-sm outline-none transition-all duration-300 vsm:text-base ${isSingleLine ? 'rounded-3xl' : 'rounded-rad'} `}
           aria-label="Message input field"
           rows={1}
           onInput={handleInput}
@@ -199,7 +199,7 @@ export const StartPage = () => {
 
         <button
           type="submit"
-          className="ml-6 mt-2 font-bold text-white hover:text-hoverColor"
+          className="ml-6 mb-2 font-bold text-white hover:text-hoverColor"
           onClick={handleSendClick}
         >
           {sendButtonText}
