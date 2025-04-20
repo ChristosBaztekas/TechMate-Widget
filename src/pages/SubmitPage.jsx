@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { setChatState } from '@/store/Slices/userSlice'
 import Header from '@/components/Header'
 import Footer from '../components/Footer'
@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 export const SubmitPage = () => {
   const dispatch = useDispatch()
   const location = useLocation()
+  const navigate = useNavigate()
 
   // Get formType from navigate state (sent when navigating)
   const { formType } = location.state || {}
@@ -31,6 +32,11 @@ export const SubmitPage = () => {
     // Update URL without reloading the page
     window.history.pushState({}, '', '/congratulations')
   }, [])
+
+  const handleBackToChat = () => {
+    dispatch(setChatState(true))
+    navigate('/', { replace: true })
+  }
 
   return (
     <section className="fixed bottom-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden bg-darkColor">
@@ -60,12 +66,7 @@ export const SubmitPage = () => {
 
             <button
               className="h-16 w-full rounded-rad bg-hoverColor text-xl font-bold text-lightColor hover:opacity-90 sm:h-20"
-              onClick={() => {
-                // Open chat state and reload home page
-                dispatch(setChatState(true))
-                window.history.pushState({}, '', '/')
-                window.location.reload()
-              }}
+              onClick={handleBackToChat}
             >
               {completionData.button}
             </button>

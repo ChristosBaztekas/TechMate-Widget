@@ -145,6 +145,16 @@ const chatbotApiSlice = createSlice({
     removeLastMessage: (state) => {
       if (state.messages.length > 0) state.messages.pop()
     },
+    addFormResponse: (state, action) => {
+      const { text, questions = [] } = action.payload
+      state.messages.push({
+        id: state.messages.length + 1,
+        text,
+        questions,
+        query: '',
+        source: 'chat',
+      })
+    },
     /**
      * resetMessages: Reinitializes chat messages so that the greeting always appears first.
      * If a question is provided in the payload, it adds a message for that question after the greeting.
@@ -328,6 +338,7 @@ export const {
   resetMessages,
   restartChat,
   navigateToForm,
+  addFormResponse,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer

@@ -117,6 +117,15 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
       full_name,
       phone,
     })
+    console.log('[API Response] User Info Form:', response.data)
+    // Add response to chat history
+    store.dispatch({
+      type: 'chatbotApi/addFormResponse',
+      payload: {
+        text: response.data.answer || 'Thank you for submitting your information!',
+        questions: response.data.follow_up || [],
+      },
+    })
     return response.data
   } catch (error) {
     console.error('Error posting user info:', error)
@@ -135,6 +144,15 @@ export const postUserEmail = async (conversation_id, email) => {
   try {
     const response = await axiosInstance.post(`/${conversation_id}/form?id=3`, {
       email,
+    })
+    console.log('[API Response] Email Form:', response.data)
+    // Add response to chat history
+    store.dispatch({
+      type: 'chatbotApi/addFormResponse',
+      payload: {
+        text: response.data.answer || 'Thank you for subscribing to our newsletter!',
+        questions: response.data.follow_up || [],
+      },
     })
     return response.data
   } catch (error) {
@@ -156,6 +174,15 @@ export const postUserPhone = async (conversationId, data) => {
       `/${conversationId}/form?id=4`,
       data,
     )
+    console.log('[API Response] Phone Form:', response.data)
+    // Add response to chat history
+    store.dispatch({
+      type: 'chatbotApi/addFormResponse',
+      payload: {
+        text: response.data.answer || 'Thank you for providing your phone number!',
+        questions: response.data.follow_up || [],
+      },
+    })
     return response.data
   } catch (error) {
     console.error(
