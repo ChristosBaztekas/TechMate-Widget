@@ -26,7 +26,7 @@ export const StartPage = () => {
 
   const textareaRef = useRef(null)
 
-  const { messages, conversationId, logoUrl, texts } = useSelector(
+  const { messages, conversationId, logoUrl, texts, isLoading } = useSelector(
     (state) => state.chatbotApi,
   )
 
@@ -190,7 +190,7 @@ export const StartPage = () => {
           onChange={(e) => setUserInput(e.target.value)}
           value={userInput}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter' && !e.shiftKey && !isLoading) {
               e.preventDefault()
               handleSendClick()
             }
@@ -199,8 +199,9 @@ export const StartPage = () => {
 
         <button
           type="submit"
-          className="ml-6 mb-2 font-bold text-white hover:text-hoverColor"
+          className={`ml-6 mb-2 font-bold text-white hover:text-hoverColor ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={handleSendClick}
+          disabled={isLoading}
         >
           {sendButtonText}
         </button>
