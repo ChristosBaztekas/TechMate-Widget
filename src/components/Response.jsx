@@ -4,6 +4,16 @@ import { useSelector } from 'react-redux'
 import ChatLogo from '../assets/images/bot.webp'
 import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
 
+const ThinkingDots = () => {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="animate-bounce [animation-delay:-0.3s]">.</span>
+      <span className="animate-bounce [animation-delay:-0.15s]">.</span>
+      <span className="animate-bounce">.</span>
+    </div>
+  )
+}
+
 const Response = ({ text }) => {
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
   const [isLiked, setIsLiked] = useState(false)
@@ -71,7 +81,7 @@ const Response = ({ text }) => {
   }
 
   return (
-    <div className="flex animate-fadeIn items-start justify-start gap-2 sm:gap-4">
+    <div className="flex animate-fadeIn items-start justify-start gap-2 sm:gap-4 pt-2">
       {/* Logo Container */}
       <div className="mt-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lightColor text-sm font-light">
         <img
@@ -84,12 +94,16 @@ const Response = ({ text }) => {
 
       {/* Chat Message */}
       <div className="relative prose prose-sm text-base font-light w-fit max-w-none rounded-rad bg-lightColor p-4 text-darkColor">
-        {/* Render raw HTML from backend */}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: text,
-          }}
-        />
+        {/* Render raw HTML from backend or thinking dots */}
+        {text === '...' ? (
+          <ThinkingDots />
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: text,
+            }}
+          />
+        )}
 
         {/* Feedback Section - Only render if message is complete */}
         {text !== '...' && (
