@@ -117,7 +117,7 @@ export const StartPage = () => {
           <img
             src={logoUrl || Logo}
             alt="logo"
-            className="w-9 cursor-pointer"
+            className="w-10 cursor-pointer"
             loading="lazy"
             onClick={() => navigate('/first')}
           />
@@ -146,7 +146,7 @@ export const StartPage = () => {
       </header>
 
       {/* Messages */}
-      <div className="flex flex-grow flex-col gap-5 overflow-scroll overflow-x-hidden px-4 py-4 sm:px-8 sm:pt-8">
+      <div className="flex flex-grow flex-col gap-5 overflow-scroll overflow-x-hidden px-4 py-4 sm:px-8 sm:pt-8 border-x-2 border-primaryColor">
         {messages.map((message, index) => {
           if (message.text.startsWith('form')) {
             const lastChar = message.text.slice(-1)
@@ -179,7 +179,7 @@ export const StartPage = () => {
       </div>
 
       {/* Input + Send */}
-      <div className="flex items-end justify-center bg-gradient-to-r from-primaryColor to-gradientColor p-6">
+      <div className="flex items-end justify-center bg-gradient-to-r from-primaryColor to-gradientColor py-4 px-[22px]">
         <textarea
           ref={textareaRef}
           placeholder={placeholderInput}

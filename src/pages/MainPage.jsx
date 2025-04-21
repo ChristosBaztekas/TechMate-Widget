@@ -30,25 +30,37 @@ export const MainPage = () => {
         primaryColor: '#501AC8',
         hoverColor: '#B366CF',
         gradientColor: '#1C064C',
-        footerColor: '#370E92',
+        footerColor: '#501AC8',
       },
       green: {
         primaryColor: '#0D642F',
         hoverColor: '#7CB937',
         gradientColor: '#03421C',
-        footerColor: '#508A0F',
+        footerColor: '#0D642F',
       },
       red: {
         primaryColor: '#C7313D',
         hoverColor: '#E55640',
         gradientColor: '#681017',
-        footerColor: '#9D2816',
+        footerColor: '#C7313D',
       },
       blue: {
-        primaryColor: '#184A88',
-        hoverColor: '#0077B6',
+        primaryColor: '#0077B6',
+        hoverColor: '#184A88',
         gradientColor: '#03045E',
-        footerColor: '#14577B',
+        footerColor: '#0077B6',
+      },
+      orange: {
+        primaryColor: '#D27000',
+        hoverColor: '#935600',
+        gradientColor: '#935600',
+        footerColor: '#D27000',
+      },
+      yellow: {
+        primaryColor: '#E1C720',
+        hoverColor: '#D2A203',
+        gradientColor: '#997500',
+        footerColor: '#E1C720',
       },
     }
 
