@@ -159,6 +159,12 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
                     setEmail(e.target.value)
                     setEmailError('')
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isSubmitting) {
+                      e.preventDefault()
+                      handleSendEmail()
+                    }
+                  }}
                 />
                 {emailError && (
                   <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
@@ -198,6 +204,12 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
                   onChange={(e) => {
                     setPhone(e.target.value)
                     setPhoneError('')
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isSubmitting) {
+                      e.preventDefault()
+                      handleSendPhone()
+                    }
                   }}
                 />
                 {phoneError && (

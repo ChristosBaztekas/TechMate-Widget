@@ -97,6 +97,12 @@ export const NewsLetterPage = () => {
                   setEmail(e.target.value)
                   setError('')
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !isSubmitting) {
+                    e.preventDefault()
+                    handleSend()
+                  }
+                }}
               />
               {error && (
                 <div className="group absolute right-4 top-1/2 -translate-y-1/2 w-fit">
