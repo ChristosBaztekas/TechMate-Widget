@@ -16,9 +16,9 @@ export const Notifications = () => {
   if (error) return null
 
   return (
-    <main className="mt-auto flex items-start justify-center gap-2">
+    <main className="mt-auto flex items-start justify-center gap-2 animate-slide-in">
       <button
-        className="mt-1 flex-shrink-0 cursor-pointer overflow-hidden rounded-full text-primaryColor hover:text-hoverColor"
+        className="mt-1 flex-shrink-0 cursor-pointer overflow-hidden rounded-full text-primaryColor hover:text-hoverColor hover:scale-110 transition-transform duration-300"
         onClick={() => dispatch(setNotificationState(false))}
         aria-label="Close"
       >
@@ -42,7 +42,7 @@ export const Notifications = () => {
               sendDimensionsToParent('33%', '70%', false)
             }}
           >
-            <article className="ml-auto line-clamp-3 w-fit cursor-pointer rounded-rad border-2 border-primaryColor bg-lightColor px-2 py-2 text-center font-medium text-darkColor transition-all hover:bg-primaryColor hover:text-lightColor">
+            <article className="ml-auto line-clamp-3 w-fit cursor-pointer rounded-rad border-2 border-primaryColor bg-lightColor px-2 py-2 text-center font-medium text-darkColor transition-all hover:bg-primaryColor hover:text-lightColor animate-notification-item">
               {item.question}
             </article>
           </Link>

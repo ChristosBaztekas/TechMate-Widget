@@ -46,16 +46,16 @@ export const Widget = () => {
   ]
 
   return (
-    <div className="relative mx-auto mb-5 ml-5 rounded-[20px] bg-darkColor px-3 py-5 text-lightColor vsm:mb-0 vsm:ml-auto vsm:mr-5">
+    <div className="relative mx-auto mb-5 ml-5 rounded-[20px] bg-darkColor px-3 py-5 text-lightColor vsm:mb-0 vsm:ml-auto vsm:mr-5 animate-widget">
       <span className="flex items-center justify-start gap-3">
         <img
           src={logoUrl || Logo}
           alt="logo"
-          className="w-18 flex-shrink-0"
+          className="w-18 flex-shrink-0 animate-flow"
           loading="lazy"
         />
 
-        <p className="text-left">
+        <p className="text-left animate-widget-item" style={{ '--index': 0 }}>
           {greetingBubble.map((line, index) => (
             <span key={index}>
               {line}
@@ -72,9 +72,9 @@ export const Widget = () => {
             key={index}
             onClick={() => handleQuestionClick(item)}
             className={activeQuestion === item.id ? 'active' : ''}
-            style={{ width: '100%', textAlign: 'center' }}
+            style={{ width: '100%', textAlign: 'center', '--index': index + 1 }}
           >
-            <article className="line-clamp-2 w-full cursor-pointer rounded-full border-2 border-primaryColor px-2 py-2 text-center font-medium text-lightColor transition-all hover:bg-primaryColor">
+            <article className="line-clamp-2 w-full cursor-pointer rounded-full border-2 border-primaryColor px-2 py-2 text-center font-medium text-lightColor transition-all hover:bg-primaryColor animate-widget-item">
               {item.question}
             </article>
           </Link>
@@ -84,7 +84,8 @@ export const Widget = () => {
       {/* Close Button */}
       <span
         onClick={handleCloseWidget}
-        className="w-5 cursor-pointer text-primaryColor transition-all hover:text-hoverColor"
+        className="w-5 cursor-pointer text-primaryColor transition-all hover:text-hoverColor hover:scale-110 animate-widget-item"
+        style={{ '--index': 4 }}
       >
         <Icons.HideWidgetIcon />
       </span>

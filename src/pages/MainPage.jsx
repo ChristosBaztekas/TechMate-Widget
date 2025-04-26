@@ -233,14 +233,14 @@ export const MainPage = () => {
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
-                className="relative z-50 mt-2 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full text-sm"
+                className="relative z-50 mt-2 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full text-sm animate-popup hover:scale-110 transition-transform duration-300"
                 role="button"
                 aria-label="Open chat"
               >
                 <img
                   src={logoUrl || Logo}
                   alt="logo"
-                  className="absolute -left-3 -top-1 w-8"
+                  className="absolute -left-3 -top-1 w-8 animate-flow"
                   loading="lazy"
                 />
               </button>

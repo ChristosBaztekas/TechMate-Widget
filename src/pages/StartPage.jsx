@@ -126,7 +126,7 @@ export const StartPage = () => {
 
         <div className="z-20 flex items-center justify-center gap-2 text-lightColor">
           <button
-            className="cursor-pointer hover:animate-spin hover:text-hoverColor"
+            className="cursor-pointer transform transition-all duration-300 hover:scale-110 hover:rotate-[360deg] hover:text-hoverColor"
             onClick={() => dispatch(refreshChat())}
             aria-label="Refresh chat"
           >
