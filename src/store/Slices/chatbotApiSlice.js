@@ -307,6 +307,7 @@ const chatbotApiSlice = createSlice({
         lastMessage.text = action.payload.answer
         lastMessage.questions = action.payload.follow_up
         lastMessage.feedback = action.payload.feedback
+        lastMessage.message_id = action.payload.message_id
       })
       .addCase(fetchUserQuestion.rejected, (state, action) => {
         state.isLoading = false
@@ -336,6 +337,7 @@ const chatbotApiSlice = createSlice({
         lastMessage.text = action.payload.answer
         lastMessage.questions = action.payload.follow_up
         lastMessage.feedback = action.payload.feedback
+        lastMessage.message_id = action.payload.message_id
       })
       .addCase(fetchGivenQuestion.rejected, (state, action) => {
         state.isLoading = false

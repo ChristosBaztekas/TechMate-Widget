@@ -192,3 +192,26 @@ export const postUserPhone = async (conversationId, data) => {
     throw error
   }
 }
+
+/**
+ * Posts user feedback for a specific message
+ * 
+ * @param {string} conversation_id - The conversation ID
+ * @param {string} message_id - The message ID from the question response
+ * @param {number} feedback - 0 for dislike, 1 for like
+ * @param {number} [feedback_option] - Optional feedback option ID from the dislike options
+ * @returns {Promise<Object|null>}
+ */
+export const postFeedback = async (conversation_id, message_id, feedback, feedback_option) => {
+  try {
+    const response = await axiosInstance.post(`/${conversation_id}/feedback`, {
+      message_id,
+      feedback,
+      feedback_option
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error posting feedback:', error)
+    return null
+  }
+}

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import ChatLogo from '../assets/images/bot.webp'
 import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
+import { postFeedback } from '@/API/techMateApi'
 
 const ThinkingDots = () => {
   return (
@@ -14,8 +15,9 @@ const ThinkingDots = () => {
   )
 }
 
-const Response = ({ text, feedback }) => {
+const Response = ({ text, feedback, message_id }) => {
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
+  const conversationId = useSelector((state) => state.chatbotApi.conversationId)
   const [isLiked, setIsLiked] = useState(false)
   const [showFeedbackOptions, setShowFeedbackOptions] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
@@ -54,7 +56,7 @@ const Response = ({ text, feedback }) => {
     }
   }, [selectedOption])
 
-  const handleFeedback = (type) => {
+  const handleFeedback = async (type) => {
     if (type === 'helpful') {
       if (isLiked) {
         // If already liked, reset the feedback
@@ -66,8 +68,9 @@ const Response = ({ text, feedback }) => {
         setIsDisliked(false)
         setShowFeedbackOptions(false)
         setShowDetailedFeedback(false)
+        // Post like feedback
+        await postFeedback(conversationId, message_id, 1)
       }
-      console.log('Feedback: helpful')
     } else {
       if (isDisliked) {
         // If already disliked, reset the feedback
@@ -84,10 +87,14 @@ const Response = ({ text, feedback }) => {
     }
   }
 
-  const handleDetailedFeedback = (option) => {
+  const handleDetailedFeedback = async (option) => {
     setSelectedOption(option)
-    // Here you can add API call to save detailed feedback
-    console.log('Detailed Feedback:', option)
+    // Find the feedback option ID from the API response
+    const feedbackOption = feedback.dislike.find(item => item.value === option)
+    if (feedbackOption) {
+      // Post dislike feedback with the specific option
+      await postFeedback(conversationId, message_id, 0, feedbackOption.id)
+    }
   }
 
   const toggleDetailedFeedback = () => {
@@ -189,6 +196,7 @@ const Response = ({ text, feedback }) => {
 
 Response.propTypes = {
   text: PropTypes.string.isRequired,
+  message_id: PropTypes.string.isRequired,
   feedback: PropTypes.shape({
     like: PropTypes.array,
     dislike: PropTypes.arrayOf(PropTypes.shape({
