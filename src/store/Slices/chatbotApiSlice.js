@@ -353,7 +353,9 @@ const chatbotApiSlice = createSlice({
         state.imageUrl = action.payload.imageUrl
         state.logoUrl = action.payload.logoUrl
         state.texts = action.payload.texts
-        // Reset messages and add new greeting with questions
+        // Reset all states
+        state.activeQuestions = []
+        state.hiddenQuestions = []
         state.messages = [{
           id: 1,
           text: action.payload.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY,
