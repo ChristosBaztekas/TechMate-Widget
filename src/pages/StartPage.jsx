@@ -164,7 +164,10 @@ export const StartPage = () => {
               )}
 
               {message.text && !message.isQuestion && (
-                <Response text={message.text} />
+                <Response
+                  text={message.text}
+                  feedback={message.feedback}
+                />
               )}
 
               {message.questions?.length > 0 && (

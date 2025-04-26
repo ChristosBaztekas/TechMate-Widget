@@ -7,14 +7,14 @@ import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
 const ThinkingDots = () => {
   return (
     <div className="flex items-center gap-1">
-      <span className="animate-bounce [animation-delay:-0.3s]">.</span>
-      <span className="animate-bounce [animation-delay:-0.15s]">.</span>
-      <span className="animate-bounce">.</span>
+      <span className="animate-bounce [animation-delay:-0.3s]">•</span>
+      <span className="animate-bounce [animation-delay:-0.15s]">•</span>
+      <span className="animate-bounce">•</span>
     </div>
   )
 }
 
-const Response = ({ text }) => {
+const Response = ({ text, feedback }) => {
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
   const [isLiked, setIsLiked] = useState(false)
   const [showFeedbackOptions, setShowFeedbackOptions] = useState(true)
@@ -23,11 +23,8 @@ const Response = ({ text }) => {
   const [selectedOption, setSelectedOption] = useState(null)
   const [isDisliked, setIsDisliked] = useState(false)
 
-  const detailedFeedbackOptions = [
-    'Άσχετη απάντηση',
-    'Δεν κατάλαβε',
-    'Μπορούσε καλύτερα'
-  ]
+  // Get feedback options from API response
+  const detailedFeedbackOptions = feedback?.dislike?.map(item => item.value) || []
 
   useEffect(() => {
     let timer
@@ -123,8 +120,8 @@ const Response = ({ text }) => {
           />
         )}
 
-        {/* Feedback Section - Only render if message is complete */}
-        {text !== '...' && (
+        {/* Feedback Section - Only render if message is complete and feedback is enabled */}
+        {feedback && (
           <div className={`flex items-center gap-2 transition-all duration-300 ${isVisible ? 'opacity-100 mt-2' : 'opacity-0'}`}>
             {isDisliked ? (
               <div className="flex flex-col gap-2 w-full animate-scaleIn">
@@ -192,6 +189,13 @@ const Response = ({ text }) => {
 
 Response.propTypes = {
   text: PropTypes.string.isRequired,
+  feedback: PropTypes.shape({
+    like: PropTypes.array,
+    dislike: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      value: PropTypes.string
+    }))
+  })
 }
 
 export default Response
