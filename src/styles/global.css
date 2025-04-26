@@ -72,7 +72,7 @@ html {
   }
 
   50% {
-    transform: translateY(-3px);
+    transform: translateY(4px);
   }
 
   100% {
