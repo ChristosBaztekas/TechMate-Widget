@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import propTypes from 'prop-types'
 import { setChatState } from '@/store/Slices/userSlice'
-import { fetchUserQuestion, navigateToForm, restartChat } from '@/store/Slices/chatbotApiSlice'
+import { fetchUserQuestion, navigateToForm, refreshChat } from '@/store/Slices/chatbotApiSlice'
 import * as Icons from '@/utils/icons.util'
 import Logo from '@/assets/images/Logo.webp'
 import Query from '@/components/Query'
@@ -127,7 +127,7 @@ export const StartPage = () => {
         <div className="z-20 flex items-center justify-center gap-2 text-lightColor">
           <button
             className="cursor-pointer hover:animate-spin hover:text-hoverColor"
-            onClick={() => dispatch(restartChat())}
+            onClick={() => dispatch(refreshChat())}
             aria-label="Refresh chat"
           >
             <Icons.RefreshIcon />

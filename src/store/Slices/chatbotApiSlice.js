@@ -92,6 +92,25 @@ export const fetchGivenQuestion = createAsyncThunk(
   },
 )
 
+export const refreshChat = createAsyncThunk(
+  'questions/refreshChat',
+  async (_, thunkAPI) => {
+    try {
+      const response = await getQuestions()
+      const { questions, image, logo, conversation_id, texts } = response
+      return {
+        questions,
+        imageUrl: image,
+        logoUrl: logo,
+        conversation_id,
+        texts,
+      }
+    } catch (error) {
+      console.error('[API ERROR] refreshChat:', error)
+      return thunkAPI.rejectWithValue(error)
+    }
+  },
+)
 
 const initialState = {
   lastResponse: null,
@@ -322,6 +341,31 @@ const chatbotApiSlice = createSlice({
         const lastMessage = state.messages[state.messages.length - 1]
         lastMessage.text = 'Failed to fetch response.'
         lastMessage.questions = []
+      })
+      // Refresh Chat
+      .addCase(refreshChat.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(refreshChat.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.conversationId = action.payload.conversation_id
+        state.imageUrl = action.payload.imageUrl
+        state.logoUrl = action.payload.logoUrl
+        state.texts = action.payload.texts
+        // Reset messages and add new greeting with questions
+        state.messages = [{
+          id: 1,
+          text: action.payload.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY,
+          questions: action.payload.questions || [],
+          query: '',
+          source: 'chat',
+        }]
+        state.notificationQuestions = (action.payload.questions || []).slice(0, 3)
+      })
+      .addCase(refreshChat.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload
       })
   },
 })
