@@ -14,9 +14,16 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
   const hiddenQuestions = useSelector(
     (state) => state.chatbotApi.hiddenQuestions,
   )
+  const messages = useSelector((state) => state.chatbotApi.messages)
+
+  // Check if this is the message right before the last user query
+  const isBeforeUserQuery = messages.length > 1 &&
+    messages[messages.length - 1].query &&
+    !messages[messages.length - 1].isQuestion &&
+    messages[messages.length - 2].message_id === message_id
 
   const handleQuestionClick = (questionObj) => {
-    if (!isChosenQuestion) {
+    if (!isChosenQuestion && !isBeforeUserQuery) {
       // Only append if the question has a different message_id or is not already active
       const isQuestionActive = activeQuestions.some(
         (q) => q.id === questionObj.id && q.message_id === message_id
@@ -46,6 +53,11 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
       dispatch(setHiddenQuestions(newHidden))
       dispatch(fetchGivenQuestion(questionObj.id))
     }
+  }
+
+  // If this is the message before a user query, hide all questions
+  if (isBeforeUserQuery) {
+    return null
   }
 
   const displayedQuestions = questionsArr.filter(
