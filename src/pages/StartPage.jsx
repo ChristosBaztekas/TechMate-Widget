@@ -175,6 +175,7 @@ export const StartPage = () => {
                 <Questions
                   questionsArr={message.questions}
                   isChosenQuestion={message.isQuestion}
+                  message_id={message.message_id}
                 />
               )}
             </div>

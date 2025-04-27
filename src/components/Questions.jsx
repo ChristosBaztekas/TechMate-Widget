@@ -6,7 +6,7 @@ import {
   setHiddenQuestions,
 } from '@/store/Slices/chatbotApiSlice'
 
-const Questions = ({ questionsArr, isChosenQuestion = false }) => {
+const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
   const dispatch = useDispatch()
   const activeQuestions = useSelector(
     (state) => state.chatbotApi.activeQuestions,
@@ -14,43 +14,51 @@ const Questions = ({ questionsArr, isChosenQuestion = false }) => {
   const hiddenQuestions = useSelector(
     (state) => state.chatbotApi.hiddenQuestions,
   )
-  const messages = useSelector((state) => state.chatbotApi.messages)
-
-  // Check if the last message was a user query (not a selected question)
-  const isLastMessageUserQuery = messages.length > 0 &&
-    messages[messages.length - 1].query &&
-    !messages[messages.length - 1].isQuestion
 
   const handleQuestionClick = (questionObj) => {
-    if (!isChosenQuestion && !isLastMessageUserQuery) {
-      // Append the new active question if not already present,
-      // Previous active questions remain highlighted.
-      if (!activeQuestions.some((q) => q.id === questionObj.id)) {
-        dispatch(setActiveQuestions([...activeQuestions, questionObj]))
+    if (!isChosenQuestion) {
+      // Only append if the question has a different message_id or is not already active
+      const isQuestionActive = activeQuestions.some(
+        (q) => q.id === questionObj.id && q.message_id === message_id
+      )
+
+      if (!isQuestionActive) {
+        // Remove any previous active questions with the same message_id
+        const filteredActiveQuestions = activeQuestions.filter(
+          q => q.message_id !== message_id
+        )
+        dispatch(setActiveQuestions([...filteredActiveQuestions, {
+          id: questionObj.id,
+          message_id,
+          question: questionObj.question
+        }]))
       }
-      // For the current batch, mark all other questions as hidden.
+
+      // For the current batch, mark all other questions as hidden
       const currentHidden = questionsArr
         .filter((q) => q.id !== questionObj.id)
-        .map((q) => q.id)
-      // Merge with any previously hidden IDs (remove duplicates).
-      const newHidden = Array.from(
-        new Set([...hiddenQuestions, ...currentHidden]),
-      )
+        .map((q) => ({ id: q.id, message_id, question: q.question }))
+
+      // Remove any previous hidden questions with the same message_id
+      const filteredHiddenQuestions = hiddenQuestions.filter(h => h.message_id !== message_id)
+      const newHidden = [...filteredHiddenQuestions, ...currentHidden]
+
       dispatch(setHiddenQuestions(newHidden))
       dispatch(fetchGivenQuestion(questionObj.id))
     }
   }
 
   const displayedQuestions = questionsArr.filter(
-    (q) => !hiddenQuestions.includes(q.id),
+    (q) => !hiddenQuestions.some(h => h.id === q.id && h.message_id === message_id)
   )
 
   return (
     <div className="flex animate-fadeIn flex-col items-end justify-center gap-2 text-xs sm:gap-3">
       {displayedQuestions.map((item, index) => {
-        const isDisabled = activeQuestions.some((q) => q.id === item.id) ||
-          isChosenQuestion ||
-          isLastMessageUserQuery
+        // Check if this question is active in the current message context
+        const isDisabled = activeQuestions.some(
+          (q) => q.id === item.id && q.message_id === message_id
+        ) || isChosenQuestion
 
         return (
           <div
@@ -74,6 +82,7 @@ const Questions = ({ questionsArr, isChosenQuestion = false }) => {
 Questions.propTypes = {
   questionsArr: propTypes.array.isRequired,
   isChosenQuestion: propTypes.bool,
+  message_id: propTypes.string,
 }
 
 export default Questions

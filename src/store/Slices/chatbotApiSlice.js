@@ -17,8 +17,10 @@ export const fetchAllQuestions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const state = thunkAPI.getState()
+      console.log('[DEBUG] Current state:', state.chatbotApi)
       // Check if we already have a conversation ID and messages
       if (state.chatbotApi.conversationId && state.chatbotApi.messages.length > 0) {
+        console.log('[DEBUG] Using existing conversation state')
         return {
           questions: state.chatbotApi.messages[0]?.questions || [],
           imageUrl: state.chatbotApi.imageUrl,
@@ -29,6 +31,7 @@ export const fetchAllQuestions = createAsyncThunk(
       }
 
       const response = await getQuestions()
+      console.log('[DEBUG] fetchAllQuestions response:', response)
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -54,12 +57,14 @@ export const fetchUserQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
+      console.log('[DEBUG] fetchUserQuestion state:', { conversation_id, question })
       if (!conversation_id) {
         console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansUserQuestion(conversation_id, question)
+      console.log('[DEBUG] fetchUserQuestion response:', response)
       return response
     } catch (error) {
       console.error('[API ERROR] fetchUserQuestion:', error)
@@ -78,12 +83,14 @@ export const fetchGivenQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
+      console.log('[DEBUG] fetchGivenQuestion state:', { conversation_id, question })
       if (!conversation_id) {
         console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansGivenQuestion(conversation_id, question)
+      console.log('[DEBUG] fetchGivenQuestion response:', response)
       return response
     } catch (error) {
       console.error('[API ERROR] fetchGivenQuestion:', error)
@@ -97,6 +104,7 @@ export const refreshChat = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions()
+      console.log('[DEBUG] refreshChat response:', response)
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -156,10 +164,20 @@ const chatbotApiSlice = createSlice({
       state.questionId = action.payload
     },
     setActiveQuestions: (state, action) => {
-      state.activeQuestions = action.payload
+      // Ensure each question has id, message_id, and question text
+      state.activeQuestions = action.payload.map(q => ({
+        id: q.id,
+        message_id: q.message_id,
+        question: q.question
+      }))
     },
     setHiddenQuestions: (state, action) => {
-      state.hiddenQuestions = action.payload
+      // Ensure each hidden question has id, message_id, and question text
+      state.hiddenQuestions = action.payload.map(q => ({
+        id: q.id,
+        message_id: q.message_id,
+        question: q.question
+      }))
     },
     removeLastMessage: (state) => {
       if (state.messages.length > 0) state.messages.pop()
@@ -231,6 +249,7 @@ const chatbotApiSlice = createSlice({
         state.error = null
       })
       .addCase(fetchAllQuestions.fulfilled, (state, action) => {
+        console.log('[DEBUG] fetchAllQuestions.fulfilled:', action.payload)
         state.isLoading = false
         state.conversationId = action.payload.conversation_id
         state.imageUrl = action.payload.imageUrl
@@ -289,6 +308,9 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.pending, (state, action) => {
         state.isLoading = true
         state.error = null
+        // Clear all active and hidden questions when a new user query is made
+        state.activeQuestions = []
+        state.hiddenQuestions = []
         state.messages.push({
           id: state.messages.length + 1,
           text: '...',
@@ -298,6 +320,7 @@ const chatbotApiSlice = createSlice({
         })
       })
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
+        console.log('[DEBUG] fetchUserQuestion.fulfilled:', action.payload)
         state.isLoading = false
         state.lastResponse = action.payload
         if (action.payload.form_id) {
@@ -328,6 +351,7 @@ const chatbotApiSlice = createSlice({
         })
       })
       .addCase(fetchGivenQuestion.fulfilled, (state, action) => {
+        console.log('[DEBUG] fetchGivenQuestion.fulfilled:', action.payload)
         state.isLoading = false
         state.lastResponse = action.payload
         if (action.payload.form_id) {
@@ -338,6 +362,14 @@ const chatbotApiSlice = createSlice({
         lastMessage.questions = action.payload.follow_up
         lastMessage.feedback = action.payload.feedback
         lastMessage.message_id = action.payload.message_id
+
+        // Clear active and hidden questions for this message_id
+        state.activeQuestions = state.activeQuestions.filter(
+          q => q.message_id !== action.payload.message_id
+        )
+        state.hiddenQuestions = state.hiddenQuestions.filter(
+          q => q.message_id !== action.payload.message_id
+        )
       })
       .addCase(fetchGivenQuestion.rejected, (state, action) => {
         state.isLoading = false
@@ -352,6 +384,7 @@ const chatbotApiSlice = createSlice({
         state.error = null
       })
       .addCase(refreshChat.fulfilled, (state, action) => {
+        console.log('[DEBUG] refreshChat.fulfilled:', action.payload)
         state.isLoading = false
         state.conversationId = action.payload.conversation_id
         state.imageUrl = action.payload.imageUrl
