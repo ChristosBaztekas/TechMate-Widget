@@ -200,14 +200,16 @@ export const postUserPhone = async (conversationId, data) => {
  * @param {string} message_id - The message ID from the question response
  * @param {number} feedback - 0 for dislike, 1 for like
  * @param {number} [feedback_option] - Optional feedback option ID from the dislike options
+ * @param {string} [feedback_description] - Optional feedback description text
  * @returns {Promise<Object|null>}
  */
-export const postFeedback = async (conversation_id, message_id, feedback, feedback_option) => {
+export const postFeedback = async (conversation_id, message_id, feedback, feedback_option, feedback_description) => {
   try {
     const response = await axiosInstance.post(`/${conversation_id}/feedback`, {
       message_id,
       feedback,
-      feedback_option
+      feedback_option,
+      feedback_description
     })
     return response.data
   } catch (error) {
