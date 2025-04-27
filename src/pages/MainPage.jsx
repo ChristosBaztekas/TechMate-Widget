@@ -180,7 +180,6 @@ export const MainPage = () => {
   useEffect(() => {
     // Only fetch if we don't have a conversation ID and we're not on a form page
     if (!conversationId && !location.pathname.includes('form')) {
-      console.log('Fetching initial questions...')
       dispatch(fetchAllQuestions())
     }
   }, [dispatch, conversationId, location.pathname])

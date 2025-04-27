@@ -37,9 +37,11 @@ const fetchQuestionsWithRetry = async (
 
   if (retryCount < maxRetries) {
     const nextDelay = delay * 1.5
-    console.warn(
-      `Retrying... Attempt ${retryCount + 1}/${maxRetries}, next try in ${nextDelay}ms`,
-    )
+    if (retryCount > 0) {
+      console.warn(
+        `Retrying... Attempt ${retryCount + 1}/${maxRetries}, next try in ${nextDelay}ms`,
+      )
+    }
 
     return new Promise((resolve) =>
       setTimeout(
@@ -117,7 +119,6 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
       full_name,
       phone,
     })
-    console.log('[API Response] User Info Form:', response.data)
     // Add response to chat history
     store.dispatch({
       type: 'chatbotApi/addFormResponse',
@@ -145,7 +146,6 @@ export const postUserEmail = async (conversation_id, email) => {
     const response = await axiosInstance.post(`/${conversation_id}/form?id=3`, {
       email,
     })
-    console.log('[API Response] Email Form:', response.data)
     // Add response to chat history
     store.dispatch({
       type: 'chatbotApi/addFormResponse',
@@ -174,7 +174,6 @@ export const postUserPhone = async (conversationId, data) => {
       `/${conversationId}/form?id=4`,
       data,
     )
-    console.log('[API Response] Phone Form:', response.data)
     // Add response to chat history
     store.dispatch({
       type: 'chatbotApi/addFormResponse',
