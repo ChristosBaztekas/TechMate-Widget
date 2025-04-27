@@ -17,10 +17,8 @@ export const fetchAllQuestions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const state = thunkAPI.getState()
-      console.log('[DEBUG] Current state:', state.chatbotApi)
       // Check if we already have a conversation ID and messages
       if (state.chatbotApi.conversationId && state.chatbotApi.messages.length > 0) {
-        console.log('[DEBUG] Using existing conversation state')
         return {
           questions: state.chatbotApi.messages[0]?.questions || [],
           imageUrl: state.chatbotApi.imageUrl,
@@ -31,7 +29,6 @@ export const fetchAllQuestions = createAsyncThunk(
       }
 
       const response = await getQuestions()
-      console.log('[DEBUG] fetchAllQuestions response:', response)
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -47,7 +44,6 @@ export const fetchAllQuestions = createAsyncThunk(
   },
 )
 
-
 /**
  * Fetch an answer for a user's input question.
  */
@@ -57,14 +53,12 @@ export const fetchUserQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
-      console.log('[DEBUG] fetchUserQuestion state:', { conversation_id, question })
       if (!conversation_id) {
         console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansUserQuestion(conversation_id, question)
-      console.log('[DEBUG] fetchUserQuestion response:', response)
       return response
     } catch (error) {
       console.error('[API ERROR] fetchUserQuestion:', error)
@@ -72,7 +66,6 @@ export const fetchUserQuestion = createAsyncThunk(
     }
   },
 )
-
 
 /**
  * Fetch an answer for a pre-defined question.
@@ -83,14 +76,12 @@ export const fetchGivenQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
-      console.log('[DEBUG] fetchGivenQuestion state:', { conversation_id, question })
       if (!conversation_id) {
         console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansGivenQuestion(conversation_id, question)
-      console.log('[DEBUG] fetchGivenQuestion response:', response)
       return response
     } catch (error) {
       console.error('[API ERROR] fetchGivenQuestion:', error)
@@ -104,7 +95,6 @@ export const refreshChat = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions()
-      console.log('[DEBUG] refreshChat response:', response)
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -123,8 +113,8 @@ export const refreshChat = createAsyncThunk(
 const initialState = {
   lastResponse: null,
   conversationId: '',
-  activeQuestions: [],
-  hiddenQuestions: [],
+  activeQuestions: [], // Array of { id, message_id, question }
+  hiddenQuestions: [], // Array of { id, message_id, question }
   notificationQuestions: [],
   messages: [
     {
@@ -192,10 +182,6 @@ const chatbotApiSlice = createSlice({
         source: 'chat',
       })
     },
-    /**
-     * resetMessages: Reinitializes chat messages so that the greeting always appears first.
-     * If a question is provided in the payload, it adds a message for that question after the greeting.
-     */
     resetMessages: (state, action) => {
       const greetingBody =
         state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY
@@ -219,9 +205,6 @@ const chatbotApiSlice = createSlice({
         })
       }
     },
-    /**
-     * restartChat: Reinitializes chat messages (chat source only) without affecting widget messages.
-     */
     restartChat: (state) => {
       const greetingBody =
         state.texts?.greetings?.chatBody?.greetingBody || DEFAULT_GREETING_BODY
@@ -235,7 +218,6 @@ const chatbotApiSlice = createSlice({
       })
     },
     navigateToForm: (state) => {
-      // Keep the conversation state but remove the form message
       if (state.messages.length > 0) {
         state.messages.pop()
       }
@@ -243,19 +225,16 @@ const chatbotApiSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch All Questions
       .addCase(fetchAllQuestions.pending, (state) => {
         state.isLoading = true
         state.error = null
       })
       .addCase(fetchAllQuestions.fulfilled, (state, action) => {
-        console.log('[DEBUG] fetchAllQuestions.fulfilled:', action.payload)
         state.isLoading = false
         state.conversationId = action.payload.conversation_id
         state.imageUrl = action.payload.imageUrl
         state.logoUrl = action.payload.logoUrl
         state.texts = action.payload.texts
-        // If no active question exists, update the greeting message with the full questions list.
         if (state.activeQuestions.length === 0) {
           if (
             state.messages.length > 0 &&
@@ -274,7 +253,6 @@ const chatbotApiSlice = createSlice({
             })
           }
         } else {
-          // If there is an active question, update only the greeting text.
           if (
             state.messages.length > 0 &&
             state.messages[0].source === 'chat'
@@ -304,11 +282,9 @@ const chatbotApiSlice = createSlice({
         state.isLoading = false
         state.error = action.payload
       })
-      // Fetch Answer for User Question
       .addCase(fetchUserQuestion.pending, (state, action) => {
         state.isLoading = true
         state.error = null
-        // Clear all active and hidden questions when a new user query is made
         state.activeQuestions = []
         state.hiddenQuestions = []
         state.messages.push({
@@ -320,7 +296,6 @@ const chatbotApiSlice = createSlice({
         })
       })
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
-        console.log('[DEBUG] fetchUserQuestion.fulfilled:', action.payload)
         state.isLoading = false
         state.lastResponse = action.payload
         if (action.payload.form_id) {
@@ -339,7 +314,6 @@ const chatbotApiSlice = createSlice({
         lastMessage.text = 'Failed to fetch response.'
         lastMessage.questions = []
       })
-      // Fetch Answer for Given Question
       .addCase(fetchGivenQuestion.pending, (state) => {
         state.isLoading = true
         state.error = null
@@ -351,7 +325,6 @@ const chatbotApiSlice = createSlice({
         })
       })
       .addCase(fetchGivenQuestion.fulfilled, (state, action) => {
-        console.log('[DEBUG] fetchGivenQuestion.fulfilled:', action.payload)
         state.isLoading = false
         state.lastResponse = action.payload
         if (action.payload.form_id) {
@@ -362,14 +335,6 @@ const chatbotApiSlice = createSlice({
         lastMessage.questions = action.payload.follow_up
         lastMessage.feedback = action.payload.feedback
         lastMessage.message_id = action.payload.message_id
-
-        // Clear active and hidden questions for this message_id
-        state.activeQuestions = state.activeQuestions.filter(
-          q => q.message_id !== action.payload.message_id
-        )
-        state.hiddenQuestions = state.hiddenQuestions.filter(
-          q => q.message_id !== action.payload.message_id
-        )
       })
       .addCase(fetchGivenQuestion.rejected, (state, action) => {
         state.isLoading = false
@@ -378,19 +343,16 @@ const chatbotApiSlice = createSlice({
         lastMessage.text = 'Failed to fetch response.'
         lastMessage.questions = []
       })
-      // Refresh Chat
       .addCase(refreshChat.pending, (state) => {
         state.isLoading = true
         state.error = null
       })
       .addCase(refreshChat.fulfilled, (state, action) => {
-        console.log('[DEBUG] refreshChat.fulfilled:', action.payload)
         state.isLoading = false
         state.conversationId = action.payload.conversation_id
         state.imageUrl = action.payload.imageUrl
         state.logoUrl = action.payload.logoUrl
         state.texts = action.payload.texts
-        // Reset all states
         state.activeQuestions = []
         state.hiddenQuestions = []
         state.messages = [{

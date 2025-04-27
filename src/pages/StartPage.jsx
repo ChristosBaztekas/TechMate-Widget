@@ -167,7 +167,7 @@ export const StartPage = () => {
                 <Response
                   text={message.text}
                   feedback={message.feedback}
-                  message_id={message.message_id}
+                  message_id={message.message_id || ''}
                 />
               )}
 
