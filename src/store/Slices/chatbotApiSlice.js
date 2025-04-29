@@ -132,6 +132,13 @@ const initialState = {
   imageUrl: '',
   logoUrl: '',
   texts: {},
+  feedback: {
+    likedMessages: {},
+    dislikedMessages: {},
+    selectedOptions: {},
+    showFeedbackOptions: {},
+    showDetailedFeedback: {},
+  }
 }
 
 const chatbotApiSlice = createSlice({
@@ -222,6 +229,33 @@ const chatbotApiSlice = createSlice({
         state.messages.pop()
       }
     },
+    setFeedback: (state, action) => {
+      const { message_id, type, value, option, showOptions, showDetailed } = action.payload
+
+      if (type === 'like') {
+        state.feedback.likedMessages[message_id] = value
+        if (value) {
+          state.feedback.dislikedMessages[message_id] = false
+        }
+      } else if (type === 'dislike') {
+        state.feedback.dislikedMessages[message_id] = value
+        if (value) {
+          state.feedback.likedMessages[message_id] = false
+        }
+      }
+
+      if (option !== undefined) {
+        state.feedback.selectedOptions[message_id] = option
+      }
+
+      if (showOptions !== undefined) {
+        state.feedback.showFeedbackOptions[message_id] = showOptions
+      }
+
+      if (showDetailed !== undefined) {
+        state.feedback.showDetailedFeedback[message_id] = showDetailed
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -306,6 +340,12 @@ const chatbotApiSlice = createSlice({
         lastMessage.questions = action.payload.follow_up
         lastMessage.feedback = action.payload.feedback
         lastMessage.message_id = action.payload.message_id
+
+        // Initialize feedback state for new message
+        if (action.payload.message_id) {
+          state.feedback.showFeedbackOptions[action.payload.message_id] = true
+          state.feedback.showDetailedFeedback[action.payload.message_id] = false
+        }
       })
       .addCase(fetchUserQuestion.rejected, (state, action) => {
         state.isLoading = false
@@ -384,6 +424,7 @@ export const {
   restartChat,
   navigateToForm,
   addFormResponse,
+  setFeedback,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer

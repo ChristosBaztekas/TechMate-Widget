@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import ChatLogo from '../assets/images/bot.webp'
 import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
 import { postFeedback } from '@/API/techMateApi'
+import { setFeedback } from '@/store/Slices/chatbotApiSlice'
 
 const ThinkingDots = () => {
   return (
@@ -16,14 +17,18 @@ const ThinkingDots = () => {
 }
 
 const Response = ({ text, feedback, message_id }) => {
+  const dispatch = useDispatch()
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
   const conversationId = useSelector((state) => state.chatbotApi.conversationId)
-  const [isLiked, setIsLiked] = useState(false)
-  const [showFeedbackOptions, setShowFeedbackOptions] = useState(true)
+  const feedbackState = useSelector((state) => state.chatbotApi.feedback)
+
   const [isVisible, setIsVisible] = useState(false)
-  const [showDetailedFeedback, setShowDetailedFeedback] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
-  const [isDisliked, setIsDisliked] = useState(false)
+
+  const isLiked = feedbackState.likedMessages[message_id] || false
+  const isDisliked = feedbackState.dislikedMessages[message_id] || false
+  const showFeedbackOptions = feedbackState.showFeedbackOptions[message_id] ?? true
+  const showDetailedFeedback = feedbackState.showDetailedFeedback[message_id] || false
 
   // Get feedback options from API response
   const detailedFeedbackOptions = feedback?.dislike?.map(item => item.value) || []
@@ -48,41 +53,63 @@ const Response = ({ text, feedback, message_id }) => {
     if (selectedOption) {
       timer = setTimeout(() => {
         setSelectedOption(null)
-        setShowDetailedFeedback(false)
+        dispatch(setFeedback({ message_id, showDetailed: false }))
       }, 4000)
     }
     return () => {
       if (timer) clearTimeout(timer)
     }
-  }, [selectedOption])
+  }, [selectedOption, message_id, dispatch])
 
   const handleFeedback = async (type) => {
     if (type === 'helpful') {
       if (isLiked) {
         // If already liked, reset the feedback
-        setIsLiked(false)
-        setShowFeedbackOptions(true)
+        dispatch(setFeedback({
+          message_id,
+          type: 'like',
+          value: false,
+          showOptions: true
+        }))
       } else {
         // If not liked, set like and reset dislike
-        setIsLiked(true)
-        setIsDisliked(false)
-        setShowFeedbackOptions(false)
-        setShowDetailedFeedback(false)
+        dispatch(setFeedback({
+          message_id,
+          type: 'like',
+          value: true,
+          showOptions: false,
+          showDetailed: false
+        }))
         // Post like feedback
         await postFeedback(conversationId, message_id, 1)
       }
     } else {
       if (isDisliked) {
         // If already disliked, reset the feedback
-        setIsDisliked(false)
-        setShowFeedbackOptions(true)
-        setShowDetailedFeedback(false)
+        dispatch(setFeedback({
+          message_id,
+          type: 'dislike',
+          value: false,
+          showOptions: true,
+          showDetailed: false
+        }))
       } else {
         // If not disliked, set dislike and reset like
-        setIsDisliked(true)
-        setIsLiked(false)
-        setShowDetailedFeedback(true)
-        setShowFeedbackOptions(false)
+        dispatch(setFeedback({
+          message_id,
+          type: 'dislike',
+          value: true,
+          showOptions: false
+        }))
+        // Post dislike feedback immediately
+        await postFeedback(conversationId, message_id, 0)
+        // Show detailed feedback if there are options
+        if (detailedFeedbackOptions && detailedFeedbackOptions.length > 0) {
+          dispatch(setFeedback({
+            message_id,
+            showDetailed: true
+          }))
+        }
       }
     }
   }
@@ -94,11 +121,20 @@ const Response = ({ text, feedback, message_id }) => {
     if (feedbackOption) {
       // Post dislike feedback with the specific option
       await postFeedback(conversationId, message_id, 0, feedbackOption.id)
+      dispatch(setFeedback({
+        message_id,
+        type: 'dislike',
+        value: true,
+        option
+      }))
     }
   }
 
   const toggleDetailedFeedback = () => {
-    setShowDetailedFeedback(!showDetailedFeedback)
+    dispatch(setFeedback({
+      message_id,
+      showDetailed: !showDetailedFeedback
+    }))
   }
 
   return (
