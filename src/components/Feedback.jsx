@@ -56,31 +56,38 @@ const Feedback = () => {
                 setIsLiked(true)
                 setIsDisliked(false)
                 setShowFeedbackOptions(false)
+                // Send feedback immediately when thumbs up is clicked
+                await postFeedback(conversationId, null, 1, null, '')
             }
         } else {
             if (!isDisliked && !isLiked) {
                 setIsDisliked(true)
                 setIsLiked(false)
                 setShowFeedbackOptions(false)
+                // Send feedback immediately when thumbs down is clicked
+                await postFeedback(conversationId, null, 0, null, '')
             }
         }
     }
 
     const handleSubmitFeedback = async () => {
         if (feedbackDescription.trim()) {
-            // Send feedback with description
+            // Only send the comment if there is one
             await postFeedback(conversationId, null, isLiked ? 1 : 0, null, feedbackDescription)
             setFeedbackDescription('')
             // Navigate after sending feedback
             dispatch(setChatState(false))
             navigate('/')
+        } else {
+            // If no comment, just navigate
+            dispatch(setChatState(false))
+            navigate('/')
         }
     }
 
-    // Auto-send feedback when navigating away
     const handleNavigation = async () => {
-        if (isLiked || isDisliked) {
-            // Send feedback with or without description
+        // If there's a comment and feedback was given (thumbs up/down), send it before navigating
+        if (feedbackDescription.trim() && (isLiked || isDisliked)) {
             await postFeedback(conversationId, null, isLiked ? 1 : 0, null, feedbackDescription)
             setFeedbackDescription('')
         }
