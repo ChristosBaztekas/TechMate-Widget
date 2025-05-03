@@ -31,7 +31,8 @@ const Response = ({ text, feedback, message_id }) => {
   const showDetailedFeedback = feedbackState.showDetailedFeedback[message_id] || false
 
   // Get feedback options from API response
-  const detailedFeedbackOptions = feedback?.dislike?.map(item => item.value) || []
+  const detailedLikeOptions = feedback?.like?.map(item => item.value) || []
+  const detailedDislikeOptions = feedback?.dislike?.map(item => item.value) || []
 
   useEffect(() => {
     let timer
@@ -69,7 +70,8 @@ const Response = ({ text, feedback, message_id }) => {
           message_id,
           type: 'like',
           value: false,
-          showOptions: true
+          showOptions: true,
+          showDetailed: false
         }))
       } else {
         // If not liked, set like and reset dislike
@@ -77,11 +79,17 @@ const Response = ({ text, feedback, message_id }) => {
           message_id,
           type: 'like',
           value: true,
-          showOptions: false,
-          showDetailed: false
+          showOptions: false
         }))
-        // Post like feedback
+        // Post like feedback immediately
         await postFeedback(conversationId, message_id, 1)
+        // Show detailed feedback if there are options
+        if (detailedLikeOptions && detailedLikeOptions.length > 0) {
+          dispatch(setFeedback({
+            message_id,
+            showDetailed: true
+          }))
+        }
       }
     } else {
       if (isDisliked) {
@@ -104,7 +112,7 @@ const Response = ({ text, feedback, message_id }) => {
         // Post dislike feedback immediately
         await postFeedback(conversationId, message_id, 0)
         // Show detailed feedback if there are options
-        if (detailedFeedbackOptions && detailedFeedbackOptions.length > 0) {
+        if (detailedDislikeOptions && detailedDislikeOptions.length > 0) {
           dispatch(setFeedback({
             message_id,
             showDetailed: true
@@ -114,16 +122,19 @@ const Response = ({ text, feedback, message_id }) => {
     }
   }
 
-  const handleDetailedFeedback = async (option) => {
+  const handleDetailedFeedback = async (option, type) => {
     setSelectedOption(option)
     // Find the feedback option ID from the API response
-    const feedbackOption = feedback.dislike.find(item => item.value === option)
+    const feedbackOption = type === 'like' 
+      ? feedback.like.find(item => item.value === option)
+      : feedback.dislike.find(item => item.value === option)
+      
     if (feedbackOption) {
-      // Post dislike feedback with the specific option
-      await postFeedback(conversationId, message_id, 0, feedbackOption.id)
+      // Post feedback with the specific option
+      await postFeedback(conversationId, message_id, type === 'like' ? 1 : 0, feedbackOption.id)
       dispatch(setFeedback({
         message_id,
-        type: 'dislike',
+        type: type,
         value: true,
         option
       }))
@@ -166,7 +177,43 @@ const Response = ({ text, feedback, message_id }) => {
         {/* Feedback Section - Only render if message is complete and feedback is enabled */}
         {feedback && (
           <div className={`flex items-center gap-2 transition-all duration-300 ${isVisible ? 'opacity-100 mt-2' : 'opacity-0'}`}>
-            {isDisliked ? (
+            {isLiked ? (
+              <div className="flex flex-col gap-2 w-full animate-scaleIn">
+                <div className="text-primaryColor">
+                  <LikeIcon />
+                </div>
+                {showDetailedFeedback && (
+                  <div className="flex flex-wrap gap-2 animate-fadeInUp">
+                    {selectedOption ? (
+                      <button
+                        className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
+                      >
+                        {selectedOption}
+                      </button>
+                    ) : (
+                      <>
+                        {detailedLikeOptions.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleDetailedFeedback(option, 'like')}
+                            className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                        <button
+                          onClick={toggleDetailedFeedback}
+                          className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
+                          aria-label="Close feedback options"
+                        >
+                          <CloseFeedbackIcon />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : isDisliked ? (
               <div className="flex flex-col gap-2 w-full animate-scaleIn">
                 <div className="text-primaryColor">
                   <DislikeIcon />
@@ -181,10 +228,10 @@ const Response = ({ text, feedback, message_id }) => {
                       </button>
                     ) : (
                       <>
-                        {detailedFeedbackOptions.map((option) => (
+                        {detailedDislikeOptions.map((option) => (
                           <button
                             key={option}
-                            onClick={() => handleDetailedFeedback(option)}
+                            onClick={() => handleDetailedFeedback(option, 'dislike')}
                             className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
                           >
                             {option}
@@ -218,10 +265,6 @@ const Response = ({ text, feedback, message_id }) => {
                   <DislikeIcon />
                 </button>
               </>
-            ) : isLiked ? (
-              <div className="text-primaryColor animate-scaleIn">
-                <LikeIcon />
-              </div>
             ) : null}
           </div>
         )}
@@ -234,7 +277,10 @@ Response.propTypes = {
   text: PropTypes.string.isRequired,
   message_id: PropTypes.string.isRequired,
   feedback: PropTypes.shape({
-    like: PropTypes.array,
+    like: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      value: PropTypes.string
+    })),
     dislike: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number,
       value: PropTypes.string
