@@ -37,29 +37,8 @@ export const PhoneLayout = ({ icon }) => {
   // Prioritize API icon, fallback to prop icon
   const displayedIcon = formIcon || icon
 
-  const validatePhone = (phone) => {
-    const phoneRegex = /^[0-9]{10}$/
-    return phoneRegex.test(phone)
-  }
-
   const handleSend = async () => {
-    if (!name) {
-      setNameError('Please enter your name')
-      return
-    }
-
-    if (!phone) {
-      setPhoneError('Please enter your phone number')
-      return
-    }
-
-    if (!validatePhone(phone)) {
-      setPhoneError('Wrong answer! Please type numbers in form')
-      return
-    }
-
     if (isSubmitting) return
-
     try {
       setIsSubmitting(true)
       setNameError('')
@@ -69,8 +48,7 @@ export const PhoneLayout = ({ icon }) => {
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType: 'form-a' }, replace: true })
     } catch (error) {
-      console.error('Error while posting user info', error)
-      setPhoneError('An error occurred. Please try again.')
+      setPhoneError(error.response?.data?.msg)
       setIsSubmitting(false)
     }
   }

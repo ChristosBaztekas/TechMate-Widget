@@ -130,7 +130,7 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
     return response.data
   } catch (error) {
     console.error('Error posting user info:', error)
-    return null
+    throw error
   }
 }
 
@@ -157,7 +157,7 @@ export const postUserEmail = async (conversation_id, email) => {
     return response.data
   } catch (error) {
     console.error('Error posting user email:', error)
-    return null
+    throw error
   }
 }
 

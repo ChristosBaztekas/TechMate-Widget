@@ -61,26 +61,7 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
     },
   }
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
-  const validatePhone = (phone) => {
-    const phoneRegex = /^[0-9]{10}$/
-    return phoneRegex.test(phone)
-  }
-
   const handleSendEmail = async () => {
-    if (!email) {
-      setEmailError('Please enter your email address')
-      return
-    }
-
-    if (!validateEmail(email)) {
-      setEmailError('Wrong answer! Please type text in form ******@email.com')
-      return
-    }
 
     try {
       setIsSubmitting(true)
@@ -93,23 +74,13 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
         setStep(2)
       }
     } catch (error) {
-      console.error('Error in handleSendEmail:', error)
-      setEmailError('An error occurred. Please try again.')
+      setEmailError(error.response?.data?.msg)
     } finally {
       setIsSubmitting(false)
     }
   }
 
   const handleSendPhone = async () => {
-    if (!phone) {
-      setPhoneError('Please enter your phone number')
-      return
-    }
-
-    if (!validatePhone(phone)) {
-      setPhoneError('Wrong answer! Please type numbers in form')
-      return
-    }
 
     if (!localFormId) return
 
@@ -124,8 +95,7 @@ export const EmailLayout = ({ formType = 'form-c' }) => {
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType }, replace: true })
     } catch (error) {
-      console.error('Error in handleSendPhone:', error)
-      setPhoneError('An error occurred. Please try again.')
+      setPhoneError(error.response?.data?.msg)
     } finally {
       setIsSubmitting(false)
     }

@@ -29,22 +29,7 @@ export const NewsLetterPage = () => {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   }
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
   const handleSend = async () => {
-    if (!email) {
-      setError('Please enter your email address')
-      return
-    }
-
-    if (!validateEmail(email)) {
-      setError('Wrong answer! Please type text in form ******@email.com')
-      return
-    }
-
     if (isSubmitting) return
 
     try {
@@ -55,8 +40,7 @@ export const NewsLetterPage = () => {
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType: 'form-b' }, replace: true })
     } catch (error) {
-      console.error('Error while posting user email', error)
-      setError('An error occurred. Please try again.')
+      setError(error.response?.data?.msg)
       setIsSubmitting(false)
     }
   }
@@ -143,4 +127,3 @@ export const NewsLetterPage = () => {
     </section>
   )
 }
-

@@ -125,10 +125,10 @@ const Response = ({ text, feedback, message_id }) => {
   const handleDetailedFeedback = async (option, type) => {
     setSelectedOption(option)
     // Find the feedback option ID from the API response
-    const feedbackOption = type === 'like' 
+    const feedbackOption = type === 'like'
       ? feedback.like.find(item => item.value === option)
       : feedback.dislike.find(item => item.value === option)
-      
+
     if (feedbackOption) {
       // Post feedback with the specific option
       await postFeedback(conversationId, message_id, type === 'like' ? 1 : 0, feedbackOption.id)
