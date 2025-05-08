@@ -30,9 +30,9 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
       )
 
       if (!isQuestionActive) {
-        // Remove any previous active questions with the same message_id
+        // Remove any previous active questions with the same message_id and question id
         const filteredActiveQuestions = activeQuestions.filter(
-          q => q.message_id !== message_id
+          q => !(q.message_id === message_id && q.id === questionObj.id)
         )
         dispatch(setActiveQuestions([...filteredActiveQuestions, {
           id: questionObj.id,
@@ -46,8 +46,8 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
         .filter((q) => q.id !== questionObj.id)
         .map((q) => ({ id: q.id, message_id, question: q.question }))
 
-      // Remove any previous hidden questions with the same message_id
-      const filteredHiddenQuestions = hiddenQuestions.filter(h => h.message_id !== message_id)
+      // Remove any previous hidden questions with the same message_id and question id
+      const filteredHiddenQuestions = hiddenQuestions.filter(h => !(h.message_id === message_id && h.id === questionObj.id))
       const newHidden = [...filteredHiddenQuestions, ...currentHidden]
 
       dispatch(setHiddenQuestions(newHidden))
@@ -60,6 +60,7 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
     return null
   }
 
+  // Maintain the state of active and hidden questions when user types in chat
   const displayedQuestions = questionsArr.filter(
     (q) => !hiddenQuestions.some(h => h.id === q.id && h.message_id === message_id)
   )

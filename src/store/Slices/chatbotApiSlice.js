@@ -17,6 +17,7 @@ export const fetchAllQuestions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const state = thunkAPI.getState()
+
       // Check if we already have a conversation ID and messages
       if (state.chatbotApi.conversationId && state.chatbotApi.messages.length > 0) {
         return {
@@ -38,7 +39,6 @@ export const fetchAllQuestions = createAsyncThunk(
         texts,
       }
     } catch (error) {
-      console.error('[API ERROR] fetchAllQuestions:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -53,15 +53,14 @@ export const fetchUserQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
+
       if (!conversation_id) {
-        console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansUserQuestion(conversation_id, question)
       return response
     } catch (error) {
-      console.error('[API ERROR] fetchUserQuestion:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -76,15 +75,14 @@ export const fetchGivenQuestion = createAsyncThunk(
     try {
       const state = thunkAPI.getState()
       const conversation_id = state.chatbotApi.conversationId
+
       if (!conversation_id) {
-        console.warn('[API WARN] No conversation_id found')
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
       const response = await ansGivenQuestion(conversation_id, question)
       return response
     } catch (error) {
-      console.error('[API ERROR] fetchGivenQuestion:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -104,7 +102,6 @@ export const refreshChat = createAsyncThunk(
         texts,
       }
     } catch (error) {
-      console.error('[API ERROR] refreshChat:', error)
       return thunkAPI.rejectWithValue(error)
     }
   },
@@ -138,7 +135,8 @@ const initialState = {
     selectedOptions: {},
     showFeedbackOptions: {},
     showDetailedFeedback: {},
-  }
+  },
+  initialQuestionsHidden: false // Flag to track initial questions visibility
 }
 
 const chatbotApiSlice = createSlice({
@@ -161,7 +159,6 @@ const chatbotApiSlice = createSlice({
       state.questionId = action.payload
     },
     setActiveQuestions: (state, action) => {
-      // Ensure each question has id, message_id, and question text
       state.activeQuestions = action.payload.map(q => ({
         id: q.id,
         message_id: q.message_id,
@@ -169,7 +166,6 @@ const chatbotApiSlice = createSlice({
       }))
     },
     setHiddenQuestions: (state, action) => {
-      // Ensure each hidden question has id, message_id, and question text
       state.hiddenQuestions = action.payload.map(q => ({
         id: q.id,
         message_id: q.message_id,
@@ -319,8 +315,22 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.pending, (state, action) => {
         state.isLoading = true
         state.error = null
-        state.activeQuestions = []
-        state.hiddenQuestions = []
+        // Ensure questions for which a user has typed an answer remain hidden
+        const initialMessageId = state.messages[0]?.message_id;
+        if (!state.initialQuestionsHidden) {
+          const typedQuestions = state.messages[0].questions.filter(q => !state.activeQuestions.some(aq => aq.id === q.id && aq.message_id === initialMessageId));
+          state.hiddenQuestions = [
+            ...state.hiddenQuestions,
+            ...typedQuestions.map(q => ({
+              id: q.id,
+              message_id: initialMessageId || 'initial', // Use 'initial' as a placeholder for message_id
+              question: q.question
+            }))
+          ];
+          // Remove questions from the initial message to prevent reappearance
+          state.messages[0].questions = [];
+          state.initialQuestionsHidden = true; // Set flag to true after first interaction
+        }
         state.messages.push({
           id: state.messages.length + 1,
           text: '...',
@@ -341,7 +351,6 @@ const chatbotApiSlice = createSlice({
         lastMessage.feedback = action.payload.feedback
         lastMessage.message_id = action.payload.message_id
 
-        // Initialize feedback state for new message
         if (action.payload.message_id) {
           state.feedback.showFeedbackOptions[action.payload.message_id] = true
           state.feedback.showDetailedFeedback[action.payload.message_id] = false
