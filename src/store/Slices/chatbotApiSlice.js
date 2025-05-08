@@ -315,15 +315,14 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.pending, (state, action) => {
         state.isLoading = true
         state.error = null
-        // Ensure questions for which a user has typed an answer remain hidden
-        const initialMessageId = state.messages[0]?.message_id;
+        // Ensure initial questions remain hidden
         if (!state.initialQuestionsHidden) {
-          const typedQuestions = state.messages[0].questions.filter(q => !state.activeQuestions.some(aq => aq.id === q.id && aq.message_id === initialMessageId));
+          const initialQuestions = state.messages[0].questions;
           state.hiddenQuestions = [
             ...state.hiddenQuestions,
-            ...typedQuestions.map(q => ({
+            ...initialQuestions.map(q => ({
               id: q.id,
-              message_id: initialMessageId || 'initial', // Use 'initial' as a placeholder for message_id
+              message_id: 'initial', // Use 'initial' as a placeholder for message_id
               question: q.question
             }))
           ];
