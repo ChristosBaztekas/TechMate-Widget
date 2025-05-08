@@ -48,8 +48,14 @@ export const PhoneLayout = ({ icon }) => {
       dispatch(setFormSubmitted(true))
       navigate('/submitted', { state: { formType: 'form-a' }, replace: true })
     } catch (error) {
-      setPhoneError(error.response?.data?.msg)
-      setIsSubmitting(false)
+      const fieldError = error.response?.data?.field_error;
+      const errorMsg = error.response?.data?.msg;
+      if (fieldError === 'input1') {
+        setNameError(errorMsg);
+      } else if (fieldError === 'input2') {
+        setPhoneError(errorMsg);
+      }
+      setIsSubmitting(false);
     }
   }
 
