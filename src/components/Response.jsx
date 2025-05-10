@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ChatLogo from '../assets/images/bot.webp'
 import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
 import { postFeedback } from '@/API/techMateApi'
-import { setFeedback } from '@/store/Slices/chatbotApiSlice'
+import { setFeedback, markMessageAnimated } from '@/store/Slices/chatbotApiSlice'
 
 const ThinkingDots = () => {
   return (
@@ -16,11 +16,12 @@ const ThinkingDots = () => {
   )
 }
 
-const Response = ({ text, feedback, message_id }) => {
+const Response = ({ text, feedback, message_id, isLastMessage }) => {
   const dispatch = useDispatch()
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
   const conversationId = useSelector((state) => state.chatbotApi.conversationId)
   const feedbackState = useSelector((state) => state.chatbotApi.feedback)
+  const animatedMessages = useSelector((state) => state.chatbotApi.animatedMessages)
 
   const [isVisible, setIsVisible] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
@@ -31,6 +32,7 @@ const Response = ({ text, feedback, message_id }) => {
   const isDisliked = feedbackState.dislikedMessages[message_id] || false
   const showFeedbackOptions = feedbackState.showFeedbackOptions[message_id] ?? true
   const showDetailedFeedback = feedbackState.showDetailedFeedback[message_id] || false
+  const hasBeenAnimated = animatedMessages[message_id] || false
 
   // Get feedback options from API response
   const detailedLikeOptions = feedback?.like?.map(item => item.value) || []
@@ -43,23 +45,31 @@ const Response = ({ text, feedback, message_id }) => {
       return
     }
 
-    setIsTyping(true)
-    let currentIndex = 0
-    const textLength = text.length
-    const typingSpeed = 20 // milliseconds per character
+    // Only apply typing animation to the last message and if it hasn't been animated before
+    if (isLastMessage && !hasBeenAnimated) {
+      setIsTyping(true)
+      let currentIndex = 0
+      const textLength = text.length
+      const typingSpeed = 20 // milliseconds per character
 
-    const typingInterval = setInterval(() => {
-      if (currentIndex < textLength) {
-        setDisplayedText(text.slice(0, currentIndex + 1))
-        currentIndex++
-      } else {
-        clearInterval(typingInterval)
-        setIsTyping(false)
-      }
-    }, typingSpeed)
+      const typingInterval = setInterval(() => {
+        if (currentIndex < textLength) {
+          setDisplayedText(text.slice(0, currentIndex + 1))
+          currentIndex++
+        } else {
+          clearInterval(typingInterval)
+          setIsTyping(false)
+          // Mark this message as animated
+          dispatch(markMessageAnimated(message_id))
+        }
+      }, typingSpeed)
 
-    return () => clearInterval(typingInterval)
-  }, [text])
+      return () => clearInterval(typingInterval)
+    } else {
+      // For non-last messages or already animated messages, display text immediately
+      setDisplayedText(text)
+    }
+  }, [text, isLastMessage, hasBeenAnimated, message_id, dispatch])
 
   useEffect(() => {
     let timer
@@ -319,7 +329,8 @@ Response.propTypes = {
       id: PropTypes.number,
       value: PropTypes.string
     }))
-  })
+  }),
+  isLastMessage: PropTypes.bool
 }
 
 export default Response

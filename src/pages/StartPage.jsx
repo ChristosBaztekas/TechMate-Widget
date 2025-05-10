@@ -188,6 +188,7 @@ export const StartPage = () => {
                   text={message.text}
                   feedback={message.feedback}
                   message_id={message.message_id || ''}
+                  isLastMessage={index === messages.length - 1}
                 />
               )}
 

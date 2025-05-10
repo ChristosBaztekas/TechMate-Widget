@@ -138,6 +138,7 @@ const initialState = {
   },
   initialQuestionsHidden: false, // Flag to track initial questions visibility
   streamingMessage: null, // Store the current streaming message
+  animatedMessages: {}, // Track which messages have been animated
 }
 
 const chatbotApiSlice = createSlice({
@@ -263,6 +264,10 @@ const chatbotApiSlice = createSlice({
         if (feedback) lastMessage.feedback = feedback;
         if (message_id) lastMessage.message_id = message_id;
       }
+    },
+    markMessageAnimated: (state, action) => {
+      const messageId = action.payload;
+      state.animatedMessages[messageId] = true;
     },
   },
   extraReducers: (builder) => {
@@ -446,6 +451,7 @@ export const {
   addFormResponse,
   setFeedback,
   updateStreamingMessage,
+  markMessageAnimated,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer
