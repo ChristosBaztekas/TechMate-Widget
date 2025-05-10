@@ -212,7 +212,7 @@ const Response = ({ text, feedback, message_id, isLastMessage, questions }) => {
             <ThinkingDots />
           ) : (
             <div
-              className="transition-all duration-300 ease-in w-full"
+              className="transition-all duration-300 ease-in w-full prose prose-sm prose-ul:list-disc prose-ul:pl-4 prose-li:my-1 prose-p:my-1"
               style={{
                 opacity: displayedText ? 1 : 0,
                 transform: `translateY(${displayedText ? '0' : '10px'})`,

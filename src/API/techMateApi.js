@@ -76,63 +76,23 @@ export const getQuestions = () => {
  * @returns {Promise<Object|null>}
  */
 export const ansUserQuestion = async (conversation_id, question, onChunk) => {
+  if (!conversation_id) {
+    console.error('No conversation ID provided')
+    return null
+  }
+
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/${conversation_id}/question`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ question }),
+    const response = await axiosInstance.post(`/${conversation_id}/question`, {
+      question
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // Handle the response data
+    if (response.data) {
+      if (onChunk) onChunk(response.data);
+      return response.data;
     }
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let finalResponse = null;
-
-    while (true) {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        // Process any remaining buffer
-        if (buffer) {
-          try {
-            const lastChunk = JSON.parse(buffer);
-            finalResponse = lastChunk;
-            if (onChunk) onChunk(lastChunk);
-          } catch (e) {
-            console.error('Error parsing final chunk:', e);
-          }
-        }
-        break;
-      }
-
-      // Decode the chunk and add to buffer
-      buffer += decoder.decode(value, { stream: true });
-
-      // Try to parse complete JSON objects from the buffer
-      let newlineIndex;
-      while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
-        const line = buffer.slice(0, newlineIndex);
-        buffer = buffer.slice(newlineIndex + 1);
-
-        if (line.trim()) {
-          try {
-            const chunk = JSON.parse(line);
-            if (onChunk) onChunk(chunk);
-            finalResponse = chunk;
-          } catch (e) {
-            console.error('Error parsing chunk:', e);
-          }
-        }
-      }
-    }
-
-    return finalResponse;
+    return null;
   } catch (error) {
     console.error('Error sending user question:', error);
     return null;
@@ -144,17 +104,25 @@ export const ansUserQuestion = async (conversation_id, question, onChunk) => {
  *
  * @param {string} conversation_id - The conversation ID.
  * @param {string} question_id - The question ID.
+ * @param {function} onChunk - Callback function to handle streaming chunks.
  * @returns {Promise<Object|null>}
  */
-export const ansGivenQuestion = async (conversation_id, question_id) => {
+export const ansGivenQuestion = async (conversation_id, question_id, onChunk) => {
   try {
     const response = await axiosInstance.post(`/${conversation_id}/question`, {
-      question_id,
-    })
-    return response.data
+      question_id
+    });
+
+    // Handle the response data
+    if (response.data) {
+      if (onChunk) onChunk(response.data);
+      return response.data;
+    }
+
+    return null;
   } catch (error) {
-    console.error('Error fetching answer for question ID:', error)
-    return null
+    console.error('Error fetching answer for question ID:', error);
+    return null;
   }
 }
 

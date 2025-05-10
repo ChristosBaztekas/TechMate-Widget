@@ -28,7 +28,9 @@ export const Widget = () => {
   const handleQuestionClick = (item) => {
     setActiveQuestion(item.id)
     dispatch(resetMessages({ question: item }))
-    dispatch(fetchGivenQuestion(item.id))
+    setTimeout(() => {
+      dispatch(fetchGivenQuestion(item.id))
+    }, 100)
     dispatch(setNotificationState(true))
     dispatch(setChatState(false))
     sendDimensionsToParent('33%', '70%', false)

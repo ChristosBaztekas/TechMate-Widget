@@ -23,6 +23,9 @@ export const StartPage = () => {
   const [userInput, setUserInput] = useState('')
   const [isSingleLine, setIsSingleLine] = useState(true)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true)
+  const chatContainerRef = useRef(null)
+  const scrollTimeoutRef = useRef(null)
 
   const textareaRef = useRef(null)
 
@@ -37,8 +40,53 @@ export const StartPage = () => {
     'Πληκτρολογήστε την ερώτησή σας...'
   const sendButtonText = texts?.greetings?.chatBody?.sendQuestionText || 'Send'
 
+  // Handle scroll events
+  const handleScroll = () => {
+    if (chatContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+      // If user has scrolled up more than 100px from bottom, disable auto-scroll
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100
+      setShouldAutoScroll(isNearBottom)
+    }
+  }
+
+  // Function to scroll to bottom
+  const scrollToBottom = () => {
+    if (chatContainerRef.current && shouldAutoScroll) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }
+
+  // Auto scroll to bottom when messages change
+  useEffect(() => {
+    // Clear any existing timeout
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current)
+    }
+
+    // Scroll immediately
+    scrollToBottom()
+
+    // Set up a continuous scroll check for streaming responses
+    const startContinuousScroll = () => {
+      scrollToBottom()
+      scrollTimeoutRef.current = setTimeout(startContinuousScroll, 100)
+    }
+
+    startContinuousScroll()
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+    }
+  }, [messages, shouldAutoScroll])
+
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId || isNavigating) return
+
+    // Enable auto-scroll when user sends a new message
+    setShouldAutoScroll(true)
 
     // Add the user's message to the chat
     dispatch(fetchUserQuestion(userInput.trim()))
@@ -54,6 +102,8 @@ export const StartPage = () => {
           message_id: chunk.message_id
         }
       });
+      // Scroll to bottom on each chunk update if auto-scroll is enabled
+      scrollToBottom()
     };
 
     try {
@@ -87,13 +137,6 @@ export const StartPage = () => {
       setIsSingleLine(true)
     }
   }
-
-  useEffect(() => {
-    const chatSection = document.querySelector('.overflow-scroll')
-    if (chatSection) {
-      chatSection.scrollTop = chatSection.scrollHeight
-    }
-  }, [messages])
 
   useEffect(() => {
     if (messages.length > 0 && !isNavigating) {
@@ -165,7 +208,11 @@ export const StartPage = () => {
       </header>
 
       {/* Messages */}
-      <div className="flex flex-grow flex-col gap-5 overflow-scroll overflow-x-hidden px-4 py-4 sm:px-8 sm:pt-8 border-x-2 border-primaryColor">
+      <div
+        ref={chatContainerRef}
+        onScroll={handleScroll}
+        className="flex flex-grow flex-col gap-5 overflow-y-auto overflow-x-hidden px-4 py-4 sm:px-8 sm:pt-8 border-x-2 border-primaryColor scroll-smooth"
+      >
         {messages.map((message, index) => {
           if (message.text.startsWith('form')) {
             const lastChar = message.text.slice(-1)

@@ -38,7 +38,9 @@ export const Notifications = () => {
               dispatch(restartChat())
               dispatch(setActiveQuestions([]))
               dispatch(resetMessages({ question: item }))
-              dispatch(fetchGivenQuestion(item.id))
+              setTimeout(() => {
+                dispatch(fetchGivenQuestion(item.id))
+              }, 100)
               sendDimensionsToParent('33%', '70%', false)
             }}
           >

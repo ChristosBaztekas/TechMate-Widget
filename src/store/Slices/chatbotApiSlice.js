@@ -59,6 +59,9 @@ export const fetchUserQuestion = createAsyncThunk(
       }
 
       const response = await ansUserQuestion(conversation_id, question)
+      if (!response) {
+        return thunkAPI.rejectWithValue('Failed to get response')
+      }
       return response
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
@@ -203,9 +206,8 @@ const chatbotApiSlice = createSlice({
         state.messages.push({
           id: 2,
           text: '',
-          questions: [action.payload.question],
-          query: '',
-          isQuestion: true,
+          questions: [],
+          query: action.payload.question.question,
           source: 'chat',
         })
       }
@@ -358,26 +360,30 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
         state.isLoading = false
         state.lastResponse = action.payload
-        if (action.payload.form_id) {
+        if (action.payload?.form_id) {
           state.formID = action.payload.form_id
         }
         const lastMessage = state.messages[state.messages.length - 1]
-        lastMessage.text = action.payload.answer
-        lastMessage.questions = action.payload.follow_up
-        lastMessage.feedback = action.payload.feedback
-        lastMessage.message_id = action.payload.message_id
+        if (lastMessage) {
+          lastMessage.text = action.payload?.answer || 'Failed to get response'
+          lastMessage.questions = action.payload?.follow_up || []
+          lastMessage.feedback = action.payload?.feedback || null
+          lastMessage.message_id = action.payload?.message_id || ''
 
-        if (action.payload.message_id) {
-          state.feedback.showFeedbackOptions[action.payload.message_id] = true
-          state.feedback.showDetailedFeedback[action.payload.message_id] = false
+          if (action.payload?.message_id) {
+            state.feedback.showFeedbackOptions[action.payload.message_id] = true
+            state.feedback.showDetailedFeedback[action.payload.message_id] = false
+          }
         }
       })
       .addCase(fetchUserQuestion.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload
         const lastMessage = state.messages[state.messages.length - 1]
-        lastMessage.text = 'Failed to fetch response.'
-        lastMessage.questions = []
+        if (lastMessage) {
+          lastMessage.text = 'Failed to fetch response. Please try again.'
+          lastMessage.questions = []
+        }
       })
       .addCase(fetchGivenQuestion.pending, (state) => {
         state.isLoading = true
