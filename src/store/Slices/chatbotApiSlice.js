@@ -136,7 +136,8 @@ const initialState = {
     showFeedbackOptions: {},
     showDetailedFeedback: {},
   },
-  initialQuestionsHidden: false // Flag to track initial questions visibility
+  initialQuestionsHidden: false, // Flag to track initial questions visibility
+  streamingMessage: null, // Store the current streaming message
 }
 
 const chatbotApiSlice = createSlice({
@@ -250,6 +251,17 @@ const chatbotApiSlice = createSlice({
 
       if (showDetailed !== undefined) {
         state.feedback.showDetailedFeedback[message_id] = showDetailed
+      }
+    },
+    updateStreamingMessage: (state, action) => {
+      const { text, questions, feedback, message_id } = action.payload;
+      const lastMessage = state.messages[state.messages.length - 1];
+
+      if (lastMessage && lastMessage.text === '...') {
+        lastMessage.text = text;
+        if (questions) lastMessage.questions = questions;
+        if (feedback) lastMessage.feedback = feedback;
+        if (message_id) lastMessage.message_id = message_id;
       }
     },
   },
@@ -433,6 +445,7 @@ export const {
   navigateToForm,
   addFormResponse,
   setFeedback,
+  updateStreamingMessage,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer

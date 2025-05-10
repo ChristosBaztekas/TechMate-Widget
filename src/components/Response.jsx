@@ -24,6 +24,8 @@ const Response = ({ text, feedback, message_id }) => {
 
   const [isVisible, setIsVisible] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
+  const [displayedText, setDisplayedText] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
 
   const isLiked = feedbackState.likedMessages[message_id] || false
   const isDisliked = feedbackState.dislikedMessages[message_id] || false
@@ -35,9 +37,34 @@ const Response = ({ text, feedback, message_id }) => {
   const detailedDislikeOptions = feedback?.dislike?.map(item => item.value) || []
 
   useEffect(() => {
+    if (text === '...') {
+      setDisplayedText('')
+      setIsTyping(false)
+      return
+    }
+
+    setIsTyping(true)
+    let currentIndex = 0
+    const textLength = text.length
+    const typingSpeed = 20 // milliseconds per character
+
+    const typingInterval = setInterval(() => {
+      if (currentIndex < textLength) {
+        setDisplayedText(text.slice(0, currentIndex + 1))
+        currentIndex++
+      } else {
+        clearInterval(typingInterval)
+        setIsTyping(false)
+      }
+    }, typingSpeed)
+
+    return () => clearInterval(typingInterval)
+  }, [text])
+
+  useEffect(() => {
     let timer
-    // Only show feedback if the message is complete (not "...")
-    if (text !== '...') {
+    // Only show feedback if the message is complete and not typing
+    if (text !== '...' && !isTyping) {
       timer = setTimeout(() => {
         setIsVisible(true)
       }, 1000)
@@ -46,7 +73,7 @@ const Response = ({ text, feedback, message_id }) => {
     }
 
     return () => clearTimeout(timer)
-  }, [text])
+  }, [text, isTyping])
 
   // Effect to handle the 4-second timeout after selecting an option
   useEffect(() => {
@@ -149,34 +176,41 @@ const Response = ({ text, feedback, message_id }) => {
   }
 
   return (
-    <div className="flex animate-fadeInUp items-start justify-start gap-2 sm:gap-4 pt-4">
+    <div className="flex w-full items-start justify-start gap-2 sm:gap-4 pt-4 transition-all duration-300 ease-in-out">
       {/* Logo Container */}
-      <div className="mt-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lightColor text-sm font-light transition-all duration-300 hover:scale-105">
+      <div className="mt-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-lightColor text-sm font-light">
         <img
           src={imageUrl || ChatLogo}
           alt="Chatbot Logo"
           loading="lazy"
-          className="h-[50px] w-[50px] object-contain transition-transform duration-300 hover:scale-110"
+          className="h-[50px] w-[50px] object-contain"
         />
       </div>
 
       {/* Chat Message */}
-      <div className="relative prose prose-sm text-base font-light w-fit max-w-none rounded-rad bg-lightColor p-4 text-darkColor transition-all duration-300 hover:shadow-md">
+      <div className={`relative prose prose-sm text-base font-light ${text === '...' ? 'w-fit' : 'w-full'} max-w-none rounded-rad bg-lightColor p-4 text-darkColor transition-all duration-300 ease-in-out transform hover:shadow-md`}>
         {/* Render raw HTML from backend or thinking dots */}
         {text === '...' ? (
           <ThinkingDots />
         ) : (
           <div
-            className="animate-fadeIn"
+            className="transition-all duration-300 ease-in w-full"
+            style={{
+              opacity: displayedText ? 1 : 0,
+              transform: `translateY(${displayedText ? '0' : '10px'})`,
+            }}
             dangerouslySetInnerHTML={{
-              __html: text,
+              __html: displayedText,
             }}
           />
         )}
 
         {/* Feedback Section - Only render if message is complete and feedback is enabled */}
-        {feedback && (
-          <div className={`flex items-center gap-2 transition-all duration-300 ${isVisible ? 'opacity-100 mt-2' : 'opacity-0'}`}>
+        {feedback && !isTyping && (
+          <div
+            className={`flex items-center gap-2 transition-all duration-300 ease-in-out w-full ${isVisible ? 'opacity-100 mt-2 translate-y-0' : 'opacity-0 -translate-y-2'
+              }`}
+          >
             {isLiked ? (
               <div className="flex flex-col gap-2 w-full animate-scaleIn">
                 <div className="text-primaryColor">

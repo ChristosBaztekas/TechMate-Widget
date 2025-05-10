@@ -72,17 +72,70 @@ export const getQuestions = () => {
  *
  * @param {string} conversation_id - The conversation ID.
  * @param {string} question - The user's question.
+ * @param {function} onChunk - Callback function to handle streaming chunks.
  * @returns {Promise<Object|null>}
  */
-export const ansUserQuestion = async (conversation_id, question) => {
+export const ansUserQuestion = async (conversation_id, question, onChunk) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/question`, {
-      question,
-    })
-    return response.data
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/${conversation_id}/question`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let finalResponse = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+        // Process any remaining buffer
+        if (buffer) {
+          try {
+            const lastChunk = JSON.parse(buffer);
+            finalResponse = lastChunk;
+            if (onChunk) onChunk(lastChunk);
+          } catch (e) {
+            console.error('Error parsing final chunk:', e);
+          }
+        }
+        break;
+      }
+
+      // Decode the chunk and add to buffer
+      buffer += decoder.decode(value, { stream: true });
+
+      // Try to parse complete JSON objects from the buffer
+      let newlineIndex;
+      while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+        const line = buffer.slice(0, newlineIndex);
+        buffer = buffer.slice(newlineIndex + 1);
+
+        if (line.trim()) {
+          try {
+            const chunk = JSON.parse(line);
+            if (onChunk) onChunk(chunk);
+            finalResponse = chunk;
+          } catch (e) {
+            console.error('Error parsing chunk:', e);
+          }
+        }
+      }
+    }
+
+    return finalResponse;
   } catch (error) {
-    console.error('Error sending user question:', error)
-    return null
+    console.error('Error sending user question:', error);
+    return null;
   }
 }
 

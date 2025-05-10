@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import propTypes from 'prop-types'
 import { setChatState } from '@/store/Slices/userSlice'
 import { fetchUserQuestion, navigateToForm, refreshChat } from '@/store/Slices/chatbotApiSlice'
+import { ansUserQuestion } from '@/API/techMateApi'
 import * as Icons from '@/utils/icons.util'
 import Logo from '@/assets/images/Logo.webp'
 import Query from '@/components/Query'
@@ -42,6 +43,25 @@ export const StartPage = () => {
 
     // Add the user's message to the chat
     dispatch(fetchUserQuestion(userInput.trim()))
+
+    // Handle streaming response
+    const onChunk = (chunk) => {
+      dispatch({
+        type: 'chatbotApi/updateStreamingMessage',
+        payload: {
+          text: chunk.answer || '',
+          questions: chunk.follow_up,
+          feedback: chunk.feedback,
+          message_id: chunk.message_id
+        }
+      });
+    };
+
+    try {
+      await ansUserQuestion(conversationId, userInput.trim(), onChunk);
+    } catch (error) {
+      console.error('Error in streaming response:', error);
+    }
 
     setUserInput('')
     setIsSingleLine(true)
