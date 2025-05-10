@@ -5,6 +5,7 @@ import ChatLogo from '../assets/images/bot.webp'
 import { CloseFeedbackIcon, DislikeIcon, LikeIcon } from '../utils/icons.util'
 import { postFeedback } from '@/API/techMateApi'
 import { setFeedback, markMessageAnimated } from '@/store/Slices/chatbotApiSlice'
+import Questions from './Questions'
 
 const ThinkingDots = () => {
   return (
@@ -16,7 +17,7 @@ const ThinkingDots = () => {
   )
 }
 
-const Response = ({ text, feedback, message_id, isLastMessage }) => {
+const Response = ({ text, feedback, message_id, isLastMessage, questions }) => {
   const dispatch = useDispatch()
   const imageUrl = useSelector((state) => state.chatbotApi.imageUrl)
   const conversationId = useSelector((state) => state.chatbotApi.conversationId)
@@ -27,6 +28,7 @@ const Response = ({ text, feedback, message_id, isLastMessage }) => {
   const [selectedOption, setSelectedOption] = useState(null)
   const [displayedText, setDisplayedText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [showQuestions, setShowQuestions] = useState(false)
 
   const isLiked = feedbackState.likedMessages[message_id] || false
   const isDisliked = feedbackState.dislikedMessages[message_id] || false
@@ -42,12 +44,14 @@ const Response = ({ text, feedback, message_id, isLastMessage }) => {
     if (text === '...') {
       setDisplayedText('')
       setIsTyping(false)
+      setShowQuestions(false)
       return
     }
 
     // Only apply typing animation to the last message and if it hasn't been animated before
     if (isLastMessage && !hasBeenAnimated) {
       setIsTyping(true)
+      setShowQuestions(false)
       let currentIndex = 0
       const textLength = text.length
       const typingSpeed = 20 // milliseconds per character
@@ -61,6 +65,8 @@ const Response = ({ text, feedback, message_id, isLastMessage }) => {
           setIsTyping(false)
           // Mark this message as animated
           dispatch(markMessageAnimated(message_id))
+          // Show questions after animation is complete
+          setShowQuestions(true)
         }
       }, typingSpeed)
 
@@ -68,6 +74,7 @@ const Response = ({ text, feedback, message_id, isLastMessage }) => {
     } else {
       // For non-last messages or already animated messages, display text immediately
       setDisplayedText(text)
+      setShowQuestions(true)
     }
   }, [text, isLastMessage, hasBeenAnimated, message_id, dispatch])
 
@@ -197,119 +204,132 @@ const Response = ({ text, feedback, message_id, isLastMessage }) => {
         />
       </div>
 
-      {/* Chat Message */}
-      <div className={`relative prose prose-sm text-base font-light ${text === '...' ? 'w-fit' : 'w-full'} max-w-none rounded-rad bg-lightColor p-4 text-darkColor transition-all duration-300 ease-in-out transform hover:shadow-md`}>
-        {/* Render raw HTML from backend or thinking dots */}
-        {text === '...' ? (
-          <ThinkingDots />
-        ) : (
-          <div
-            className="transition-all duration-300 ease-in w-full"
-            style={{
-              opacity: displayedText ? 1 : 0,
-              transform: `translateY(${displayedText ? '0' : '10px'})`,
-            }}
-            dangerouslySetInnerHTML={{
-              __html: displayedText,
-            }}
-          />
-        )}
+      <div className="flex flex-col gap-4 w-full">
+        {/* Chat Message */}
+        <div className={`relative prose prose-sm text-base font-light ${text === '...' ? 'w-fit' : 'w-full'} max-w-none rounded-rad bg-lightColor p-4 text-darkColor transition-all duration-300 ease-in-out transform hover:shadow-md`}>
+          {/* Render raw HTML from backend or thinking dots */}
+          {text === '...' ? (
+            <ThinkingDots />
+          ) : (
+            <div
+              className="transition-all duration-300 ease-in w-full"
+              style={{
+                opacity: displayedText ? 1 : 0,
+                transform: `translateY(${displayedText ? '0' : '10px'})`,
+              }}
+              dangerouslySetInnerHTML={{
+                __html: displayedText,
+              }}
+            />
+          )}
 
-        {/* Feedback Section - Only render if message is complete and feedback is enabled */}
-        {feedback && !isTyping && (
-          <div
-            className={`flex items-center gap-2 transition-all duration-300 ease-in-out w-full ${isVisible ? 'opacity-100 mt-2 translate-y-0' : 'opacity-0 -translate-y-2'
-              }`}
-          >
-            {isLiked ? (
-              <div className="flex flex-col gap-2 w-full animate-scaleIn">
-                <div className="text-primaryColor">
-                  <LikeIcon />
-                </div>
-                {showDetailedFeedback && (
-                  <div className="flex flex-wrap gap-2 animate-fadeInUp">
-                    {selectedOption ? (
-                      <button
-                        className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
-                      >
-                        {selectedOption}
-                      </button>
-                    ) : (
-                      <>
-                        {detailedLikeOptions.map((option) => (
-                          <button
-                            key={option}
-                            onClick={() => handleDetailedFeedback(option, 'like')}
-                            className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
-                          >
-                            {option}
-                          </button>
-                        ))}
-                        <button
-                          onClick={toggleDetailedFeedback}
-                          className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
-                          aria-label="Close feedback options"
-                        >
-                          <CloseFeedbackIcon />
-                        </button>
-                      </>
-                    )}
+          {/* Feedback Section - Only render if message is complete and feedback is enabled */}
+          {feedback && !isTyping && (
+            <div
+              className={`flex items-center gap-2 transition-all duration-300 ease-in-out w-full ${isVisible ? 'opacity-100 mt-2 translate-y-0' : 'opacity-0 -translate-y-2'
+                }`}
+            >
+              {isLiked ? (
+                <div className="flex flex-col gap-2 w-full animate-scaleIn">
+                  <div className="text-primaryColor">
+                    <LikeIcon />
                   </div>
-                )}
-              </div>
-            ) : isDisliked ? (
-              <div className="flex flex-col gap-2 w-full animate-scaleIn">
-                <div className="text-primaryColor">
-                  <DislikeIcon />
-                </div>
-                {showDetailedFeedback && (
-                  <div className="flex flex-wrap gap-2 animate-fadeInUp">
-                    {selectedOption ? (
-                      <button
-                        className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
-                      >
-                        {selectedOption}
-                      </button>
-                    ) : (
-                      <>
-                        {detailedDislikeOptions.map((option) => (
-                          <button
-                            key={option}
-                            onClick={() => handleDetailedFeedback(option, 'dislike')}
-                            className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
-                          >
-                            {option}
-                          </button>
-                        ))}
+                  {showDetailedFeedback && (
+                    <div className="flex flex-wrap gap-2 animate-fadeInUp">
+                      {selectedOption ? (
                         <button
-                          onClick={toggleDetailedFeedback}
-                          className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
-                          aria-label="Close feedback options"
+                          className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
                         >
-                          <CloseFeedbackIcon />
+                          {selectedOption}
                         </button>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          {detailedLikeOptions.map((option) => (
+                            <button
+                              key={option}
+                              onClick={() => handleDetailedFeedback(option, 'like')}
+                              className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
+                            >
+                              {option}
+                            </button>
+                          ))}
+                          <button
+                            onClick={toggleDetailedFeedback}
+                            className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
+                            aria-label="Close feedback options"
+                          >
+                            <CloseFeedbackIcon />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : isDisliked ? (
+                <div className="flex flex-col gap-2 w-full animate-scaleIn">
+                  <div className="text-primaryColor">
+                    <DislikeIcon />
                   </div>
-                )}
-              </div>
-            ) : showFeedbackOptions ? (
-              <>
-                <button
-                  onClick={() => handleFeedback('helpful')}
-                  aria-label="Helpful response"
-                  className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
-                >
-                  <LikeIcon />
-                </button>
-                <button
-                  onClick={() => handleFeedback('not_helpful')}
-                  className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
-                >
-                  <DislikeIcon />
-                </button>
-              </>
-            ) : null}
+                  {showDetailedFeedback && (
+                    <div className="flex flex-wrap gap-2 animate-fadeInUp">
+                      {selectedOption ? (
+                        <button
+                          className="text-left text-nowrap px-2 py-1 bg-primaryColor text-lightColor text-xs font-light rounded transition-all duration-300 hover:bg-hoverColor"
+                        >
+                          {selectedOption}
+                        </button>
+                      ) : (
+                        <>
+                          {detailedDislikeOptions.map((option) => (
+                            <button
+                              key={option}
+                              onClick={() => handleDetailedFeedback(option, 'dislike')}
+                              className="text-left text-nowrap px-2 py-1 border border-[#6D6D6D] text-xs hover:bg-primaryColor hover:text-lightColor font-light rounded transition-all duration-300 hover:scale-105"
+                            >
+                              {option}
+                            </button>
+                          ))}
+                          <button
+                            onClick={toggleDetailedFeedback}
+                            className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
+                            aria-label="Close feedback options"
+                          >
+                            <CloseFeedbackIcon />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : showFeedbackOptions ? (
+                <>
+                  <button
+                    onClick={() => handleFeedback('helpful')}
+                    aria-label="Helpful response"
+                    className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
+                  >
+                    <LikeIcon />
+                  </button>
+                  <button
+                    onClick={() => handleFeedback('not_helpful')}
+                    className='text-[#6D6D6D] transition-transform duration-300 hover:scale-110 hover:text-primaryColor'
+                  >
+                    <DislikeIcon />
+                  </button>
+                </>
+              ) : null}
+            </div>
+          )}
+        </div>
+
+        {/* Questions Section - Only show after animation is complete */}
+        {showQuestions && questions && questions.length > 0 && (
+          <div className="animate-fadeIn">
+            <Questions
+              questionsArr={questions}
+              isChosenQuestion={false}
+              message_id={message_id}
+            />
           </div>
         )}
       </div>
@@ -330,7 +350,8 @@ Response.propTypes = {
       value: PropTypes.string
     }))
   }),
-  isLastMessage: PropTypes.bool
+  isLastMessage: PropTypes.bool,
+  questions: PropTypes.array
 }
 
 export default Response

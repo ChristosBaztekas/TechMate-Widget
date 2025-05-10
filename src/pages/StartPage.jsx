@@ -8,7 +8,6 @@ import { ansUserQuestion } from '@/API/techMateApi'
 import * as Icons from '@/utils/icons.util'
 import Logo from '@/assets/images/Logo.webp'
 import Query from '@/components/Query'
-import Questions from '@/components/Questions'
 import Response from '@/components/Response'
 import Footer from '../components/Footer'
 
@@ -189,14 +188,7 @@ export const StartPage = () => {
                   feedback={message.feedback}
                   message_id={message.message_id || ''}
                   isLastMessage={index === messages.length - 1}
-                />
-              )}
-
-              {message.questions?.length > 0 && (
-                <Questions
-                  questionsArr={message.questions}
-                  isChosenQuestion={message.isQuestion}
-                  message_id={message.message_id}
+                  questions={message.questions}
                 />
               )}
             </div>
