@@ -331,32 +331,34 @@ const chatbotApiSlice = createSlice({
         state.isLoading = false
         state.error = action.payload
       })
-      .addCase(fetchUserQuestion.pending, (state, action) => {
-        state.isLoading = true
-        state.error = null
-        // Ensure initial questions remain hidden
-        if (!state.initialQuestionsHidden) {
-          const initialQuestions = state.messages[0].questions;
-          state.hiddenQuestions = [
-            ...state.hiddenQuestions,
-            ...initialQuestions.map(q => ({
-              id: q.id,
-              message_id: 'initial', // Use 'initial' as a placeholder for message_id
-              question: q.question
-            }))
-          ];
-          // Remove questions from the initial message to prevent reappearance
-          state.messages[0].questions = [];
-          state.initialQuestionsHidden = true; // Set flag to true after first interaction
-        }
-        state.messages.push({
-          id: state.messages.length + 1,
-          text: '...',
-          questions: [],
-          query: action.meta.arg,
-          source: 'chat',
-        })
-      })
+       .addCase(fetchUserQuestion.pending, (state, action) => {
+  state.isLoading = true
+  state.error = null
+  
+  // REMOVE ALL THIS CODE - This is what's hiding the questions:
+  // if (!state.initialQuestionsHidden) {
+  //   const initialQuestions = state.messages[0].questions;
+  //   state.hiddenQuestions = [
+  //     ...state.hiddenQuestions,
+  //     ...initialQuestions.map(q => ({
+  //       id: q.id,
+  //       message_id: 'initial',
+  //       question: q.question
+  //     }))
+  //   ];
+  //   state.messages[0].questions = [];
+  //   state.initialQuestionsHidden = true;
+  // }
+  
+  // Just add the user's message - keep it simple
+  state.messages.push({
+    id: state.messages.length + 1,
+    text: '...',
+    questions: [],
+    query: action.meta.arg,
+    source: 'chat',
+  })
+})
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
         state.isLoading = false
         state.lastResponse = action.payload
