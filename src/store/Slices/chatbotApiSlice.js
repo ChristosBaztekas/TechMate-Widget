@@ -30,6 +30,9 @@ export const fetchAllQuestions = createAsyncThunk(
       }
 
       const response = await getQuestions()
+      if (!response) {
+        return thunkAPI.rejectWithValue('Failed to get questions')
+      }
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -39,13 +42,13 @@ export const fetchAllQuestions = createAsyncThunk(
         texts,
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error.message || 'Failed to fetch all questions')
     }
   },
 )
 
 /**
- * Fetch an answer for a user's input question.
+ * Fetch an answer for a user's input question with streaming support.
  */
 export const fetchUserQuestion = createAsyncThunk(
   'questions/fetchUserQuestion',
@@ -58,13 +61,21 @@ export const fetchUserQuestion = createAsyncThunk(
         return thunkAPI.rejectWithValue('No conversation_id found')
       }
 
-      const response = await ansUserQuestion(conversation_id, question)
+      // Handle streaming chunks
+      const onChunk = (chunk) => {
+        thunkAPI.dispatch(updateStreamingMessage({
+          text: chunk.text || chunk.answer || '',
+          isStreaming: true
+        }))
+      }
+
+      const response = await ansUserQuestion(conversation_id, question, onChunk)
       if (!response) {
         return thunkAPI.rejectWithValue('Failed to get response')
       }
       return response
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error.message || 'Failed to fetch user question')
     }
   },
 )
@@ -86,7 +97,7 @@ export const fetchGivenQuestion = createAsyncThunk(
       const response = await ansGivenQuestion(conversation_id, question)
       return response
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error.message || 'Failed to fetch given question')
     }
   },
 )
@@ -96,6 +107,9 @@ export const refreshChat = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getQuestions()
+      if (!response) {
+        return thunkAPI.rejectWithValue('Failed to get questions')
+      }
       const { questions, image, logo, conversation_id, texts } = response
       return {
         questions,
@@ -105,7 +119,7 @@ export const refreshChat = createAsyncThunk(
         texts,
       }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+      return thunkAPI.rejectWithValue(error.message || 'Failed to refresh chat')
     }
   },
 )
@@ -257,11 +271,22 @@ const chatbotApiSlice = createSlice({
       }
     },
     updateStreamingMessage: (state, action) => {
-      const { text, questions, feedback, message_id } = action.payload;
+      const { text, questions, feedback, message_id, isStreaming } = action.payload;
       const lastMessage = state.messages[state.messages.length - 1];
 
-      if (lastMessage && lastMessage.text === '...') {
-        lastMessage.text = text;
+      if (lastMessage) {
+        if (isStreaming) {
+          // Accumulate streaming text
+          if (lastMessage.text === '...') {
+            lastMessage.text = text;
+          } else {
+            lastMessage.text += text;
+          }
+        } else {
+          // Final update
+          lastMessage.text = text;
+        }
+
         if (questions) lastMessage.questions = questions;
         if (feedback) lastMessage.feedback = feedback;
         if (message_id) lastMessage.message_id = message_id;
@@ -270,6 +295,17 @@ const chatbotApiSlice = createSlice({
     markMessageAnimated: (state, action) => {
       const messageId = action.payload;
       state.animatedMessages[messageId] = true;
+    },
+    hideFollowUpQuestions: (state) => {
+      // Find the last message that has follow-up questions and hide them
+      const lastMessageWithQuestions = state.messages
+        .slice()
+        .reverse()
+        .find(msg => msg.questions && msg.questions.length > 0);
+
+      if (lastMessageWithQuestions) {
+        lastMessageWithQuestions.questions = [];
+      }
     },
   },
   extraReducers: (builder) => {
@@ -362,17 +398,19 @@ const chatbotApiSlice = createSlice({
       .addCase(fetchUserQuestion.fulfilled, (state, action) => {
         state.isLoading = false
         state.lastResponse = action.payload
+
         if (action.payload?.form_id) {
           state.formID = action.payload.form_id
         }
-        const lastMessage = state.messages[state.messages.length - 1]
-        if (lastMessage) {
-          lastMessage.text = action.payload?.answer || 'Failed to get response'
-          lastMessage.questions = action.payload?.follow_up || []
-          lastMessage.feedback = action.payload?.feedback || null
-          lastMessage.message_id = action.payload?.message_id || ''
 
-          if (action.payload?.message_id) {
+        const lastMessage = state.messages[state.messages.length - 1]
+        if (lastMessage && action.payload) {
+          // Final update with message_id and follow_up questions
+          lastMessage.questions = action.payload.follow_up || []
+          lastMessage.feedback = action.payload.feedback || null
+          lastMessage.message_id = action.payload.message_id || ''
+
+          if (action.payload.message_id) {
             state.feedback.showFeedbackOptions[action.payload.message_id] = true
             state.feedback.showDetailedFeedback[action.payload.message_id] = false
           }
@@ -460,6 +498,7 @@ export const {
   setFeedback,
   updateStreamingMessage,
   markMessageAnimated,
+  hideFollowUpQuestions,
 } = chatbotApiSlice.actions
 
 export default chatbotApiSlice.reducer

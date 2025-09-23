@@ -27,7 +27,7 @@ const fetchQuestionsWithRetry = async (
 
   if (identifier) {
     try {
-      const response = await axiosInstance.get(`/${identifier}`)
+      const response = await axiosInstance.get(`/chats/${identifier}`)
       return response.data
     } catch (error) {
       console.error('Error fetching questions:', error)
@@ -68,7 +68,7 @@ export const getQuestions = () => {
 }
 
 /**
- * Sends a user's question to the backend.
+ * Sends a user's question to the backend using streaming endpoint.
  *
  * @param {string} conversation_id - The conversation ID.
  * @param {string} question - The user's question.
@@ -82,20 +82,142 @@ export const ansUserQuestion = async (conversation_id, question, onChunk) => {
   }
 
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/question`, {
-      question
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+    const response = await fetch(`${baseURL}/chats/${conversation_id}/stream`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question })
     });
 
-    // Handle the response data
-    if (response.data) {
-      if (onChunk) onChunk(response.data);
-      return response.data;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return null;
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let finalData = null;
+    let fullResponse = '';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          // Process any remaining buffer content
+          if (buffer.trim()) {
+            const line = buffer.trim();
+
+            // Handle SSE format: "data: {json}"
+            if (line.startsWith('data: ')) {
+              try {
+                const jsonStr = line.substring(6);
+                const jsonData = JSON.parse(jsonStr);
+                if (jsonData.message_id) {
+                  finalData = { ...jsonData, answer: fullResponse };
+                }
+              } catch (parseError) {
+                console.warn('Failed to parse final SSE chunk:', line, parseError);
+              }
+            }
+            // Handle plain text
+            else if (!line.startsWith('event:') && !line.startsWith('id:')) {
+              try {
+                const jsonData = JSON.parse(line);
+                if (jsonData.text || jsonData.answer) {
+                  fullResponse += (jsonData.text || jsonData.answer || '');
+                  if (onChunk) onChunk({ text: fullResponse });
+                }
+              } catch {
+                fullResponse += line;
+                if (onChunk) onChunk({ text: fullResponse });
+              }
+            }
+          }
+          break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Process SSE format and plain text chunks
+        let newlineIndex;
+        while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+          const line = buffer.slice(0, newlineIndex).trim();
+          buffer = buffer.slice(newlineIndex + 1);
+
+          if (line) {
+            // Handle SSE format: "data: {json}"
+            if (line.startsWith('data: ')) {
+              try {
+                const jsonStr = line.substring(6); // Remove "data: " prefix
+                const jsonData = JSON.parse(jsonStr);
+
+                // Check if this is the final data with message_id
+                if (jsonData.message_id) {
+                  finalData = { ...jsonData, answer: fullResponse };
+                } else if (jsonData.follow_up) {
+                  finalData = { ...jsonData, answer: fullResponse };
+                }
+              } catch (parseError) {
+                console.warn('Failed to parse SSE JSON:', line, parseError);
+              }
+            }
+            // Handle plain text chunks (the actual response content)
+            else if (!line.startsWith('event:') && !line.startsWith('id:') && line !== '') {
+              try {
+                // Try to parse as JSON first
+                const jsonData = JSON.parse(line);
+                if (jsonData.text || jsonData.answer) {
+                  fullResponse += (jsonData.text || jsonData.answer || '');
+                  if (onChunk) onChunk({ text: fullResponse });
+                }
+              } catch {
+                // If not JSON, treat as plain text
+                fullResponse += line;
+                if (onChunk) onChunk({ text: fullResponse });
+              }
+            }
+          }
+        }
+      }
+    } catch (streamError) {
+      console.error('Stream reading error:', streamError);
+      throw streamError;
+    } finally {
+      try {
+        reader.releaseLock();
+      } catch (releaseError) {
+        console.warn('Reader release error:', releaseError);
+      }
+    }
+
+    // If we have a final response with follow_up questions, include the full text
+    if (finalData && fullResponse) {
+      finalData.answer = fullResponse;
+    }
+
+    return finalData;
   } catch (error) {
     console.error('Error sending user question:', error);
-    return null;
+
+    // Fallback to regular /question endpoint if streaming fails
+    try {
+      console.log('Falling back to regular question endpoint...');
+      const response = await axiosInstance.post(`/chats/${conversation_id}/question`, {
+        question
+      });
+
+      if (response.data && onChunk) {
+        onChunk({ text: response.data.answer || '' });
+      }
+
+      return response.data;
+    } catch (fallbackError) {
+      console.error('Fallback request also failed:', fallbackError);
+      return null;
+    }
   }
 }
 
@@ -109,7 +231,7 @@ export const ansUserQuestion = async (conversation_id, question, onChunk) => {
  */
 export const ansGivenQuestion = async (conversation_id, question_id, onChunk) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/question`, {
+    const response = await axiosInstance.post(`/chats/${conversation_id}/question`, {
       question_id
     });
 
@@ -136,7 +258,7 @@ export const ansGivenQuestion = async (conversation_id, question_id, onChunk) =>
  */
 export const postUserInfo = async (conversation_id, full_name, phone) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/form?id=1`, {
+    const response = await axiosInstance.post(`/chats/${conversation_id}/form?id=1`, {
       full_name,
       phone,
     })
@@ -164,7 +286,7 @@ export const postUserInfo = async (conversation_id, full_name, phone) => {
  */
 export const postUserEmail = async (conversation_id, email) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/form?id=3`, {
+    const response = await axiosInstance.post(`/chats/${conversation_id}/form?id=3`, {
       email,
     })
     // Add response to chat history
@@ -192,7 +314,7 @@ export const postUserEmail = async (conversation_id, email) => {
 export const postUserPhone = async (conversationId, data) => {
   try {
     const response = await axiosInstance.post(
-      `/${conversationId}/form?id=4`,
+      `/chats/${conversationId}/form?id=4`,
       data,
     )
     // Add response to chat history
@@ -225,7 +347,7 @@ export const postUserPhone = async (conversationId, data) => {
  */
 export const postFeedback = async (conversation_id, message_id, feedback, feedback_option, feedback_description) => {
   try {
-    const response = await axiosInstance.post(`/${conversation_id}/feedback`, {
+    const response = await axiosInstance.post(`/chats/${conversation_id}/feedback`, {
       message_id,
       feedback,
       feedback_option,
