@@ -63,8 +63,8 @@ const Questions = ({ questionsArr, isChosenQuestion = false, message_id }) => {
             onClick={() => !isDisabled && handleQuestionClick(item)}
             className={`outline-none transition-all duration-300 ${
               isDisabled
-                ? 'bg-primaryColor cursor-not-allowed text-lightColor'
-                : 'cursor-pointer border border-primaryColor text-primaryColor hover:bg-primaryColor hover:text-lightColor'
+                ? 'bg-primaryColor cursor-not-allowed text-white'
+                : 'cursor-pointer border border-primaryColor text-white hover:bg-primaryColor hover:text-white'
             } rounded-rad`}
           >
             <p className="w-fit px-2 py-3 text-center font-medium">

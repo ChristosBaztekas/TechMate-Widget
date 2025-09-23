@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import propTypes from 'prop-types'
 import { setChatState } from '@/store/Slices/userSlice'
-import { fetchUserQuestion, navigateToForm, refreshChat } from '@/store/Slices/chatbotApiSlice'
+import { fetchUserQuestion, navigateToForm, refreshChat, hideFollowUpQuestions } from '@/store/Slices/chatbotApiSlice'
 import { ansUserQuestion } from '@/API/techMateApi'
 import * as Icons from '@/utils/icons.util'
 import Logo from '@/assets/images/Logo.webp'
@@ -84,6 +84,9 @@ export const StartPage = () => {
 
   const handleSendClick = async () => {
     if (!userInput.trim() || !conversationId || isNavigating) return
+
+    // Hide follow-up questions when user types their own question
+    dispatch(hideFollowUpQuestions())
 
     // Enable auto-scroll when user sends a new message
     setShouldAutoScroll(true)
